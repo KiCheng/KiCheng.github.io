@@ -17,28 +17,18 @@
 <link rel="stylesheet" href="/css/style.css">
 
     <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/fontawesome.min.css">
-
-    
-<link rel="stylesheet" href="/css/brands.min.css">
-
-    
-<link rel="stylesheet" href="/css/solid.min.css">
-
-    
-<link rel="stylesheet" href="/css/regular.min.css">
-
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/brands.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/solid.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/regular.min.css">
     
     
     
-    
-<link rel="stylesheet" href="/css/css2.css">
-
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/css2.css">
     <script id="hexo-configurations">
     let REDEFINE = window.REDEFINE || {};
-    REDEFINE.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
-    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://evan.beee.top/img/wallhaven-wqery6-light.webp","dark":"https://evan.beee.top/img/wallhaven-wqery6-dark.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"description":"Theme Redefine"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.4.0"};
+    REDEFINE.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://evan.beee.top/img/wallhaven-wqery6-light.webp","dark":"https://evan.beee.top/img/wallhaven-wqery6-dark.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"description":"Theme Redefine"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.4.0"};
     REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
   </script>
 <meta name="generator" content="Hexo 5.4.2"></head>
@@ -201,10 +191,16 @@
                         </li>
                     
                     
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
                 </ul>
             </div>
             <!-- Mobile -->
             <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i></div>
                 
                 <div class="icon-item menu-bar">
                     <div class="menu-bar-middle"></div>
@@ -308,7 +304,7 @@
         
     </div>
 
-    <a href="/2022/12/17/hello-world/">繼續閱讀...&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2022/12/17/hello-world/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -379,7 +375,7 @@
             odometer_init();
         </script>
         <div id="start_time_div" style="display:none">
-            2022/8/17 11:45:14
+            2022/12/17 17:45:14
         </div>
         
             <div>
@@ -447,48 +443,59 @@
 
 
     
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
 
 </main>
 
 
 
 
+<script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/utils.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/main.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/header-shrink.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/back2top.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/dark-light-toggle.js"></script>
 
-<script src="/js/utils.js"></script>
 
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/local-search.js"></script>
 
 
 
-
-
-    
-<script src="/js/code-copy.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/code-copy.js"></script>
 
 
 
-
-    
-<script src="/js/lazyload.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/lazyload.js"></script>
 
 
 
-
-    
-<script src="/js/runtime.js"></script>
-
-    
-<script src="/js/odometer.min.js"></script>
-
-    
-<link rel="stylesheet" href="/css/odometer-theme-minimal.css">
-
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/runtime.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/odometer.min.js"></script>
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/css/odometer-theme-minimal.css">
 
 
 <div class="post-scripts pjax">
@@ -496,9 +503,7 @@
 </div>
 
 
-    
-<script src="/js/libs/pjax.min.js"></script>
-
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.0/source/js/libs/pjax.min.js"></script>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         window.pjax = new Pjax({
