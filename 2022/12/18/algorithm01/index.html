@@ -19,28 +19,18 @@
 <link rel="stylesheet" href="/css/style.css">
 
     <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/fontawesome.min.css">
-
-    
-<link rel="stylesheet" href="/css/brands.min.css">
-
-    
-<link rel="stylesheet" href="/css/solid.min.css">
-
-    
-<link rel="stylesheet" href="/css/regular.min.css">
-
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/brands.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/solid.min.css">
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/regular.min.css">
     
     
     
-    
-<link rel="stylesheet" href="/css/css2.css">
-
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/css2.css">
     <script id="hexo-configurations">
     let REDEFINE = window.REDEFINE || {};
     REDEFINE.hexo_config = {"hostname":"kicheng.github.io","root":"/","language":"en","path":"search.xml"};
-    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://evan.beee.top/img/wallhaven-wqery6-light.webp","dark":"https://evan.beee.top/img/wallhaven-wqery6-dark.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"description":"Welcome to KiCheng‘s Home"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.4.1"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://evan.beee.top/img/wallhaven-wqery6-light.webp","dark":"https://evan.beee.top/img/wallhaven-wqery6-dark.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"description":"Welcome to KiCheng‘s Home"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":false},"version":"0.4.1"};
     REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
   </script>
 <meta name="generator" content="Hexo 5.4.2"></head>
@@ -280,21 +270,6 @@
         </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%95%B0%E7%BB%84/">数组</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
-    
 
     
     
@@ -323,15 +298,12 @@
                 <blockquote>
 <p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
 </blockquote>
+<span id="more"></span>
+
 <h1 id="数组理论基础"><a href="#数组理论基础" class="headerlink" title="数组理论基础"></a>数组理论基础</h1><p>数组是非常基础的数据结构。</p>
 <h2 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h2><p>首先要知道数组在内存中的存储方式：<strong>数组是存放在连续内存空间上的相同类型数据的集合。</strong></p>
 <p>数组可以方便的通过下标索引的方式获取到下标下对应的数据，举一个字符数组的例子，如图所示：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/68747470733a2f2f636f64652d7468696e6b696e672e63646e2e626365626f732e636f6d2f706963732f2545372541452539372545362542332539352545392538302539412545352538352542332545362539352542302545372542422538342e706e67.png"
-                      alt="img"
-                ></p>
+<p><img src="algorithm01/68747470733a2f2f636f64652d7468696e6b696e672e63646e2e626365626f732e636f6d2f706963732f2545372541452539372545362542332539352545392538302539412545352538352542332545362539352542302545372542422538342e706e67.png" alt="img"></p>
 <blockquote>
 <p>需要两点注意的是：</p>
 <ul>
@@ -341,22 +313,12 @@
 </blockquote>
 <p>正是<strong>因为数组的在内存空间的地址是连续的，所以我们在删除或者增添元素的时候，就难免要移动其他元素的地址。</strong></p>
 <p><strong>数组的元素是不能删的，只能覆盖。</strong>例如删除下标为3的元素，需要对下标为3的元素后面的所有元素都要做移动操作，如图所示：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/68747470733a2f2f636f64652d7468696e6b696e672e63646e2e626365626f732e636f6d2f706963732f254537254145253937254536254233253935254539253830253941254535253835254233254536253935254230254537254242253834312e706e67.png"
-                      alt="img"
-                ></p>
+<p><img src="algorithm01/68747470733a2f2f636f64652d7468696e6b696e672e63646e2e626365626f732e636f6d2f706963732f254537254145253937254536254233253935254539253830253941254535253835254233254536253935254230254537254242253834312e706e67.png" alt="img"></p>
 <h2 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h2><blockquote>
 <p> Java是没有指针的，同时也不对程序员暴露其元素的地址，寻址操作完全交给虚拟机。所以看不到每个元素的地址情况。</p>
 </blockquote>
 <p>在 <em>Java</em> 当中，<strong>二维数组</strong>的存储空间实际上并不是连续的，而是这样的：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/webp"
-                      alt="img"
-                ></p>
+<p><img src="algorithm01/webp" alt="img"></p>
 <p><strong>一维数组</strong>在堆上连续的内存空间直接存储值，<strong>二维数组</strong>在连续的地址上存储一维数组的引用地址，一维数组与一维数组并不一定靠在一起，但是这些一维数组内部的值是在连续地址上的。更高维的数组继续以此类推，只有最后一维数组在连续地址上保存值，其他纬度均在连续地址上保存下一维度的引用地址。</p>
 <p>可以通过代码验证一下：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test_arr</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] arr = &#123;&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;, &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;, &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;, &#123;<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>&#125;&#125;;</span><br><span class="line">    System.out.println(arr[<span class="number">0</span>]);</span><br><span class="line">    System.out.println(arr[<span class="number">1</span>]);</span><br><span class="line">    System.out.println(arr[<span class="number">2</span>]);</span><br><span class="line">    System.out.println(arr[<span class="number">3</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
@@ -423,12 +385,7 @@
 
 <p>思路2：</p>
 <p>两个for循环的暴力法——第一个for遍历每个元素，第二个for将数组中元素等于val的值之后的元素前移一位。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/68747470733a2f2f747661312e73696e61696d672e636e2f6c617267652f30303865476d5a456c7931676e747263377839746a673330647530396d316b792e676966.gif"
-                      alt="27.移除元素-暴力解法"
-                ></p>
+<p><img src="algorithm01/68747470733a2f2f747661312e73696e61696d672e636e2f6c617267652f30303865476d5a456c7931676e747263377839746a673330647530396d316b792e676966.gif" alt="27.移除元素-暴力解法"></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> val)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] == val)&#123;</span><br><span class="line">                len--;</span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> j=i;j&lt;len;j++)&#123;  </span><br><span class="line">                    nums[j] = nums[j+<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                i--; <span class="comment">// 因为i以及之后的元素都向前移动了一位</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p><strong>思路3：</strong></p>
@@ -437,12 +394,7 @@
 <li>快指针：寻找新数组的元素 ，新数组就是不含有目标元素的数组</li>
 <li>慢指针：指向更新新数组下标的位置</li>
 </ul>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/68747470733a2f2f747661312e73696e61696d672e636e2f6c617267652f30303865476d5a456c7931676e7472647336723539673330647530396d6e70642e676966.gif"
-                      alt="27.移除元素-双指针法"
-                ></p>
+<p><img src="algorithm01/68747470733a2f2f747661312e73696e61696d672e636e2f6c617267652f30303865476d5a456c7931676e7472647336723539673330647530396d6e70642e676966.gif" alt="27.移除元素-双指针法"></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> val)</span> &#123;</span><br><span class="line">        <span class="type">int</span> leftIndex=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> rightIndex=<span class="number">0</span>;rightIndex&lt;nums.length;rightIndex++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[rightIndex]==val)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            nums[leftIndex++]=nums[rightIndex];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> leftIndex;  <span class="comment">// 新数组的长度</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <blockquote>
@@ -508,12 +460,7 @@
 </li>
 </ul>
 <p>解题的关键在于 <strong>窗口的起始位置</strong> 如何移动，如图所示：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303231303331323136303434313934322e706e67.png"
-                      alt="leetcode_209"
-                ></p>
+<p><img src="algorithm01/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303231303331323136303434313934322e706e67.png" alt="leetcode_209"></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">       <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> nums.length; </span><br><span class="line">       <span class="type">int</span> slowIndex=<span class="number">0</span>,fastIndex;</span><br><span class="line">       <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> Integer.MAX_VALUE;</span><br><span class="line">       <span class="type">int</span> sum=<span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span>(fastIndex=<span class="number">0</span>;fastIndex&lt;len;fastIndex++)&#123;</span><br><span class="line">           sum += nums[fastIndex];</span><br><span class="line">           <span class="keyword">while</span>(sum &gt;= target)&#123;</span><br><span class="line">               result = result &lt; fastIndex-slowIndex+<span class="number">1</span> ? result : fastIndex-slowIndex+<span class="number">1</span>;</span><br><span class="line">               sum -= nums[slowIndex];</span><br><span class="line">               slowIndex++;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="type">return</span> <span class="variable">result</span> <span class="operator">=</span> result==Integer.MAX_VALUE ? <span class="number">0</span> : result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <blockquote>
@@ -543,12 +490,7 @@
 <h2 id="数组：模拟"><a href="#数组：模拟" class="headerlink" title="数组：模拟"></a>数组：模拟</h2><h4 id="59-螺旋矩阵II"><a href="#59-螺旋矩阵II" class="headerlink" title="59.螺旋矩阵II"></a>59.螺旋矩阵II</h4><p><a class="link"   target="_blank" rel="noopener" href="https://leetcode.cn/problems/spiral-matrix-ii/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>给你一个正整数 <code>n</code> ，生成一个包含 <code>1</code> 到 <code>n2</code> 所有元素，且元素按顺时针顺序螺旋排列的 <code>n x n</code> 正方形矩阵 <code>matrix</code> 。</p>
 <p>示例1：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/1242D48E-772B-4C40-BE9E-CB05A136147C.png"
-                      alt="1242D48E-772B-4C40-BE9E-CB05A136147C"
-                ></p>
+<p><img src="algorithm01/1242D48E-772B-4C40-BE9E-CB05A136147C.png" alt="1242D48E-772B-4C40-BE9E-CB05A136147C"></p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：[[1,2,3],[8,9,4],[7,6,5]]</span><br></pre></td></tr></table></figure></div>
 
 <p>示例2：</p>
@@ -557,12 +499,7 @@
 <h5 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h5><p>模拟顺时针画矩阵的过程:</p>
 <p>① 填充上行从左到右  ② 填充右列从上到   ③ 填充下行从右到左   ④ 填充左列从下到上</p>
 <p>一圈下来，我们要画每四条边，这四条边怎么画，每画一条边都要坚持一致的<strong>左闭右开</strong>的原则，这样这一圈才能按照统一的规则画下来。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="algorithm01/image-20221220165427845.png"
-                      alt="image-20221220165427845"
-                ></p>
+<p><img src="algorithm01/image-20221220165427845.png" alt="image-20221220165427845"></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[][] generateMatrix(<span class="type">int</span> n) &#123;</span><br><span class="line">        <span class="type">int</span>[][] ans = <span class="keyword">new</span> <span class="title class_">int</span>[n][n];</span><br><span class="line">        <span class="type">int</span> <span class="variable">loop</span> <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">// 控制循环次数</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// 填充的数字</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 每一轮循环开始的位置</span></span><br><span class="line">        <span class="type">int</span> i,j;</span><br><span class="line">        <span class="keyword">while</span>(loop++ &lt; n/<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">// 模拟从左到右</span></span><br><span class="line">            <span class="keyword">for</span>(j=start;j&lt;n-loop;j++)&#123;</span><br><span class="line">                ans[start][j]=count;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 模拟从上到下</span></span><br><span class="line">            <span class="keyword">for</span>(i=start;i&lt;n-loop;i++)&#123;</span><br><span class="line">                ans[i][j]=count;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 模拟从右到左</span></span><br><span class="line">            <span class="keyword">for</span>(;j&gt;=loop;j--)&#123;</span><br><span class="line">                ans[i][j]=count;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 模拟从下到上</span></span><br><span class="line">            <span class="keyword">for</span>(;i&gt;=loop;i--)&#123;</span><br><span class="line">                ans[i][start]=count;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">            start++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">// n是奇数 -- 中间置位</span></span><br><span class="line">            ans[n/<span class="number">2</span>][n/<span class="number">2</span>]=count;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <h4 id="相关题目推荐-3"><a href="#相关题目推荐-3" class="headerlink" title="相关题目推荐"></a>相关题目推荐</h4><ul>
@@ -627,39 +564,7 @@
             
 
             
-                <ul class="post-tags-box">
-                    
-                        <li class="tag-item">
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>&nbsp;
-                        </li>
-                    
-                        <li class="tag-item">
-                            <a href="/tags/%E6%95%B0%E7%BB%84/">#数组</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            
 
-            
-                <div class="article-nav">
-                    
-                    
-                        <div class="article-next">
-                            <a class="next"
-                            rel="next"
-                            href="/2022/12/17/hello-world/"
-                            >
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">Hello World</span>
-                                    <span class="post-nav-item">Next posts</span>
-                                </span>
-                                <span class="right arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </span>
-                            </a>
-                        </div>
-                    
-                </div>
             
 
             
@@ -851,64 +756,32 @@
 
 
 
+<script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/utils.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/main.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/header-shrink.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/back2top.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/dark-light-toggle.js"></script>
 
-<script src="/js/utils.js"></script>
 
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/local-search.js"></script>
 
 
 
-    
-<script src="/js/local-search.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/code-copy.js"></script>
 
 
 
 
-    
-<script src="/js/code-copy.js"></script>
 
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-
-    
-<script src="/js/runtime.js"></script>
-
-    
-<script src="/js/odometer.min.js"></script>
-
-    
-<link rel="stylesheet" href="/css/odometer-theme-minimal.css">
-
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/runtime.js"></script>
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/odometer.min.js"></script>
+    <link rel="stylesheet" href="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/css/odometer-theme-minimal.css">
 
 
 <div class="post-scripts pjax">
     
-        
-<script src="/js/toc-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
+        <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/toc-toggle.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/libs/anime.min.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/toc.js"></script>
     
 </div>
 
 
-    
-<script src="/js/libs/pjax.min.js"></script>
-
+    <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/libs/pjax.min.js"></script>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         window.pjax = new Pjax({
