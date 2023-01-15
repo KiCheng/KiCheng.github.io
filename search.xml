@@ -6,8 +6,8 @@
     <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
 <span id="more"></span>
 
-<h1 id="数组理论基础"><a href="#数组理论基础" class="headerlink" title="数组理论基础"></a>数组理论基础</h1><p>数组是非常基础的数据结构。</p>
-<h2 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h2><p>首先要知道数组在内存中的存储方式：<strong>数组是存放在连续内存空间上的相同类型数据的集合。</strong></p>
+<h2 id="数组理论基础"><a href="#数组理论基础" class="headerlink" title="数组理论基础"></a>数组理论基础</h2><p>数组是非常基础的数据结构。</p>
+<h3 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h3><p>首先要知道数组在内存中的存储方式：<strong>数组是存放在连续内存空间上的相同类型数据的集合。</strong></p>
 <p>数组可以方便的通过下标索引的方式获取到下标下对应的数据，举一个字符数组的例子，如图所示：</p>
 <img src="pic1.png" alt="img" style="zoom:80%;" />
 
@@ -22,9 +22,7 @@
 <p><strong>数组的元素是不能删的，只能覆盖。</strong>例如删除下标为3的元素，需要对下标为3的元素后面的所有元素都要做移动操作，如图所示：</p>
 <img src="pic2.png" alt="img" style="zoom:67%;" />
 
-
-
-<h2 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h2><blockquote>
+<h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><blockquote>
 <p> Java是没有指针的，同时也不对程序员暴露其元素的地址，寻址操作完全交给虚拟机。所以看不到每个元素的地址情况。</p>
 </blockquote>
 <p>在 <em>Java</em> 当中，<strong>二维数组</strong>的存储空间实际上并不是连续的，而是这样的：</p>
@@ -37,8 +35,7 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">[I@36baf30c</span><br><span class="line">[I@7a81197d</span><br><span class="line">[I@5ca881b5</span><br><span class="line">[I@24d46ca6</span><br></pre></td></tr></table></figure></div>
 
 <p>这不是真正的地址，而是经过处理过后的数值了，我们也可以看出，二维数组的每一行头结点的地址是没有规则的，更谈不上连续。</p>
-<h1 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h1><p>摘自 <a class="link"   href="https://leetcode.cn/" >Leetcode<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<h2 id="数组：二分查找"><a href="#数组：二分查找" class="headerlink" title="数组：二分查找"></a>数组：二分查找</h2><h4 id="704、二分查找"><a href="#704、二分查找" class="headerlink" title="704、二分查找"></a>704、二分查找</h4><p><a class="link"   href="https://leetcode.cn/problems/binary-search/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<h2 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h2><h3 id="704、二分查找"><a href="#704、二分查找" class="headerlink" title="704、二分查找"></a>704、二分查找</h3><p><a class="link"   href="https://leetcode.cn/problems/binary-search/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。</p>
 <p>示例 1:</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 9     </span><br><span class="line">输出: 4       </span><br><span class="line">解释: 9 出现在 nums 中并且下标为 4     </span><br></pre></td></tr></table></figure></div>
@@ -52,7 +49,7 @@
 <li>n 将在 [1, 10000]之间。</li>
 <li>nums 的每个元素都将在 [-9999, 9999]之间。</li>
 </ul>
-<h5 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h5><p><strong>这道题目的前提是数组为有序数组</strong>，同时题目还强调<strong>数组中无重复元素</strong>，因为一旦有重复元素，使用二分查找法返回的元素下标可能不是唯一的，这些都是使用二分法的前提条件，当大家看到题目描述满足如上条件的时候，可要想一想是不是可以用二分法了。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p><strong>这道题目的前提是数组为有序数组</strong>，同时题目还强调<strong>数组中无重复元素</strong>，因为一旦有重复元素，使用二分查找法返回的元素下标可能不是唯一的，这些都是使用二分法的前提条件，当大家看到题目描述满足如上条件的时候，可要想一想是不是可以用二分法了。</p>
 <p>二分查找涉及的很多的边界条件，逻辑比较简单，但就是写不好。例如到底是 <code>while(left &lt; right)</code> 还是 <code>while(left &lt;= right)</code>，到底是<code>right = middle</code>呢，还是要<code>right = middle - 1</code>呢？</p>
 <p>我们定义 target 是在一个在左闭右闭的区间里，<strong>也就是[left, right] （这个很重要非常重要）</strong></p>
 <ul>
@@ -72,7 +69,7 @@
 <li><p><a class="link"   href="https://leetcode.cn/problems/valid-perfect-square/" >367.有效的完全平方数<i class="fa-solid fa-up-right-from-square"></i></a></p>
 </li>
 </ul>
-<h2 id="数组：移除元素（双指针）"><a href="#数组：移除元素（双指针）" class="headerlink" title="数组：移除元素（双指针）"></a>数组：移除元素（双指针）</h2><h4 id="27、移除元素"><a href="#27、移除元素" class="headerlink" title="27、移除元素"></a>27、移除元素</h4><p><a class="link"   href="https://leetcode.cn/problems/remove-element/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<h3 id="27、移除元素（双指针）"><a href="#27、移除元素（双指针）" class="headerlink" title="27、移除元素（双指针）"></a>27、移除元素（双指针）</h3><p><a class="link"   href="https://leetcode.cn/problems/remove-element/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。</p>
 <p>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并<strong>原地修改输入数组</strong>。</p>
 <p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
@@ -88,7 +85,7 @@
 <li><code>0 &lt;= nums[i] &lt;= 50</code></li>
 <li><code>0 &lt;= val &lt;= 100</code></li>
 </ul>
-<h5 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h5><p><strong>要知道数组的元素在内存地址中是连续的，不能单独删除数组中的某个元素，只能覆盖。</strong></p>
+<h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p><strong>要知道数组的元素在内存地址中是连续的，不能单独删除数组中的某个元素，只能覆盖。</strong></p>
 <p>思路1：</p>
 <p>因为数组中的元素大小都在0~50之间，而且不计返回新数组的元素顺序，可以把数组中元素等于<code>val</code>的值设为一个大于50的值，然后对原数组sort操作。</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> val)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">// 与val相同的元素数</span></span><br><span class="line">        <span class="keyword">if</span>(val &gt; <span class="number">50</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> len;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] == val)&#123;</span><br><span class="line">                nums[i] = <span class="number">100</span>;   <span class="comment">// 一个不可能在nums中出现的数</span></span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        <span class="keyword">return</span> len-count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
@@ -121,7 +118,7 @@
 <li><p><a class="link"   href="https://leetcode.cn/problems/squares-of-a-sorted-array/" >977.有序数组的平方<i class="fa-solid fa-up-right-from-square"></i></a></p>
 </li>
 </ul>
-<h2 id="数组：序数组的平方"><a href="#数组：序数组的平方" class="headerlink" title="数组：序数组的平方"></a>数组：序数组的平方</h2><h4 id="977、有序数组的平方"><a href="#977、有序数组的平方" class="headerlink" title="977、有序数组的平方"></a>977、有序数组的平方</h4><p><a class="link"   href="https://leetcode.cn/problems/squares-of-a-sorted-array/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<h3 id="977、有序数组的平方"><a href="#977、有序数组的平方" class="headerlink" title="977、有序数组的平方"></a>977、有序数组的平方</h3><p><a class="link"   href="https://leetcode.cn/problems/squares-of-a-sorted-array/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>给你一个按 <strong>非递减顺序</strong> 排序的整数数组 <code>nums</code>，返回 <strong>每个数字的平方</strong> 组成的新数组，要求也按 <strong>非递减顺序</strong> 排序。</p>
 <p>示例1：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [-4,-1,0,3,10]</span><br><span class="line">输出：[0,1,9,16,100]</span><br><span class="line">解释：平方后，数组变为 [16,1,0,9,100]</span><br><span class="line">排序后，数组变为 [0,1,9,16,100]</span><br></pre></td></tr></table></figure></div>
@@ -129,7 +126,7 @@
 <p>示例2：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [-7,-3,2,3,11]</span><br><span class="line">输出：[4,9,9,49,121]</span><br></pre></td></tr></table></figure></div>
 
-<h5 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h5><p>思路1：排序</p>
+<h4 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h4><p>思路1：排序</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] sortedSquares(<span class="type">int</span>[] nums) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            nums[i] *= nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <ul>
@@ -141,7 +138,7 @@
 <ul>
 <li>时间复杂度<code>O(n)</code></li>
 </ul>
-<h2 id="数组：长度最小的子数组"><a href="#数组：长度最小的子数组" class="headerlink" title="数组：长度最小的子数组"></a>数组：长度最小的子数组</h2><h4 id="209、长度最小的子数组"><a href="#209、长度最小的子数组" class="headerlink" title="209、长度最小的子数组"></a>209、长度最小的子数组</h4><p>给定一个含有 n 个正整数的数组和一个正整数 target 。</p>
+<h3 id="209、长度最小的子数组"><a href="#209、长度最小的子数组" class="headerlink" title="209、长度最小的子数组"></a>209、长度最小的子数组</h3><p>给定一个含有 n 个正整数的数组和一个正整数 target 。</p>
 <p>找出该数组中满足其和 <code>≥ target </code> 的长度最小的 <strong>连续子数组</strong> ，并返回其长度。如果不存在符合条件的子数组，返回 0 。</p>
 <p>示例1：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：target = 7, nums = [2,3,1,2,4,3]</span><br><span class="line">输出：2</span><br><span class="line">解释：子数组 [4,3] 是该条件下的长度最小的子数组。</span><br></pre></td></tr></table></figure></div>
@@ -152,7 +149,7 @@
 <p>示例3：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：target = 11, nums = [1,1,1,1,1,1,1,1]</span><br><span class="line">输出：0</span><br></pre></td></tr></table></figure></div>
 
-<h5 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h5><p>思路1：暴力解法 – 据说后面更新了题目数据用例，暴力解法已经超时了</p>
+<h4 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h4><p>思路1：暴力解法 – 据说后面更新了题目数据用例，暴力解法已经超时了</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">MinCount</span> <span class="operator">=</span> Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="type">int</span> sum=<span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=i;j&lt;len;j++)&#123;</span><br><span class="line">                sum += nums[j];</span><br><span class="line">                count++;</span><br><span class="line">                <span class="keyword">if</span>(sum &gt;= target)&#123;</span><br><span class="line">                    MinCount = MinCount&gt;count ? count : MinCount;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        MinCount = MinCount==Integer.MAX_VALUE ? <span class="number">0</span> : MinCount;</span><br><span class="line">        <span class="keyword">return</span> MinCount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>思路2：滑动窗口</p>
@@ -198,7 +195,7 @@
 <p>char转换成String：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> String.valueOf(<span class="string">&#x27;c&#x27;</span>); <span class="comment">//效率最高的方法</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> String.valueOf(<span class="keyword">new</span> <span class="title class_">char</span>[]&#123;<span class="string">&#x27;c&#x27;</span>&#125;); <span class="comment">//将一个char数组转换成String</span></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> Character.toString(<span class="string">&#x27;c&#x27;</span>);</span><br><span class="line"><span class="comment">// Character.toString(char)方法实际上直接返回String.valueOf(char)</span></span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Character</span>(<span class="string">&#x27;c&#x27;</span>).toString();</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span> + <span class="string">&#x27;c&#x27;</span>;</span><br><span class="line"><span class="comment">// 虽然这个方法很简单，但这是效率最低的方法</span></span><br><span class="line"><span class="comment">// Java中的String Object的值实际上是不可变的，是一个final的变量。</span></span><br><span class="line"><span class="comment">// 所以我们每次对String做出任何改变，都是初始化了一个全新的String Object并将原来的变量指向了这个新String。</span></span><br><span class="line"><span class="comment">// 而Java对使用+运算符处理String相加进行了方法重载。</span></span><br><span class="line"><span class="comment">// 字符串直接相加连接实际上调用了如下方法：</span></span><br><span class="line"><span class="comment">// new StringBuilder().append(&quot;&quot;).append(&#x27;c&#x27;).toString();</span></span><br><span class="line"></span><br><span class="line"><span class="number">6.</span> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="keyword">new</span> <span class="title class_">char</span>[]&#123;<span class="string">&#x27;c&#x27;</span>&#125;);</span><br></pre></td></tr></table></figure></div>
 </blockquote>
-<h2 id="数组：模拟"><a href="#数组：模拟" class="headerlink" title="数组：模拟"></a>数组：模拟</h2><h4 id="59-螺旋矩阵II"><a href="#59-螺旋矩阵II" class="headerlink" title="59.螺旋矩阵II"></a>59.螺旋矩阵II</h4><p><a class="link"   href="https://leetcode.cn/problems/spiral-matrix-ii/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<h3 id="59-螺旋矩阵II（模拟）"><a href="#59-螺旋矩阵II（模拟）" class="headerlink" title="59.螺旋矩阵II（模拟）"></a>59.螺旋矩阵II（模拟）</h3><p><a class="link"   href="https://leetcode.cn/problems/spiral-matrix-ii/" >题目链接<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>给你一个正整数 <code>n</code> ，生成一个包含 <code>1</code> 到 <code>n2</code> 所有元素，且元素按顺时针顺序螺旋排列的 <code>n x n</code> 正方形矩阵 <code>matrix</code> 。</p>
 <p>示例1：</p>
 <p><img src="pic7.png" alt="1242D48E-772B-4C40-BE9E-CB05A136147C"></p>
@@ -207,7 +204,7 @@
 <p>示例2：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：[[1]]</span><br></pre></td></tr></table></figure></div>
 
-<h5 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h5><p>模拟顺时针画矩阵的过程:</p>
+<h4 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h4><p>模拟顺时针画矩阵的过程:</p>
 <p>① 填充上行从左到右  ② 填充右列从上到   ③ 填充下行从右到左   ④ 填充左列从下到上</p>
 <p>一圈下来，我们要画每四条边，这四条边怎么画，每画一条边都要坚持一致的<strong>左闭右开</strong>的原则，这样这一圈才能按照统一的规则画下来。</p>
 <img src="pic8.png" alt="image-20221220165427845" style="zoom:50%;" />
@@ -218,22 +215,22 @@
 <li><a class="link"   href="https://leetcode.cn/problems/spiral-matrix/" >54.螺旋矩阵<i class="fa-solid fa-up-right-from-square"></i></a></li>
 <li><a class="link"   href="https://leetcode.cn/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/?favorite=xb9nqhhg" >剑指Offer 29.顺时针打印矩阵<i class="fa-solid fa-up-right-from-square"></i></a></li>
 </ul>
-<h1 id="数组总结"><a href="#数组总结" class="headerlink" title="数组总结"></a>数组总结</h1><p>回顾一下数组的四种经典题型，每一种题型都对应着一种思想。</p>
-<h2 id="数组必会知识"><a href="#数组必会知识" class="headerlink" title="数组必会知识"></a>数组必会知识</h2><p>1、在《Java核心技术》中对数组的定义是：<strong>一种可以用来存储同一类型值的集合。</strong></p>
+<h2 id="数组总结"><a href="#数组总结" class="headerlink" title="数组总结"></a>数组总结</h2><p>回顾一下数组的四种经典题型，每一种题型都对应着一种思想。</p>
+<h3 id="数组必会知识"><a href="#数组必会知识" class="headerlink" title="数组必会知识"></a>数组必会知识</h3><p>1、在《Java核心技术》中对数组的定义是：<strong>一种可以用来存储同一类型值的集合。</strong></p>
 <p>2、数组的内存空间分配：</p>
 <ul>
 <li>一维数组：存放在连续内存空间上</li>
 <li>二维（高维）数组：最后一个维度的元素存放在连续的内存空间上</li>
 </ul>
 <p>3、数组不能删除单一元素，只能覆盖。</p>
-<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p>考察数组的基本操作，思路很简单，但是通过率在简单题里并不高，不要轻敌。</p>
+<h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>考察数组的基本操作，思路很简单，但是通过率在简单题里并不高，不要轻敌。</p>
 <p>可以使用暴力解法，如果追求更优的算法，建议试一试用二分法，来解决这道题目。</p>
 <ul>
 <li>暴力解法时间复杂度：<code>O(n)</code></li>
 <li>二分法时间复杂度：<code>O(logn)</code></li>
 </ul>
 <p><strong>二分法是算法面试中的常考题，建议吃透上面列举的二分题目，锻炼自己手撕二分的能力</strong>。</p>
-<h2 id="双指针法"><a href="#双指针法" class="headerlink" title="双指针法"></a>双指针法</h2><p>双指针法（快慢指针法）：<strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></p>
+<h3 id="双指针法"><a href="#双指针法" class="headerlink" title="双指针法"></a>双指针法</h3><p>双指针法（快慢指针法）：<strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></p>
 <ul>
 <li>暴力解法时间复杂度：<code>O(n^2)</code></li>
 <li>双指针时间复杂度：<code>O(n)</code></li>
@@ -243,7 +240,7 @@
 <li>数组在内存中是连续的地址空间，不能释放单一元素，如果要释放，就是全释放。</li>
 </ul>
 <p>双指针法（快慢指针法）在<strong>数组和链表</strong>的操作中是非常常见的，很多考察数组和链表操作的面试题，都使用双指针法。</p>
-<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><p>本题介绍了数组操作中的另一个重要思想：滑动窗口。</p>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>本题介绍了数组操作中的另一个重要思想：滑动窗口。</p>
 <ul>
 <li>暴力解法时间复杂度：<code>O(n^2)</code></li>
 <li>滑动窗口时间复杂度：<code>O(n)</code></li>
@@ -251,7 +248,7 @@
 <p>本题中，主要要理解滑动窗口如何移动 窗口起始位置，达到动态更新窗口大小的，从而得出长度最小的符合条件的长度。</p>
 <p><strong>滑动窗口的精妙之处在于根据当前子序列和大小的情况，不断调节子序列的起始位置。从而将O(n^2)的暴力解法降为O(n)。</strong></p>
 <p>如果没有接触过这一类的方法，很难想到类似的解题思路，滑动窗口方法还是很巧妙的。</p>
-<h2 id="模拟行为"><a href="#模拟行为" class="headerlink" title="模拟行为"></a>模拟行为</h2><p>模拟类的题目在数组中很常见，不涉及到什么算法，就是单纯的模拟，十分考察大家对代码的掌控能力。</p>
+<h3 id="模拟行为"><a href="#模拟行为" class="headerlink" title="模拟行为"></a>模拟行为</h3><p>模拟类的题目在数组中很常见，不涉及到什么算法，就是单纯的模拟，十分考察大家对代码的掌控能力。</p>
 <p>相信大家有遇到过这种情况： 感觉题目的边界调节超多，一波接着一波的判断，找边界，拆了东墙补西墙，好不容易运行通过了，代码写的十分冗余，毫无章法，其实<strong>真正解决题目的代码都是简洁的，或者有原则性的</strong>，大家可以在这道题目中体会到这一点。</p>
 ]]></content>
       <categories>
