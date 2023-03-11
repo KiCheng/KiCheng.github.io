@@ -322,7 +322,7 @@
 <img src="result2_1.png" alt="result2_1" style="zoom: 25%;" />
 
 <p>​        这是上述程序在概率霍夫变换后的输出：</p>
-<img src="result2_2.png" style="zoom:25%;" />
+<img src="result2_2.png" alt="result2_2" style="zoom:25%;" />
 
 <p>​        这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
 
