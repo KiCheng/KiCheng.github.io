@@ -295,10 +295,10 @@
             
 
             <div class="article-content markdown-body">
-                <h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
+                <p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
 <span id="more"></span>
 
-<h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
+<h1 id="OpenCV-特征检测"><a href="#OpenCV-特征检测" class="headerlink" title="[OpenCV]特征检测"></a>[OpenCV]特征检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
 <p>​        最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
 <p>​        Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
 <div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure></div>
@@ -307,7 +307,7 @@
 <div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/people.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Canny&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Canny&quot;</span>, dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>​        网上随便找了一张图，实验结果是这样的。值得注意的是：Canny算法的output是二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
-<img src="/Users/NUC/JC_Code/Blog/source/_posts/opencv01/result1.png" alt="result1" style="zoom:67%;" />
+<img src="result1.png" alt="result1" style="zoom:67%;" />
 
 <h2 id="直线检测Line-detection"><a href="#直线检测Line-detection" class="headerlink" title="直线检测Line detection"></a>直线检测Line detection</h2><p>​        霍夫变换直线检测是最基本的算法，也是今天学习和使用到的。他有<code>HoughLines</code>和<code>HoughLinesP</code>两种，后者是前者的优化，但并不意味着<code>HoughLines</code>完全被取代，他们适用于不同的场景，大家可以根据实际需要自行选择。</p>
 <p>​        需要我们注意的是霍夫直线检测是从二值图像中检测直线(线段)，所以在调用<code>HoughLines</code>或<code>HoughLinesP</code>算法前，要先将图像转换成二值图像，通常在之前先使用<code>Canny</code>将其简化成只有边缘特征的二值图像。</p>
@@ -319,10 +319,10 @@
 
 <p>​        实验结果如下。</p>
 <p>​        这是一个OpenCV官方文档提供的示例图片:</p>
-<img src="/Users/NUC/JC_Code/Blog/source/_posts/opencv01/result2_1.png" alt="result2_1" style="zoom: 25%;" />
+<img src="result2_1.png" alt="result2_1" style="zoom: 25%;" />
 
 <p>​        这是上述程序在概率霍夫变换后的输出：</p>
-<img src="/Users/NUC/JC_Code/Blog/source/_posts/opencv01/result2_2.png" style="zoom:25%;" />
+<img src="result2_2.png" style="zoom:25%;" />
 
 <p>​        这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
 
@@ -379,7 +379,7 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCV-Canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E3%80%81HoughLinesP%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">[OpenCV]Canny边缘检测、HoughLinesP直线检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8BEdge-detection"><span class="nav-number">1.1.</span> <span class="nav-text">边缘检测Edge detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8BLine-detection"><span class="nav-number">1.2.</span> <span class="nav-text">直线检测Line detection</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCV-%E7%89%B9%E5%BE%81%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">[OpenCV]特征检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8BEdge-detection"><span class="nav-number">1.1.</span> <span class="nav-text">边缘检测Edge detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8BLine-detection"><span class="nav-number">1.2.</span> <span class="nav-text">直线检测Line detection</span></a></li></ol></li></ol>
     </div>
 </div>
             </div>
