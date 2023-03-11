@@ -509,12 +509,12 @@
       </categories>
   </entry>
   <entry>
-    <title>Canny边缘检测、HoughLinesP直线检测</title>
+    <title>OpenCV特征检测</title>
     <url>/2023/03/10/opencv01/</url>
     <content><![CDATA[<p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
 <span id="more"></span>
 
-<h1 id="OpenCV-特征检测"><a href="#OpenCV-特征检测" class="headerlink" title="[OpenCV]特征检测"></a>[OpenCV]特征检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
+<h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
 <p>​        最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
 <p>​        Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
 <div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure></div>
