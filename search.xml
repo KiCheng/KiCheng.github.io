@@ -481,6 +481,34 @@
       </categories>
   </entry>
   <entry>
+    <title>algorithm03 链表</title>
+    <url>/2023/02/03/algorithm03/</url>
+    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
+<span id="more"></span>
+
+<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
+<p>链表的入口节点称为链表的头结点也就是head。</p>
+<p>如图所示：</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
+
+<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
+<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
+<p>双链表 既可以向前查询也可以向后查询。</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
+
+<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
+
+<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
+<p>链表是通过指针域的指针链接在内存中各个节点。</p>
+<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
+<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>OpenCV特征检测</title>
     <url>/2023/03/10/opencv01/</url>
     <content><![CDATA[<p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
@@ -507,7 +535,7 @@
 
 <p>​        实验结果如下。</p>
 <p>​        这是一个OpenCV官方文档提供的示例图片:</p>
-<img src="/Users/NUC/JC_Code/Blog/source/_posts/opencv01/result2_1.png" alt="result2_1" style="zoom: 25%;" />
+<img src="result2_1.png" alt="result2_1" style="zoom: 25%;" />
 
 <p>​        这是上述程序在概率霍夫变换后的输出：</p>
 <img src="result2_2.png" alt="result2_2" style="zoom:25%;" />
@@ -516,34 +544,6 @@
 ]]></content>
       <categories>
         <category>OpenCV</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>algorithm03 链表</title>
-    <url>/2023/02/03/algorithm03/</url>
-    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-<span id="more"></span>
-
-<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
-<p>链表的入口节点称为链表的头结点也就是head。</p>
-<p>如图所示：</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
-
-<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
-<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
-<p>双链表 既可以向前查询也可以向后查询。</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
-
-<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
-
-<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
-<p>链表是通过指针域的指针链接在内存中各个节点。</p>
-<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
-<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
-]]></content>
-      <categories>
-        <category>算法</category>
       </categories>
   </entry>
 </search>
