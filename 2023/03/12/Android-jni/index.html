@@ -318,13 +318,13 @@
 <span id="more"></span>
 
 <h1 id="Android平台JNI开发保姆级教程"><a href="#Android平台JNI开发保姆级教程" class="headerlink" title="Android平台JNI开发保姆级教程"></a>Android平台JNI开发保姆级教程</h1><h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>​        FFmpeg源码：可以在官网下载，目前我是用的是最新版的6.0版本（只下载源代码即可，不要下载已经编译好的在不同平台可以运行的安装包）。</p>
-<p><img src="Android-jni/pic1-8628572.png" alt="image-20230312105234096"></p>
+<p><img src="pic1-8628572.png" alt="image-20230312105234096"></p>
 <p>​        Android NDK：可以在官网下载，但更推荐在Android Studio中的Setting中可以直接下载NDK对应版本，我这里使用的是22.1.7171670版本的NDK（建议不要使用太新的NDK，否则可能会出现一些BUG）。</p>
-<img src="Android-jni/pic2-8628572.png" alt="image-20230312103532627" style="zoom: 33%;" />
+<img src="pic2-8628572.png" alt="image-20230312103532627" style="zoom: 33%;" />
 
 <p>​        安装msys2：由于我是在Windows下对FFmpeg源码进行交叉编译，所以需要一个类Unix环境；或者你可以直接使用linux操作系统。</p>
 <p>​        由于第一次接触Android开发，对Android程序调用类库的流程不清楚，导致走了很多弯路。其实总结下来也很简单，我这里引用了雷神的流程图：</p>
-<p><img src="Android-jni/pic3-8628572.png" alt="img"></p>
+<p><img src="pic3-8628572.png" alt="img"></p>
 <blockquote>
 <p><strong>在FFmpeg的最新版本6.0中，已经不需要在源码中修改configure设置了（我记得貌似从4.0版本之后就不需要修改了，记不太清了）。</strong></p>
 </blockquote>
