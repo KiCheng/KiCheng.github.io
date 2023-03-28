@@ -385,6 +385,132 @@
       </categories>
   </entry>
   <entry>
+    <title>02_Mybatis练习</title>
+    <url>/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/</url>
+    <content><![CDATA[<p>前面记录了mybatis，它是一种简化jdbc开发操作关系型数据库的持久层框架。下面我们用mybatis进行一些简单的业务来操作mysql数据库。基础的操作和代码我就不完整的展示了，我就记录一下比较容易出错的地方和需要注意的细节了。</p>
+<span id="more"></span>
+
+<h1 id="Mybatis-CRUD"><a href="#Mybatis-CRUD" class="headerlink" title="Mybatis CRUD"></a>Mybatis CRUD</h1><h2 id="查询全部"><a href="#查询全部" class="headerlink" title="查询全部"></a>查询全部</h2><p><code>selectAll</code>操作很简单，但是我们发现有些数据没有被封装成功，仍然是null：</p>
+<p><img src="image-20230326151900257.png" alt="image-20230326151900257"></p>
+<p>这是为什么呢，原因还要从mapper代理开发的过程来说起。因为在代理开发中通过接口代理对象调用接口中的函数，再在相应的sql映射文件中找sql语句：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from tb_brand;</span><br></pre></td></tr></table></figure></div>
+
+<p>找到的sql语句没问题，而它在编译的时候是变成了：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select id,brand_name,company_name,ordered,description,status from tb_brand;</span><br></pre></td></tr></table></figure></div>
+
+<p>sql语句执行后会从数据库中select出满足条件的数据，将其封装成定义的<code>Brand</code>类的对象并通过<code>List</code>集合的形式返回。但是在mapper代理开发的过程中封装成Brand对象的过程是自动进行的，那么mybatis并不知道<code>brand_name</code>数据应该被set成Brand对象中的<code>brandName</code>属性，这就是问题的关键。</p>
+<p>要解决这个问题的思路就是将二者形成映射关系，让<code>mybatis</code>在封装的时候能将其对应上。目前在mybatis上有两种解决的方案：</p>
+<ul>
+<li><p>给字段起别名</p>
+<ul>
+<li><p>直接在sql语句中用<code>AS</code>起别名即可，但是这样操作非常麻烦！</p>
+</li>
+<li><p>还有一种方法，mybatis提供了sql片段可以提高sql语句的复用性，但仍然非常麻烦而且不灵活：将需要复用的sql片段抽取到<sql>标签中，在sql语句中使用<include refid="sql的id"/>引用即可。</p>
+</li>
+</ul>
+</li>
+<li><p>使用<code>resultMap</code>映射</p>
+<p>在<code>sql映射配置文件</code>中使用<code>resultMap</code>定义属性和字段的映射关系：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">           id：完成主键字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">           result：完成一般字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">       --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;brand_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;brandName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;company_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;companyName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><resultMap>标签的<code>id</code>属性，要在下面sql映射文件的sql语句标签中引用，表示在这段sql代码中使用了如上的resultMap映射关系以自动封装数据；而<code>type</code>属性则和sql语句中的<code>type</code>一致即可，都指向pojo中的某个实体类。</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>现在再看从封装到Brand对象中的数据就没问题了：</p>
+<p><img src="image-20230326154957319.png" alt="image-20230326154957319"></p>
+<h2 id="按照id查询"><a href="#按照id查询" class="headerlink" title="按照id查询"></a>按照id查询</h2><p>在这里记录一下如何在映射配置文件的sql语句中使用<strong>参数占位符</strong>。</p>
+<p>这是在映射文件中的sql语句：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectById&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand where id = #&#123;id&#125;;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>mybatis中提供了两种参数占位符：</p>
+<ul>
+<li><p>#{} ：执行SQL时，会将 #{} 占位符替换为？，将来自动设置参数值，可以看出使用#{} 底层使用的是 <code>PreparedStatement</code></p>
+</li>
+<li><p>${} ：拼接SQL。底层使用的是 <code>Statement</code>，会存在SQL注入问题，所以不使用它。</p>
+</li>
+</ul>
+<img src="image-20230326160640669.png" alt="image-20230326160640669" style="zoom: 50%;" />
+
+<blockquote>
+<p>对于有参数的mapper接口方法，我们在sql映射配置文件中应该配置 <code>ParameterType</code> 来指定参数类型。只不过该属性都可以省略。</p>
+</blockquote>
+<p>还需要注意的一点是可能会在sql映射文件中的sql语句中用到一些特殊字符，比方说：</p>
+<img src="image-20230326160952157.png" alt="image-20230326160952157" style="zoom:67%;" />
+
+<p>xml文件会将sql中的”&lt;”、”&gt;”识别成标签符号，所以需要用相应的转义字符替代，这个用到的时候网上一搜就行了。</p>
+<h2 id="多条件查询"><a href="#多条件查询" class="headerlink" title="多条件查询"></a>多条件查询</h2><p><strong>如何编写接口方法：</strong></p>
+<ul>
+<li>使用 <code>@Param(&quot;参数名称&quot;)</code> 标记每一个参数，在映射配置文件中就需要使用 <code>#&#123;参数名称&#125;</code> 进行占位</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(<span class="meta">@Param(&quot;status&quot;)</span> <span class="type">int</span> status, <span class="meta">@Param(&quot;companyName&quot;)</span> String companyName,<span class="meta">@Param(&quot;brandName&quot;)</span> String brandName)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>将多个参数封装成一个 实体对象 ，将该实体对象作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和实体类属性名保持一致。</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Brand brand)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>将多个参数封装到map集合中，将map集合作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和map集合中Key的名称一致。</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Map map)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>如何使用动态SQL：</strong>用户在输入条件时，肯定不会所有的条件都填写</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectByCondition&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand</span><br><span class="line">       <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;brandName != null and brandName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and brand_name like #&#123;brandName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;companyName != null and companyName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and company_name like #&#123;companyName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;status != null&quot;</span>&gt;</span></span><br><span class="line">               and status = #&#123;status&#125;;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>单个条件的动态sql：</p>
+<p>用<choose></choose>里面<when test="条件"></when>标签，相当于<code>switch</code>和<code>case</code>。</p>
+</blockquote>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><ul>
+<li><p><font color="red">注意1：</font>如果要通过add、update等对数据库里的数据进行改动，那需要在测试类中手动使用<code>sqlSession.commit()</code>提交事务。</p>
+</li>
+<li><p><font color="red">注意2：</font>主键返回——在数据添加成功后，有时候需要获取插入数据库数据的主键。</p>
+<ul>
+<li>useGeneratedKeys：是够获取自动增长的主键值。true表示获取</li>
+<li>keyProperty  ：指定将获取到的主键值封装到哪儿个属性里</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;add&quot;</span> <span class="attr">useGeneratedKeys</span>=<span class="string">&quot;true&quot;</span> <span class="attr">keyProperty</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><p>修改肯定不会修改数据所有的属性，&lt;*set*&gt; 标签可以用于动态包含需要更新的列，忽略其它不更新的列。</p>
+<h2 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h2><p>编写SQL时需要遍历数组来拼接SQL语句，Mybatis 提供了 <code>foreach</code> 标签供我们使用。</p>
+<p><strong>foreach 标签</strong></p>
+<p>用来迭代任何可迭代的对象（如数组，集合）。</p>
+<ul>
+<li>collection 属性：<ul>
+<li>mybatis会将数组参数，封装为一个Map集合。<ul>
+<li>默认：array = 数组</li>
+<li>使用@Param注解改变map集合的默认key的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>item 属性：本次迭代获取到的元素。</li>
+<li>separator 属性：集合项迭代之间的分隔符。<code>foreach</code> 标签不会错误地添加多余的分隔符。也就是最后一次迭代不会加分隔符。</li>
+<li>open 属性：该属性值是在拼接SQL语句之前拼接的语句，只会拼接一次</li>
+<li>close 属性：该属性值是在拼接SQL语句拼接后拼接的语句，只会拼接一次</li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 批量删除 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteByIds&quot;</span>&gt;</span></span><br><span class="line">        delete from tb_brand where id in</span><br><span class="line">        <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;array&quot;</span> <span class="attr">item</span>=<span class="string">&quot;id&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;,&quot;</span> <span class="attr">open</span>=<span class="string">&quot;(&quot;</span> <span class="attr">close</span>=<span class="string">&quot;)&quot;</span>&gt;</span></span><br><span class="line">            #&#123;id&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">        ;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>接口参数是多个时，在每个参数上都使用 <code>@Param</code> 注解。这样代码的可读性更高。</p>
+</blockquote>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">User <span class="title function_">select</span><span class="params">(<span class="meta">@Param(&quot;username&quot;)</span> String username,<span class="meta">@Param(&quot;password&quot;)</span> String password)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="注解开发CRUD"><a href="#注解开发CRUD" class="headerlink" title="注解开发CRUD"></a>注解开发CRUD</h2><p>使用注解开发会比使用sql配置文件开发更加方便，使用了注解，就不需要再映射配置文件中书写对应的 <code>statement</code>。</p>
+<p>官方文档是这么说的：</p>
+<p><img src="image-20230327154233410.png" alt="image-20230327154233410"></p>
+<p>所以给出的结论是：简单sql用注解开发，复杂sql仍然用sql映射配置文件。</p>
+<p>举个例子：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="meta">@Delete(&quot;delete from tb_brand where id = #&#123;id&#125;;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deleteById</span><span class="params">(<span class="type">int</span> id)</span>;</span><br></pre></td></tr></table></figure></div>
+
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Android平台JNI开发保姆级教程</title>
     <url>/2023/03/12/Android-jni/</url>
     <content><![CDATA[<p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
@@ -764,6 +890,47 @@
       </categories>
   </entry>
   <entry>
+    <title>OpenCV特征检测</title>
+    <url>/2023/03/10/opencv01/</url>
+    <content><![CDATA[<p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
+<span id="more"></span>
+
+<h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
+<p>​        最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<p>​        Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验代码，参数可以自行调整。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/people.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Canny&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Canny&quot;</span>, dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        网上随便找了一张图，实验结果是这样的。值得注意的是：Canny算法的output是二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<img src="result1.png" alt="result1" style="zoom:67%;" />
+
+<h2 id="直线检测Line-detection"><a href="#直线检测Line-detection" class="headerlink" title="直线检测Line detection"></a>直线检测Line detection</h2><p>​        霍夫变换直线检测是最基本的算法，也是今天学习和使用到的。他有<code>HoughLines</code>和<code>HoughLinesP</code>两种，后者是前者的优化，但并不意味着<code>HoughLines</code>完全被取代，他们适用于不同的场景，大家可以根据实际需要自行选择。</p>
+<p>​        需要我们注意的是霍夫直线检测是从二值图像中检测直线(线段)，所以在调用<code>HoughLines</code>或<code>HoughLinesP</code>算法前，要先将图像转换成二值图像，通常在之前先使用<code>Canny</code>将其简化成只有边缘特征的二值图像。</p>
+<p>​        这里我使用了OpenCV官方文档提供的示例代码进行测试。</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">HoughLinesP算法参数：</span><br><span class="line"><span class="code">	InputArray 	image,  //  8位的单通道二值图像。对于其他类型，在进行霍夫变换之前，需要将其修改为这个指定的格式</span></span><br><span class="line"><span class="code">	OutputArray lines,  // 输出的直线集合</span></span><br><span class="line"><span class="code">	double 	rho,  // 以像素为单位的距离 r 的精度。一般情况下，使用的精度是 1</span></span><br><span class="line"><span class="code">	double 	theta,  // 角度 θ 的精度。一般情况下，使用的精度是 pi/180，表示要搜索可能的角度</span></span><br><span class="line"><span class="code">	int 	threshold,  // 阈值。该值越小，判定出的直线越多；值越大，判定出的直线就越少</span></span><br><span class="line"><span class="code">	double 	minLineLength = 0,  // 控制「接受直线的最小长度」的值，默认值为 0</span></span><br><span class="line"><span class="code">	double 	maxLineGap = 0  // 控制接受共线线段之间的最小间隔，默认值为 0</span></span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验代码，参数可以自行调整。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst, color_dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/building.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">cvtColor</span>(dst, color_dst, COLOR_GRAY2BGR);</span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">   COLOR_GRAY2BGR参数表示将灰度图像转换为3通道的BGR彩色图像。</span></span><br><span class="line"><span class="comment">   经过该转换后，color_dst中每个像素的R、G、B三个分量的值都相同，即为该像素的灰度值。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   	vector&lt;Vec4i&gt; lines;</span><br><span class="line">   	<span class="built_in">HoughLinesP</span>(dst, lines, <span class="number">1</span>, CV_PI / <span class="number">180</span>, <span class="number">200</span>, <span class="number">30</span>, <span class="number">10</span>);</span><br><span class="line">   	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; lines.<span class="built_in">size</span>(); i++)</span><br><span class="line">   	&#123;</span><br><span class="line">       	<span class="built_in">line</span>(color_dst, <span class="built_in">Point</span>(lines[i][<span class="number">0</span>], lines[i][<span class="number">1</span>]),</span><br><span class="line">           	<span class="built_in">Point</span>(lines[i][<span class="number">2</span>], lines[i][<span class="number">3</span>]), <span class="built_in">Scalar</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>, <span class="number">8</span>);</span><br><span class="line">   	&#125;</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, color_dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验结果如下。</p>
+<p>​        这是一个OpenCV官方文档提供的示例图片:</p>
+<img src="result2_1.png" alt="result2_1" style="zoom: 25%;" />
+
+<p>​        这是上述程序在概率霍夫变换后的输出：</p>
+<img src="result2_2.png" alt="result2_2" style="zoom:25%;" />
+
+<p>​        这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
+]]></content>
+      <categories>
+        <category>OpenCV</category>
+      </categories>
+      <tags>
+        <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>algorithm02 哈希表</title>
     <url>/2022/12/21/algorithm02/</url>
     <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
@@ -987,46 +1154,5 @@
       <categories>
         <category>算法</category>
       </categories>
-  </entry>
-  <entry>
-    <title>OpenCV特征检测</title>
-    <url>/2023/03/10/opencv01/</url>
-    <content><![CDATA[<p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
-<span id="more"></span>
-
-<h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
-<p>​        最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
-<p>​        Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
-<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure></div>
-
-<p>​        实验代码，参数可以自行调整。</p>
-<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/people.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Canny&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Canny&quot;</span>, dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>​        网上随便找了一张图，实验结果是这样的。值得注意的是：Canny算法的output是二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
-<img src="result1.png" alt="result1" style="zoom:67%;" />
-
-<h2 id="直线检测Line-detection"><a href="#直线检测Line-detection" class="headerlink" title="直线检测Line detection"></a>直线检测Line detection</h2><p>​        霍夫变换直线检测是最基本的算法，也是今天学习和使用到的。他有<code>HoughLines</code>和<code>HoughLinesP</code>两种，后者是前者的优化，但并不意味着<code>HoughLines</code>完全被取代，他们适用于不同的场景，大家可以根据实际需要自行选择。</p>
-<p>​        需要我们注意的是霍夫直线检测是从二值图像中检测直线(线段)，所以在调用<code>HoughLines</code>或<code>HoughLinesP</code>算法前，要先将图像转换成二值图像，通常在之前先使用<code>Canny</code>将其简化成只有边缘特征的二值图像。</p>
-<p>​        这里我使用了OpenCV官方文档提供的示例代码进行测试。</p>
-<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">HoughLinesP算法参数：</span><br><span class="line"><span class="code">	InputArray 	image,  //  8位的单通道二值图像。对于其他类型，在进行霍夫变换之前，需要将其修改为这个指定的格式</span></span><br><span class="line"><span class="code">	OutputArray lines,  // 输出的直线集合</span></span><br><span class="line"><span class="code">	double 	rho,  // 以像素为单位的距离 r 的精度。一般情况下，使用的精度是 1</span></span><br><span class="line"><span class="code">	double 	theta,  // 角度 θ 的精度。一般情况下，使用的精度是 pi/180，表示要搜索可能的角度</span></span><br><span class="line"><span class="code">	int 	threshold,  // 阈值。该值越小，判定出的直线越多；值越大，判定出的直线就越少</span></span><br><span class="line"><span class="code">	double 	minLineLength = 0,  // 控制「接受直线的最小长度」的值，默认值为 0</span></span><br><span class="line"><span class="code">	double 	maxLineGap = 0  // 控制接受共线线段之间的最小间隔，默认值为 0</span></span><br></pre></td></tr></table></figure></div>
-
-<p>​        实验代码，参数可以自行调整。</p>
-<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst, color_dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/building.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">cvtColor</span>(dst, color_dst, COLOR_GRAY2BGR);</span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">   COLOR_GRAY2BGR参数表示将灰度图像转换为3通道的BGR彩色图像。</span></span><br><span class="line"><span class="comment">   经过该转换后，color_dst中每个像素的R、G、B三个分量的值都相同，即为该像素的灰度值。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   	vector&lt;Vec4i&gt; lines;</span><br><span class="line">   	<span class="built_in">HoughLinesP</span>(dst, lines, <span class="number">1</span>, CV_PI / <span class="number">180</span>, <span class="number">200</span>, <span class="number">30</span>, <span class="number">10</span>);</span><br><span class="line">   	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; lines.<span class="built_in">size</span>(); i++)</span><br><span class="line">   	&#123;</span><br><span class="line">       	<span class="built_in">line</span>(color_dst, <span class="built_in">Point</span>(lines[i][<span class="number">0</span>], lines[i][<span class="number">1</span>]),</span><br><span class="line">           	<span class="built_in">Point</span>(lines[i][<span class="number">2</span>], lines[i][<span class="number">3</span>]), <span class="built_in">Scalar</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>, <span class="number">8</span>);</span><br><span class="line">   	&#125;</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, color_dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>​        实验结果如下。</p>
-<p>​        这是一个OpenCV官方文档提供的示例图片:</p>
-<img src="result2_1.png" alt="result2_1" style="zoom: 25%;" />
-
-<p>​        这是上述程序在概率霍夫变换后的输出：</p>
-<img src="result2_2.png" alt="result2_2" style="zoom:25%;" />
-
-<p>​        这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
-]]></content>
-      <categories>
-        <category>OpenCV</category>
-      </categories>
-      <tags>
-        <tag>OpenCV</tag>
-      </tags>
   </entry>
 </search>
