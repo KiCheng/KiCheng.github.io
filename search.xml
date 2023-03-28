@@ -245,6 +245,146 @@
       </categories>
   </entry>
   <entry>
+    <title>02_Mybatis</title>
+    <url>/2023/03/28/02-Mybatis/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>Mybatis是一款很重要的开发框架！</p>
+<h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><h2 id="Mybatis概述"><a href="#Mybatis概述" class="headerlink" title="Mybatis概述"></a>Mybatis概述</h2><p>​        MyBatis 是一款优秀的<strong>持久层框架</strong>，用于简化 JDBC 开发。</p>
+<blockquote>
+<p><strong>持久层：</strong>负责将数据到保存到数据库的那一层代码。开发中我们会将操作数据库的Java代码作为持久层，而Mybatis就是对jdbc代码进行了封装。（JavaEE三层架构：表现层、业务层、持久层）</p>
+</blockquote>
+<h3 id="JDBC缺点"><a href="#JDBC缺点" class="headerlink" title="JDBC缺点"></a>JDBC缺点</h3><img src="image-20230325185145333.png" alt="image-20230325185145333" style="zoom:67%;" />
+
+<ul>
+<li><p>硬编码</p>
+<ul>
+<li><p>注册驱动、获取连接</p>
+<p>上图①的代码有很多字符串，而这些是连接数据库的四个基本信息，以后如果要将Mysql数据库换成其他的关系型数据库的话，这四个地方都需要修改，如果放在此处就意味着要修改我们的源代码。</p>
+</li>
+<li><p>SQL语句</p>
+<p>上图②的代码。如果表结构发生变化，SQL语句就要进行更改，这也不方便后期的维护。</p>
+</li>
+</ul>
+</li>
+<li><p>操作繁琐</p>
+<ul>
+<li><p>手动设置参数</p>
+</li>
+<li><p>手动封装结果集</p>
+<p>上图④的代码是对查询到的数据进行封装，而这部分代码是没有什么技术含量，而且特别耗费时间的。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Mybatis的优化"><a href="#Mybatis的优化" class="headerlink" title="Mybatis的优化"></a>Mybatis的优化</h3><ul>
+<li>硬编码可以配置到配置文件</li>
+<li>操作繁琐的地方mybatis都自动完成</li>
+</ul>
+<h2 id="Mybatis快速入门"><a href="#Mybatis快速入门" class="headerlink" title="Mybatis快速入门"></a>Mybatis快速入门</h2><p>1、在<code>pom.xml</code>中导入依赖坐标</p>
+<p>至少需要：Mybatis、Mysql依赖</p>
+<p>直接去找：<a class="link"   href="https://mvnrepository.com/" >https://mvnrepository.com/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>2、编写<code>Mybatis</code>核心配置文件</p>
+<p>在模块下的<code> resources</code> 目录下创建mybatis的配置文件 <code>mybatis-config.xml</code>，内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    environments：配置数据库连接环境信息。可以配置多个environment，通过default属性切换不同的environment</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;test&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>3、编写sql映射文件（统一管理sql语句，解决硬编码问题）</p>
+<p>在模块的 <code>resources</code> 目录下创建映射配置文件 <code>UserMapper.xml</code>，内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;usermapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.Lijiacheng.pojo.User&quot;</span>&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>4、编码</p>
+<ul>
+<li><p>在<code>pojo</code>包下创建<code>User</code>的javaBean类。</p>
+</li>
+<li><p>创建测试类，内容如下：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//3. 执行sql</span></span><br><span class="line">        List&lt;User&gt; users = sqlSession.selectList(<span class="string">&quot;usermapper.selectAll&quot;</span>);  <span class="comment">//该字符串必须是映射配置文件的namespace.id</span></span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4. 释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<blockquote>
+<p>Mybatis的硬编码配置都可以在官方文档中找到：<a class="link"   href="https://mybatis.org/mybatis-3/zh/getting-started.html" >https://mybatis.org/mybatis-3/zh/getting-started.html<i class="fa-solid fa-up-right-from-square"></i></a></p>
+</blockquote>
+<h2 id="Mybatis代理开发"><a href="#Mybatis代理开发" class="headerlink" title="Mybatis代理开发"></a>Mybatis代理开发</h2><h3 id="代理开发概述"><a href="#代理开发概述" class="headerlink" title="代理开发概述"></a>代理开发概述</h3><p>之前使用Mybatis的时候也存在硬编码问题：</p>
+<p><img src="image-20230325192705282.png" alt="image-20230325192705282"></p>
+<p>这里调用 <code>selectList()</code> 方法传递的参数是映射配置文件中的 namespace.id值。这样写也不便于后期的维护。如果使用 Mapper 代理方式则不存在硬编码问题：</p>
+<img src="image-20230326141250750.png" alt="image-20230326141250750" style="zoom:67%;" />
+
+<p>通过上面的描述可以看出 Mapper 代理方式的目的：</p>
+<ul>
+<li>解决原生方式中的硬编码</li>
+<li>简化后期执行SQL</li>
+</ul>
+<h3 id="使用Mapper代理开发"><a href="#使用Mapper代理开发" class="headerlink" title="使用Mapper代理开发"></a>使用Mapper代理开发</h3><ul>
+<li>定义与SQL映射文件同名的Mapper接口，并且将Mapper接口和SQL映射文件放置在同一目录下</li>
+</ul>
+<img src="image-20230326133634591.png" alt="image-20230326133634591" style="zoom: 67%;" />
+
+<ul>
+<li>设置SQL映射文件的namespace属性为<strong>Mapper接口全限定名</strong></li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.Lijiacheng.mapper.UserMapper&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>在 Mapper 接口中定义方法，方法名就是<strong>SQL映射文件中sql语句的id</strong>，并保持参数类型和返回值类型一致</li>
+</ul>
+<img src="image-20230325194636891.png" alt="image-20230325194636891" style="zoom:67%;" />
+
+<p>​    在接口声明相应函数后，点击左侧<code>mapper</code>小图标可以跳转到xml映射文件相应id的sql语句上。</p>
+<img src="image-20230326133752273.png" alt="image-20230326133752273" style="zoom:67%;" />
+
+<ul>
+<li>测试类中内容：</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo_Mapper</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//3. 获取接口代理对象</span></span><br><span class="line">        <span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br><span class="line">        List&lt;User&gt; users = usermapper.selectAll();</span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4.释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>另外，使用Mapper代理的方法，在<code>mapper</code>接口和<code>sql映射文件</code>同名的前提下，可以在<code>mybatis</code>核心配置文件中通过包扫描的方式简化sql映射文件的加载。</p>
+</blockquote>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    &lt;mapper resource=&quot;com/Lijiacheng/mapper/UserMapper.xml&quot;/&gt; --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="核心配置文件"><a href="#核心配置文件" class="headerlink" title="核心配置文件"></a>核心配置文件</h2><p><strong>类型别名</strong></p>
+<p>在sql映射配置文件中的 <code>resultType</code> 属性需要配置数据封装的类型（类的全限定名）。而每次这样写是特别麻烦的，Mybatis 提供了 <code>类型别名</code>(typeAliases) 可以简化这部分的书写。</p>
+<p>首先需要现在核心配置文件中配置类型别名，也就意味着给pojo包下所有的类起了别名（别名就是类名），<font color="red">不区分大小写</font>。内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--name属性的值是实体类所在包--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>通过上述的配置，我们就可以简化映射配置文件中 <code>resultType</code> 属性值的编写：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.itheima.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;user&quot;</span>&gt;</span>  <span class="comment">&lt;!-- 如果没配置&lt;typeAliases&gt;的话，必须是类的全限定名 --&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>最后我们总结一下<code>Mybatis</code>进行代理开发的流程：</p>
+<p>1、首先和入门的开发流程相同，需要进行核心配置文件的配置、以及在<code>resource</code>目录下创建sql映射文件。</p>
+<p>核心配置文件可以从mybatis官网上直接copy：<a class="link"   href="https://mybatis.org/mybatis-3/zh/%EF%BC%88%E6%88%91%E5%B1%85%E7%84%B6%E5%9C%A8%E8%B0%B7%E6%AD%8C%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%8A%E6%89%BE%E4%B8%8D%E5%88%B0%EF%BC%8C%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B%EF%BC%89" >https://mybatis.org/mybatis-3/zh/（我居然在谷歌搜索引擎上找不到，这里记录一下）<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>配置文件需要注意的两个点，如下图：</p>
+<p><img src="image-20230326142309667.png" alt="image-20230326142309667"></p>
+<ul>
+<li><p>配置类型别名，简化sql映射文件</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p>加载sql映射配置时进行包扫描（特别是在以后开发中有多个sql映射文件时）</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>sql映射文件需要注意的几个点：</p>
+<p><img src="image-20230326143114568.png" alt="image-20230326143114568"></p>
+<ul>
+<li><p><code>namespace</code>属性对应的是<code>mapper</code>目录下的mapper接口</p>
+</li>
+<li><p><code>id</code>属性对应的是接口中声明的方法，这里的<font color='red'><code>id</code>属性要和<code>接口方法名</code>一致！</font></p>
+</li>
+<li><p><code>resultType</code>属性可以直接使用别名，习惯上直接用实体类名即可（前提要配置类型别名）</p>
+</li>
+</ul>
+<p>2、在<code>mapper</code>目录下创建和sql映射文件同名的mapper接口，声明方法</p>
+<p>3、实体类一定要有啊，这个不用说了</p>
+<p>4、测试类前面也是一样的，唯一不同的就是需要获取一个接口代理对象：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br></pre></td></tr></table></figure></div>
+
+<p>通过这个对象可以调用接口中声明的函数，接口中的函数和sql映射文件中的id值相同，这样就找到了需要执行的sql语句，这样就可以操作数据库了，并通过你调用的函数返回结果。</p>
+<blockquote>
+<p>还有一个比较重要的点：</p>
+<p>当你Bean类中的成员变量和操作数据库的数据名不同时，如何产生映射关系。这个放在后面的帖子里记录会比较容易懂。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Android平台JNI开发保姆级教程</title>
     <url>/2023/03/12/Android-jni/</url>
     <content><![CDATA[<p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
@@ -596,6 +736,34 @@
       </categories>
   </entry>
   <entry>
+    <title>algorithm03 链表</title>
+    <url>/2023/02/03/algorithm03/</url>
+    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
+<span id="more"></span>
+
+<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
+<p>链表的入口节点称为链表的头结点也就是head。</p>
+<p>如图所示：</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
+
+<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
+<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
+<p>双链表 既可以向前查询也可以向后查询。</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
+
+<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
+
+<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
+<p>链表是通过指针域的指针链接在内存中各个节点。</p>
+<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
+<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>algorithm02 哈希表</title>
     <url>/2022/12/21/algorithm02/</url>
     <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
@@ -815,34 +983,6 @@
 <p>用哈希法解决了两数之和，很多同学会感觉用哈希法也可以解决三数之和，四数之和。其实是可以解决，但是非常麻烦，需要去重导致代码效率很低。</p>
 <p>在<a class="link"   href="https://programmercarl.com/0015.%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C.html" >15.三数之和<i class="fa-solid fa-up-right-from-square"></i></a>中我给出了哈希法和双指针两个解法，大家就可以体会到，使用哈希法还是比较麻烦的。</p>
 <p>所以18. 四数之和，15.三数之和都推荐使用双指针法！</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>algorithm03 链表</title>
-    <url>/2023/02/03/algorithm03/</url>
-    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-<span id="more"></span>
-
-<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
-<p>链表的入口节点称为链表的头结点也就是head。</p>
-<p>如图所示：</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
-
-<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
-<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
-<p>双链表 既可以向前查询也可以向后查询。</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
-
-<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
-
-<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
-<p>链表是通过指针域的指针链接在内存中各个节点。</p>
-<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
-<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
 ]]></content>
       <categories>
         <category>算法</category>
