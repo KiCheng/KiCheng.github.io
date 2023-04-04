@@ -1,6 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>01_JDBC</title>
+    <url>/2023/03/28/01-JDBC/</url>
+    <content><![CDATA[<p>​        现在企业早就不使用这种繁琐的技术了，但是学过了<code>JDBC</code>才能更好的理解后面的开发框架。</p>
+<span id="more"></span>
+
+<h1 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h1><p>​        JDBC是一款使用 Java语言赖操作关系型数据库的一套API；它为不同的关系型数据库提供了一套标准的API接口。</p>
+<img src="image-20230325094653057.png" alt="image-20230325094653057" style="zoom:50%;" />
+
+<h2 id="JDBC快速入门"><a href="#JDBC快速入门" class="headerlink" title="JDBC快速入门"></a>JDBC快速入门</h2><p>（1）导入驱动包：操作哪个关系型数据库就需要导入该数据库的驱动包。将mysql驱动包放在模块的<code>lib</code>目录下，并添加为库文件；</p>
+<blockquote>
+<p>mysql驱动jar包下载地址：<a class="link"   href="https://dev.mysql.com/downloads/connector/j/" >https://dev.mysql.com/downloads/connector/j/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+</blockquote>
+<p>（2）代码步骤：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JDBCDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException, SQLException &#123;</span><br><span class="line">        <span class="comment">// 注册驱动(可省略)</span></span><br><span class="line">        Class.forName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        <span class="comment">// 获取链接</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://127.0.0.1:3306/db1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br><span class="line">        <span class="comment">// 定义mysql语句</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;update tb_user set password = &#x27;20221&#x27; where username=&#x27;ljc&#x27;;&quot;</span>;</span><br><span class="line">        <span class="comment">// 获取执行sql对象Statement</span></span><br><span class="line">        <span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">        <span class="comment">// statement执行sql语句</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> statement.executeUpdate(sql);  <span class="comment">// 数据库增删改操作返回的都是受影响的行数，int类型</span></span><br><span class="line">        <span class="comment">// 返回处理结果</span></span><br><span class="line">        System.out.println(count);</span><br><span class="line">        <span class="comment">// 释放资源</span></span><br><span class="line">        statement.close();</span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="JDBC-API"><a href="#JDBC-API" class="headerlink" title="JDBC API"></a>JDBC API</h2><p>1、<code>DriverManager</code>驱动管理类</p>
+<ul>
+<li><p>注册驱动 （mysql5自动注册）</p>
+</li>
+<li><p>获取数据库的连接</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>2、<code>Connection</code>数据库连接对象</p>
+<ul>
+<li><p>获取执行sql的statement对象</p>
+<ul>
+<li><p>普通执行</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br></pre></td></tr></table></figure></div></li>
+<li><p>预编译执行 – 防止sql注入</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">PreparedStatement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.prepareStatement(sql);  <span class="comment">// 预编译直接将sql语句传进来</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+<li><p>事务管理</p>
+<blockquote>
+<p>Mysql事务管理(mysql中默认自动提交): ①开启事务：Begin; 或 Transaction;  ②提交事务：Commit;   ③回滚事务：Rollback;</p>
+</blockquote>
+<p><code>Connection</code>中定义了3个对应的方法：</p>
+<ul>
+<li><p>开启事务：true表示自动提交事务，false表示手动提交事务，而开启事务需要将该参数设为为false。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure></div></li>
+<li><p>提交事务</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">conn.commit();</span><br></pre></td></tr></table></figure></div></li>
+<li><p>回滚事务</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">conn.rollback();</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<p>事务管理的意义：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ============开启事务==========</span></span><br><span class="line">        conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">        <span class="comment">//5. 执行sql</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count1</span> <span class="operator">=</span> stmt.executeUpdate(sql1);</span><br><span class="line">        <span class="comment">//6. 处理结果</span></span><br><span class="line">        System.out.println(count1);</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span>/<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//5. 执行sql</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count2</span> <span class="operator">=</span> stmt.executeUpdate(sql2);</span><br><span class="line">        <span class="comment">//6. 处理结果</span></span><br><span class="line">        System.out.println(count2);    </span><br><span class="line">        <span class="comment">// ============提交事务==========</span></span><br><span class="line">        <span class="comment">//程序运行到此处，说明没有出现任何问题，则需求提交事务</span></span><br><span class="line">        conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">// ============回滚事务==========</span></span><br><span class="line">        <span class="comment">//程序在出现异常时会执行到这个地方，此时就需要回滚事务</span></span><br><span class="line">        conn.rollback();</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>3、<code>Statement</code>对象</p>
+<p>​        用来执行sql代码。</p>
+<ul>
+<li><p>执行数据增删改以及数据库、表、列的定义：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> statement.excuteUpdate(sql);</span><br></pre></td></tr></table></figure></div></li>
+<li><p>表中查询</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> statement.executeQuery(sql);</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>4、<code>ResultSet</code>结果集对象</p>
+<p>​        封装了sql查询语句的结果。</p>
+<p>​        遍历查询结果中所有数据：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1 光标向下移动一行，并且判断当前行是否有数据</span></span><br><span class="line">   <span class="keyword">while</span> (rs.next())&#123;</span><br><span class="line">       <span class="comment">// 2 获取数据  getXxx()</span></span><br><span class="line">       <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> rs.getInt(<span class="string">&quot;id&quot;</span>);</span><br><span class="line">       <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> rs.getString(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">       <span class="type">double</span> <span class="variable">money</span> <span class="operator">=</span> rs.getDouble(<span class="string">&quot;money&quot;</span>);</span><br><span class="line">       System.out.println(id);</span><br><span class="line">       System.out.println(name);</span><br><span class="line">       System.out.println(money);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>5、<code>PreparedStatement</code>对象</p>
+<p>​        预编译sql语句并执行，防止sql注入。</p>
+<blockquote>
+<p>sql注入：通过操作输入来修改事先定义好的SQL语句，用以达到执行代码对服务器进行攻击的方法。</p>
+</blockquote>
+<ul>
+<li><p>模拟sql注入</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;xxxxxx&quot;</span>;</span><br><span class="line">   <span class="type">String</span> <span class="variable">pwd</span> <span class="operator">=</span> <span class="string">&quot;&#x27; or &#x27;1&#x27; = &#x27;1&quot;</span>;</span><br><span class="line">   <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from tb_user where username = &#x27;&quot;</span> + name + <span class="string">&quot;&#x27; and password = &#x27;&quot;</span> + pwd + <span class="string">&quot;&#x27;&quot;</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p>上面的sql代码是将name和pwd拼接而成的，拼接后的sql代码为：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">select * from tb_user <span class="type">where</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&#x27;xxxxxx&#x27;</span> <span class="type">and</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> or <span class="string">&#x27;1&#x27;</span> = <span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p><code>PreparedStatement</code></p>
+<p>先前使用<code>Statement</code>对象执行sql代码的步骤：</p>
+<p> ① 定义参数以及sql语句</p>
+<p> ② <code>statement.executeUpdate(sql)</code>执行</p>
+<p><strong>使用<code>PreparedStatement</code>预编译执行步骤：</strong></p>
+<p> ① 定义sql语句，占位符用 ‘?’代替</p>
+<p> ② <code>pstmt</code>对象设置 ‘?’ 参数指代的值： <code>pstmt.setString(index,参数);</code></p>
+<p> ③ <code>pstmt.executeUpdate();</code>执行，这里注意不需要传入sql语句了，因为在定义<code>pstmt</code>对象的时候已经传入sql语句进行预编译了</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">textPreparedStatement</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 注册驱动(可省略)</span></span><br><span class="line">        Class.forName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        <span class="comment">// 获取链接</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://127.0.0.1:3306/db1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br><span class="line">  </span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from tb_user where username = ? and password = ?&quot;</span>;</span><br><span class="line">        <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(sql);</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">pwd</span> <span class="operator">=</span> <span class="string">&quot;&#x27; or &#x27;1&#x27; = &#x27;1&quot;</span>;</span><br><span class="line">        pstmt.setString(<span class="number">1</span>,name);</span><br><span class="line">        pstmt.setString(<span class="number">2</span>,pwd);</span><br><span class="line">  </span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> pstmt.executeQuery();</span><br><span class="line">        <span class="keyword">if</span>(resultSet.next())&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;登陆成功!&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;登陆失败!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">        resultSet.close();</span><br><span class="line">        pstmt.close();</span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>6、<code>PreparedStatement</code>原理</p>
+<p>​    开启预编译：在url中加入参数：<code>useServerPrepStmts=true</code>;</p>
+<p>​    好处：① 预编译，性能更高； ② 防止sql注入</p>
+<img src="image-20230325160120135.png" alt="image-20230325160120135" style="zoom:50%;" />
+
+<p>​        在获取<code>PreparedStatement</code>对象时，将sql语句发送给mysql服务器进行检查、编译（这些步骤很耗时），执行时就不用再进行这些步骤了，速度更快。</p>
+<h2 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h2><p>​        数据库连接池（Connection Pool）是一种复用 Connection 的组件，它可以避免反复创建新连接，提高JDBC代码的运行效率。</p>
+<p>​        在执行JDBC的增删改查的操作时，如果每一次操作都来一次打开连接，操作，关闭连接，那么创建和销毁JDBC连接的开销就太大了。为了避免频繁地创建和销毁JDBC连接，我们可以通过连接池复用已经创建好的连接。</p>
+<p>​                                               <img src="image-20230325160719950.png" alt="image-20230325160719950" style="zoom:50%;" /></p>
+<h3 id="数据库连接池的实现"><a href="#数据库连接池的实现" class="headerlink" title="数据库连接池的实现"></a>数据库连接池的实现</h3><p>​        标准接口：<code>DataSource</code></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">DataSource</span> <span class="variable">datasource</span> <span class="operator">=</span> Connection <span class="title function_">getConnection</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        不需要通过 <code>DriverManager</code> 对象获取 <code>Connection</code> 对象，而是通过连接池（DataSource）获取 <code>Connection</code> 对象。</p>
+<p><code>Druid</code>数据连接池 – alibaba</p>
+<ul>
+<li><p>导入jar包：下载地址 <a class="link"   href="https://repo1.maven.org/maven2/com/alibaba/druid/" >https://repo1.maven.org/maven2/com/alibaba/druid/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+</li>
+<li><p>编写配置文件<code>druid.properties</code></p>
+</li>
+</ul>
+<img src="image-20230325162515349.png" alt="image-20230325162515349" style="zoom:50%;" />
+
+<ul>
+<li>测试代码</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testDruid</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//定义配置文件</span></span><br><span class="line">        <span class="comment">//加载配置文件</span></span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.load(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;src/druid.properties&quot;</span>));</span><br><span class="line">        <span class="comment">//获取连接池对象</span></span><br><span class="line">        <span class="type">DataSource</span> <span class="variable">dataSource</span> <span class="operator">=</span> DruidDataSourceFactory.createDataSource(prop);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取数据库连接 Connection</span></span><br><span class="line">        <span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> dataSource.getConnection();</span><br><span class="line">        System.out.println(connection); <span class="comment">//获取到了连接后就可以继续做其他操作了</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//System.out.println(System.getProperty(&quot;user.dir&quot;));</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>Druid</code>连接池配置成功：</p>
+<img src="image-20230325162717690.png" alt="image-20230325162717690" style="zoom:67%;" />
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
     <title>02_Maven</title>
     <url>/2023/03/28/02-Maven/</url>
     <content><![CDATA[<p>Maven是专门用于管理和构建Java项目的工具。</p>
@@ -126,119 +245,140 @@
       </categories>
   </entry>
   <entry>
-    <title>01_JDBC</title>
-    <url>/2023/03/28/01-JDBC/</url>
-    <content><![CDATA[<p>​        现在企业早就不使用这种繁琐的技术了，但是学过了<code>JDBC</code>才能更好的理解后面的开发框架。</p>
+    <title>02_Mybatis</title>
+    <url>/2023/03/28/02-Mybatis/</url>
+    <content><![CDATA[<p>Mybatis是一款很重要的开发框架！</p>
 <span id="more"></span>
 
-<h1 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h1><p>​        JDBC是一款使用 Java语言赖操作关系型数据库的一套API；它为不同的关系型数据库提供了一套标准的API接口。</p>
-<img src="image-20230325094653057.png" alt="image-20230325094653057" style="zoom:50%;" />
-
-<h2 id="JDBC快速入门"><a href="#JDBC快速入门" class="headerlink" title="JDBC快速入门"></a>JDBC快速入门</h2><p>（1）导入驱动包：操作哪个关系型数据库就需要导入该数据库的驱动包。将mysql驱动包放在模块的<code>lib</code>目录下，并添加为库文件；</p>
+<h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><h2 id="Mybatis概述"><a href="#Mybatis概述" class="headerlink" title="Mybatis概述"></a>Mybatis概述</h2><p>​        MyBatis 是一款优秀的<strong>持久层框架</strong>，用于简化 JDBC 开发。</p>
 <blockquote>
-<p>mysql驱动jar包下载地址：<a class="link"   href="https://dev.mysql.com/downloads/connector/j/" >https://dev.mysql.com/downloads/connector/j/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p><strong>持久层：</strong>负责将数据到保存到数据库的那一层代码。开发中我们会将操作数据库的Java代码作为持久层，而Mybatis就是对jdbc代码进行了封装。（JavaEE三层架构：表现层、业务层、持久层）</p>
 </blockquote>
-<p>（2）代码步骤：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JDBCDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException, SQLException &#123;</span><br><span class="line">        <span class="comment">// 注册驱动(可省略)</span></span><br><span class="line">        Class.forName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        <span class="comment">// 获取链接</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://127.0.0.1:3306/db1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br><span class="line">        <span class="comment">// 定义mysql语句</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;update tb_user set password = &#x27;20221&#x27; where username=&#x27;ljc&#x27;;&quot;</span>;</span><br><span class="line">        <span class="comment">// 获取执行sql对象Statement</span></span><br><span class="line">        <span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">        <span class="comment">// statement执行sql语句</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> statement.executeUpdate(sql);  <span class="comment">// 数据库增删改操作返回的都是受影响的行数，int类型</span></span><br><span class="line">        <span class="comment">// 返回处理结果</span></span><br><span class="line">        System.out.println(count);</span><br><span class="line">        <span class="comment">// 释放资源</span></span><br><span class="line">        statement.close();</span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<h3 id="JDBC缺点"><a href="#JDBC缺点" class="headerlink" title="JDBC缺点"></a>JDBC缺点</h3><img src="image-20230325185145333.png" alt="image-20230325185145333" style="zoom:67%;" />
 
-<h2 id="JDBC-API"><a href="#JDBC-API" class="headerlink" title="JDBC API"></a>JDBC API</h2><p>1、<code>DriverManager</code>驱动管理类</p>
 <ul>
-<li><p>注册驱动 （mysql5自动注册）</p>
+<li><p>硬编码</p>
+<ul>
+<li><p>注册驱动、获取连接</p>
+<p>上图①的代码有很多字符串，而这些是连接数据库的四个基本信息，以后如果要将Mysql数据库换成其他的关系型数据库的话，这四个地方都需要修改，如果放在此处就意味着要修改我们的源代码。</p>
 </li>
-<li><p>获取数据库的连接</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<p>2、<code>Connection</code>数据库连接对象</p>
-<ul>
-<li><p>获取执行sql的statement对象</p>
-<ul>
-<li><p>普通执行</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br></pre></td></tr></table></figure></div></li>
-<li><p>预编译执行 – 防止sql注入</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">PreparedStatement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.prepareStatement(sql);  <span class="comment">// 预编译直接将sql语句传进来</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p>SQL语句</p>
+<p>上图②的代码。如果表结构发生变化，SQL语句就要进行更改，这也不方便后期的维护。</p>
+</li>
 </ul>
 </li>
-<li><p>事务管理</p>
+<li><p>操作繁琐</p>
+<ul>
+<li><p>手动设置参数</p>
+</li>
+<li><p>手动封装结果集</p>
+<p>上图④的代码是对查询到的数据进行封装，而这部分代码是没有什么技术含量，而且特别耗费时间的。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Mybatis的优化"><a href="#Mybatis的优化" class="headerlink" title="Mybatis的优化"></a>Mybatis的优化</h3><ul>
+<li>硬编码可以配置到配置文件</li>
+<li>操作繁琐的地方mybatis都自动完成</li>
+</ul>
+<h2 id="Mybatis快速入门"><a href="#Mybatis快速入门" class="headerlink" title="Mybatis快速入门"></a>Mybatis快速入门</h2><p>1、在<code>pom.xml</code>中导入依赖坐标</p>
+<p>至少需要：Mybatis、Mysql依赖</p>
+<p>直接去找：<a class="link"   href="https://mvnrepository.com/" >https://mvnrepository.com/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>2、编写<code>Mybatis</code>核心配置文件</p>
+<p>在模块下的<code> resources</code> 目录下创建mybatis的配置文件 <code>mybatis-config.xml</code>，内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    environments：配置数据库连接环境信息。可以配置多个environment，通过default属性切换不同的environment</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;test&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>3、编写sql映射文件（统一管理sql语句，解决硬编码问题）</p>
+<p>在模块的 <code>resources</code> 目录下创建映射配置文件 <code>UserMapper.xml</code>，内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;usermapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.Lijiacheng.pojo.User&quot;</span>&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>4、编码</p>
+<ul>
+<li><p>在<code>pojo</code>包下创建<code>User</code>的javaBean类。</p>
+</li>
+<li><p>创建测试类，内容如下：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//3. 执行sql</span></span><br><span class="line">        List&lt;User&gt; users = sqlSession.selectList(<span class="string">&quot;usermapper.selectAll&quot;</span>);  <span class="comment">//该字符串必须是映射配置文件的namespace.id</span></span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4. 释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
 <blockquote>
-<p>Mysql事务管理(mysql中默认自动提交): ①开启事务：Begin; 或 Transaction;  ②提交事务：Commit;   ③回滚事务：Rollback;</p>
+<p>Mybatis的硬编码配置都可以在官方文档中找到：<a class="link"   href="https://mybatis.org/mybatis-3/zh/getting-started.html" >https://mybatis.org/mybatis-3/zh/getting-started.html<i class="fa-solid fa-up-right-from-square"></i></a></p>
 </blockquote>
-<p><code>Connection</code>中定义了3个对应的方法：</p>
-<ul>
-<li><p>开启事务：true表示自动提交事务，false表示手动提交事务，而开启事务需要将该参数设为为false。</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure></div></li>
-<li><p>提交事务</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">conn.commit();</span><br></pre></td></tr></table></figure></div></li>
-<li><p>回滚事务</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">conn.rollback();</span><br></pre></td></tr></table></figure></div></li>
-</ul>
-</li>
-</ul>
-<p>事务管理的意义：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ============开启事务==========</span></span><br><span class="line">        conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">        <span class="comment">//5. 执行sql</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count1</span> <span class="operator">=</span> stmt.executeUpdate(sql1);</span><br><span class="line">        <span class="comment">//6. 处理结果</span></span><br><span class="line">        System.out.println(count1);</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span>/<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//5. 执行sql</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">count2</span> <span class="operator">=</span> stmt.executeUpdate(sql2);</span><br><span class="line">        <span class="comment">//6. 处理结果</span></span><br><span class="line">        System.out.println(count2);    </span><br><span class="line">        <span class="comment">// ============提交事务==========</span></span><br><span class="line">        <span class="comment">//程序运行到此处，说明没有出现任何问题，则需求提交事务</span></span><br><span class="line">        conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">// ============回滚事务==========</span></span><br><span class="line">        <span class="comment">//程序在出现异常时会执行到这个地方，此时就需要回滚事务</span></span><br><span class="line">        conn.rollback();</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<h2 id="Mybatis代理开发"><a href="#Mybatis代理开发" class="headerlink" title="Mybatis代理开发"></a>Mybatis代理开发</h2><h3 id="代理开发概述"><a href="#代理开发概述" class="headerlink" title="代理开发概述"></a>代理开发概述</h3><p>之前使用Mybatis的时候也存在硬编码问题：</p>
+<p><img src="image-20230325192705282.png" alt="image-20230325192705282"></p>
+<p>这里调用 <code>selectList()</code> 方法传递的参数是映射配置文件中的 namespace.id值。这样写也不便于后期的维护。如果使用 Mapper 代理方式则不存在硬编码问题：</p>
+<img src="image-20230326141250750.png" alt="image-20230326141250750" style="zoom:67%;" />
 
-<p>3、<code>Statement</code>对象</p>
-<p>​        用来执行sql代码。</p>
+<p>通过上面的描述可以看出 Mapper 代理方式的目的：</p>
 <ul>
-<li><p>执行数据增删改以及数据库、表、列的定义：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> statement.excuteUpdate(sql);</span><br></pre></td></tr></table></figure></div></li>
-<li><p>表中查询</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> statement.executeQuery(sql);</span><br></pre></td></tr></table></figure></div></li>
+<li>解决原生方式中的硬编码</li>
+<li>简化后期执行SQL</li>
 </ul>
-<p>4、<code>ResultSet</code>结果集对象</p>
-<p>​        封装了sql查询语句的结果。</p>
-<p>​        遍历查询结果中所有数据：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1 光标向下移动一行，并且判断当前行是否有数据</span></span><br><span class="line">   <span class="keyword">while</span> (rs.next())&#123;</span><br><span class="line">       <span class="comment">// 2 获取数据  getXxx()</span></span><br><span class="line">       <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> rs.getInt(<span class="string">&quot;id&quot;</span>);</span><br><span class="line">       <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> rs.getString(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">       <span class="type">double</span> <span class="variable">money</span> <span class="operator">=</span> rs.getDouble(<span class="string">&quot;money&quot;</span>);</span><br><span class="line">       System.out.println(id);</span><br><span class="line">       System.out.println(name);</span><br><span class="line">       System.out.println(money);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></div>
+<h3 id="使用Mapper代理开发"><a href="#使用Mapper代理开发" class="headerlink" title="使用Mapper代理开发"></a>使用Mapper代理开发</h3><ul>
+<li>定义与SQL映射文件同名的Mapper接口，并且将Mapper接口和SQL映射文件放置在同一目录下</li>
+</ul>
+<img src="image-20230326133634591.png" alt="image-20230326133634591" style="zoom: 67%;" />
 
-<p>5、<code>PreparedStatement</code>对象</p>
-<p>​        预编译sql语句并执行，防止sql注入。</p>
+<ul>
+<li>设置SQL映射文件的namespace属性为<strong>Mapper接口全限定名</strong></li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.Lijiacheng.mapper.UserMapper&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>在 Mapper 接口中定义方法，方法名就是<strong>SQL映射文件中sql语句的id</strong>，并保持参数类型和返回值类型一致</li>
+</ul>
+<img src="image-20230325194636891.png" alt="image-20230325194636891" style="zoom:67%;" />
+
+<p>​    在接口声明相应函数后，点击左侧<code>mapper</code>小图标可以跳转到xml映射文件相应id的sql语句上。</p>
+<img src="image-20230326133752273.png" alt="image-20230326133752273" style="zoom:67%;" />
+
+<ul>
+<li>测试类中内容：</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo_Mapper</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//3. 获取接口代理对象</span></span><br><span class="line">        <span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br><span class="line">        List&lt;User&gt; users = usermapper.selectAll();</span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4.释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
 <blockquote>
-<p>sql注入：通过操作输入来修改事先定义好的SQL语句，用以达到执行代码对服务器进行攻击的方法。</p>
+<p>另外，使用Mapper代理的方法，在<code>mapper</code>接口和<code>sql映射文件</code>同名的前提下，可以在<code>mybatis</code>核心配置文件中通过包扫描的方式简化sql映射文件的加载。</p>
 </blockquote>
-<ul>
-<li><p>模拟sql注入</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;xxxxxx&quot;</span>;</span><br><span class="line">   <span class="type">String</span> <span class="variable">pwd</span> <span class="operator">=</span> <span class="string">&quot;&#x27; or &#x27;1&#x27; = &#x27;1&quot;</span>;</span><br><span class="line">   <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from tb_user where username = &#x27;&quot;</span> + name + <span class="string">&quot;&#x27; and password = &#x27;&quot;</span> + pwd + <span class="string">&quot;&#x27;&quot;</span>;</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    &lt;mapper resource=&quot;com/Lijiacheng/mapper/UserMapper.xml&quot;/&gt; --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 
-<p>上面的sql代码是将name和pwd拼接而成的，拼接后的sql代码为：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">select * from tb_user <span class="type">where</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&#x27;xxxxxx&#x27;</span> <span class="type">and</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> or <span class="string">&#x27;1&#x27;</span> = <span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure></div></li>
-<li><p><code>PreparedStatement</code></p>
-<p>先前使用<code>Statement</code>对象执行sql代码的步骤：</p>
-<p> ① 定义参数以及sql语句</p>
-<p> ② <code>statement.executeUpdate(sql)</code>执行</p>
-<p><strong>使用<code>PreparedStatement</code>预编译执行步骤：</strong></p>
-<p> ① 定义sql语句，占位符用 ‘?’代替</p>
-<p> ② <code>pstmt</code>对象设置 ‘?’ 参数指代的值： <code>pstmt.setString(index,参数);</code></p>
-<p> ③ <code>pstmt.executeUpdate();</code>执行，这里注意不需要传入sql语句了，因为在定义<code>pstmt</code>对象的时候已经传入sql语句进行预编译了</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">textPreparedStatement</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 注册驱动(可省略)</span></span><br><span class="line">        Class.forName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        <span class="comment">// 获取链接</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://127.0.0.1:3306/db1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&quot;xxxxx&quot;</span>;</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url, username, password);</span><br><span class="line">  </span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from tb_user where username = ? and password = ?&quot;</span>;</span><br><span class="line">        <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(sql);</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">pwd</span> <span class="operator">=</span> <span class="string">&quot;&#x27; or &#x27;1&#x27; = &#x27;1&quot;</span>;</span><br><span class="line">        pstmt.setString(<span class="number">1</span>,name);</span><br><span class="line">        pstmt.setString(<span class="number">2</span>,pwd);</span><br><span class="line">  </span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> pstmt.executeQuery();</span><br><span class="line">        <span class="keyword">if</span>(resultSet.next())&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;登陆成功!&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;登陆失败!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">        resultSet.close();</span><br><span class="line">        pstmt.close();</span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<h2 id="核心配置文件"><a href="#核心配置文件" class="headerlink" title="核心配置文件"></a>核心配置文件</h2><p><strong>类型别名</strong></p>
+<p>在sql映射配置文件中的 <code>resultType</code> 属性需要配置数据封装的类型（类的全限定名）。而每次这样写是特别麻烦的，Mybatis 提供了 <code>类型别名</code>(typeAliases) 可以简化这部分的书写。</p>
+<p>首先需要现在核心配置文件中配置类型别名，也就意味着给pojo包下所有的类起了别名（别名就是类名），<font color="red">不区分大小写</font>。内容如下：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--name属性的值是实体类所在包--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>通过上述的配置，我们就可以简化映射配置文件中 <code>resultType</code> 属性值的编写：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.itheima.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;user&quot;</span>&gt;</span>  <span class="comment">&lt;!-- 如果没配置&lt;typeAliases&gt;的话，必须是类的全限定名 --&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>最后我们总结一下<code>Mybatis</code>进行代理开发的流程：</p>
+<p>1、首先和入门的开发流程相同，需要进行核心配置文件的配置、以及在<code>resource</code>目录下创建sql映射文件。</p>
+<p>核心配置文件可以从mybatis官网上直接copy：<a class="link"   href="https://mybatis.org/mybatis-3/zh/%EF%BC%88%E6%88%91%E5%B1%85%E7%84%B6%E5%9C%A8%E8%B0%B7%E6%AD%8C%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%8A%E6%89%BE%E4%B8%8D%E5%88%B0%EF%BC%8C%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B%EF%BC%89" >https://mybatis.org/mybatis-3/zh/（我居然在谷歌搜索引擎上找不到，这里记录一下）<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>配置文件需要注意的两个点，如下图：</p>
+<p><img src="image-20230326142309667.png" alt="image-20230326142309667"></p>
+<ul>
+<li><p>配置类型别名，简化sql映射文件</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p>加载sql映射配置时进行包扫描（特别是在以后开发中有多个sql映射文件时）</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<p>6、<code>PreparedStatement</code>原理</p>
-<p>​    开启预编译：在url中加入参数：<code>useServerPrepStmts=true</code>;</p>
-<p>​    好处：① 预编译，性能更高； ② 防止sql注入</p>
-<img src="image-20230325160120135.png" alt="image-20230325160120135" style="zoom:50%;" />
-
-<p>​        在获取<code>PreparedStatement</code>对象时，将sql语句发送给mysql服务器进行检查、编译（这些步骤很耗时），执行时就不用再进行这些步骤了，速度更快。</p>
-<h2 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h2><p>​        数据库连接池（Connection Pool）是一种复用 Connection 的组件，它可以避免反复创建新连接，提高JDBC代码的运行效率。</p>
-<p>​        在执行JDBC的增删改查的操作时，如果每一次操作都来一次打开连接，操作，关闭连接，那么创建和销毁JDBC连接的开销就太大了。为了避免频繁地创建和销毁JDBC连接，我们可以通过连接池复用已经创建好的连接。</p>
-<p>​                                               <img src="image-20230325160719950.png" alt="image-20230325160719950" style="zoom:50%;" /></p>
-<h3 id="数据库连接池的实现"><a href="#数据库连接池的实现" class="headerlink" title="数据库连接池的实现"></a>数据库连接池的实现</h3><p>​        标准接口：<code>DataSource</code></p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">DataSource</span> <span class="variable">datasource</span> <span class="operator">=</span> Connection <span class="title function_">getConnection</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></div>
-
-<p>​        不需要通过 <code>DriverManager</code> 对象获取 <code>Connection</code> 对象，而是通过连接池（DataSource）获取 <code>Connection</code> 对象。</p>
-<p><code>Druid</code>数据连接池 – alibaba</p>
+<p>sql映射文件需要注意的几个点：</p>
+<p><img src="image-20230326143114568.png" alt="image-20230326143114568"></p>
 <ul>
-<li><p>导入jar包：下载地址 <a class="link"   href="https://repo1.maven.org/maven2/com/alibaba/druid/" >https://repo1.maven.org/maven2/com/alibaba/druid/<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<li><p><code>namespace</code>属性对应的是<code>mapper</code>目录下的mapper接口</p>
 </li>
-<li><p>编写配置文件<code>druid.properties</code></p>
+<li><p><code>id</code>属性对应的是接口中声明的方法，这里的<font color='red'><code>id</code>属性要和<code>接口方法名</code>一致！</font></p>
+</li>
+<li><p><code>resultType</code>属性可以直接使用别名，习惯上直接用实体类名即可（前提要配置类型别名）</p>
 </li>
 </ul>
-<img src="image-20230325162515349.png" alt="image-20230325162515349" style="zoom:50%;" />
+<p>2、在<code>mapper</code>目录下创建和sql映射文件同名的mapper接口，声明方法</p>
+<p>3、实体类一定要有啊，这个不用说了</p>
+<p>4、测试类前面也是一样的，唯一不同的就是需要获取一个接口代理对象：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br></pre></td></tr></table></figure></div>
 
-<ul>
-<li>测试代码</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">testDruid</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//定义配置文件</span></span><br><span class="line">        <span class="comment">//加载配置文件</span></span><br><span class="line">        <span class="type">Properties</span> <span class="variable">prop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        prop.load(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;src/druid.properties&quot;</span>));</span><br><span class="line">        <span class="comment">//获取连接池对象</span></span><br><span class="line">        <span class="type">DataSource</span> <span class="variable">dataSource</span> <span class="operator">=</span> DruidDataSourceFactory.createDataSource(prop);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取数据库连接 Connection</span></span><br><span class="line">        <span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> dataSource.getConnection();</span><br><span class="line">        System.out.println(connection); <span class="comment">//获取到了连接后就可以继续做其他操作了</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//System.out.println(System.getProperty(&quot;user.dir&quot;));</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p><code>Druid</code>连接池配置成功：</p>
-<img src="image-20230325162717690.png" alt="image-20230325162717690" style="zoom:67%;" />
+<p>通过这个对象可以调用接口中声明的函数，接口中的函数和sql映射文件中的id值相同，这样就找到了需要执行的sql语句，这样就可以操作数据库了，并通过你调用的函数返回结果。</p>
+<blockquote>
+<p>还有一个比较重要的点：</p>
+<p>当你Bean类中的成员变量和操作数据库的数据名不同时，如何产生映射关系。这个放在后面的帖子里记录会比较容易懂。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>JavaWeb</category>
@@ -483,146 +623,6 @@
       </categories>
   </entry>
   <entry>
-    <title>02_Mybatis</title>
-    <url>/2023/03/28/02-Mybatis/</url>
-    <content><![CDATA[<p>Mybatis是一款很重要的开发框架！</p>
-<span id="more"></span>
-
-<h1 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h1><h2 id="Mybatis概述"><a href="#Mybatis概述" class="headerlink" title="Mybatis概述"></a>Mybatis概述</h2><p>​        MyBatis 是一款优秀的<strong>持久层框架</strong>，用于简化 JDBC 开发。</p>
-<blockquote>
-<p><strong>持久层：</strong>负责将数据到保存到数据库的那一层代码。开发中我们会将操作数据库的Java代码作为持久层，而Mybatis就是对jdbc代码进行了封装。（JavaEE三层架构：表现层、业务层、持久层）</p>
-</blockquote>
-<h3 id="JDBC缺点"><a href="#JDBC缺点" class="headerlink" title="JDBC缺点"></a>JDBC缺点</h3><img src="image-20230325185145333.png" alt="image-20230325185145333" style="zoom:67%;" />
-
-<ul>
-<li><p>硬编码</p>
-<ul>
-<li><p>注册驱动、获取连接</p>
-<p>上图①的代码有很多字符串，而这些是连接数据库的四个基本信息，以后如果要将Mysql数据库换成其他的关系型数据库的话，这四个地方都需要修改，如果放在此处就意味着要修改我们的源代码。</p>
-</li>
-<li><p>SQL语句</p>
-<p>上图②的代码。如果表结构发生变化，SQL语句就要进行更改，这也不方便后期的维护。</p>
-</li>
-</ul>
-</li>
-<li><p>操作繁琐</p>
-<ul>
-<li><p>手动设置参数</p>
-</li>
-<li><p>手动封装结果集</p>
-<p>上图④的代码是对查询到的数据进行封装，而这部分代码是没有什么技术含量，而且特别耗费时间的。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Mybatis的优化"><a href="#Mybatis的优化" class="headerlink" title="Mybatis的优化"></a>Mybatis的优化</h3><ul>
-<li>硬编码可以配置到配置文件</li>
-<li>操作繁琐的地方mybatis都自动完成</li>
-</ul>
-<h2 id="Mybatis快速入门"><a href="#Mybatis快速入门" class="headerlink" title="Mybatis快速入门"></a>Mybatis快速入门</h2><p>1、在<code>pom.xml</code>中导入依赖坐标</p>
-<p>至少需要：Mybatis、Mysql依赖</p>
-<p>直接去找：<a class="link"   href="https://mvnrepository.com/" >https://mvnrepository.com/<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<p>2、编写<code>Mybatis</code>核心配置文件</p>
-<p>在模块下的<code> resources</code> 目录下创建mybatis的配置文件 <code>mybatis-config.xml</code>，内容如下：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    environments：配置数据库连接环境信息。可以配置多个environment，通过default属性切换不同的environment</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;test&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--数据库连接信息--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql:///mybatis?useSSL=false&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;12345&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p>3、编写sql映射文件（统一管理sql语句，解决硬编码问题）</p>
-<p>在模块的 <code>resources</code> 目录下创建映射配置文件 <code>UserMapper.xml</code>，内容如下：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;usermapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.Lijiacheng.pojo.User&quot;</span>&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p>4、编码</p>
-<ul>
-<li><p>在<code>pojo</code>包下创建<code>User</code>的javaBean类。</p>
-</li>
-<li><p>创建测试类，内容如下：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//3. 执行sql</span></span><br><span class="line">        List&lt;User&gt; users = sqlSession.selectList(<span class="string">&quot;usermapper.selectAll&quot;</span>);  <span class="comment">//该字符串必须是映射配置文件的namespace.id</span></span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4. 释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<blockquote>
-<p>Mybatis的硬编码配置都可以在官方文档中找到：<a class="link"   href="https://mybatis.org/mybatis-3/zh/getting-started.html" >https://mybatis.org/mybatis-3/zh/getting-started.html<i class="fa-solid fa-up-right-from-square"></i></a></p>
-</blockquote>
-<h2 id="Mybatis代理开发"><a href="#Mybatis代理开发" class="headerlink" title="Mybatis代理开发"></a>Mybatis代理开发</h2><h3 id="代理开发概述"><a href="#代理开发概述" class="headerlink" title="代理开发概述"></a>代理开发概述</h3><p>之前使用Mybatis的时候也存在硬编码问题：</p>
-<p><img src="image-20230325192705282.png" alt="image-20230325192705282"></p>
-<p>这里调用 <code>selectList()</code> 方法传递的参数是映射配置文件中的 namespace.id值。这样写也不便于后期的维护。如果使用 Mapper 代理方式则不存在硬编码问题：</p>
-<img src="image-20230326141250750.png" alt="image-20230326141250750" style="zoom:67%;" />
-
-<p>通过上面的描述可以看出 Mapper 代理方式的目的：</p>
-<ul>
-<li>解决原生方式中的硬编码</li>
-<li>简化后期执行SQL</li>
-</ul>
-<h3 id="使用Mapper代理开发"><a href="#使用Mapper代理开发" class="headerlink" title="使用Mapper代理开发"></a>使用Mapper代理开发</h3><ul>
-<li>定义与SQL映射文件同名的Mapper接口，并且将Mapper接口和SQL映射文件放置在同一目录下</li>
-</ul>
-<img src="image-20230326133634591.png" alt="image-20230326133634591" style="zoom: 67%;" />
-
-<ul>
-<li>设置SQL映射文件的namespace属性为<strong>Mapper接口全限定名</strong></li>
-</ul>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.Lijiacheng.mapper.UserMapper&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>在 Mapper 接口中定义方法，方法名就是<strong>SQL映射文件中sql语句的id</strong>，并保持参数类型和返回值类型一致</li>
-</ul>
-<img src="image-20230325194636891.png" alt="image-20230325194636891" style="zoom:67%;" />
-
-<p>​    在接口声明相应函数后，点击左侧<code>mapper</code>小图标可以跳转到xml映射文件相应id的sql语句上。</p>
-<img src="image-20230326133752273.png" alt="image-20230326133752273" style="zoom:67%;" />
-
-<ul>
-<li>测试类中内容：</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisDemo_Mapper</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//1. 加载mybatis的核心配置文件，获取 SqlSessionFactory</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="string">&quot;mybatis-config.xml&quot;</span>;</span><br><span class="line">        <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="type">SqlSessionFactory</span> <span class="variable">sqlSessionFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        <span class="comment">//2. 获取sqlSession对象，用来执行sql语句</span></span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">sqlSession</span> <span class="operator">=</span> sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//3. 获取接口代理对象</span></span><br><span class="line">        <span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br><span class="line">        List&lt;User&gt; users = usermapper.selectAll();</span><br><span class="line">        System.out.println(users);</span><br><span class="line">        <span class="comment">//4.释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>另外，使用Mapper代理的方法，在<code>mapper</code>接口和<code>sql映射文件</code>同名的前提下，可以在<code>mybatis</code>核心配置文件中通过包扫描的方式简化sql映射文件的加载。</p>
-</blockquote>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--加载sql映射文件--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    &lt;mapper resource=&quot;com/Lijiacheng/mapper/UserMapper.xml&quot;/&gt; --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<h2 id="核心配置文件"><a href="#核心配置文件" class="headerlink" title="核心配置文件"></a>核心配置文件</h2><p><strong>类型别名</strong></p>
-<p>在sql映射配置文件中的 <code>resultType</code> 属性需要配置数据封装的类型（类的全限定名）。而每次这样写是特别麻烦的，Mybatis 提供了 <code>类型别名</code>(typeAliases) 可以简化这部分的书写。</p>
-<p>首先需要现在核心配置文件中配置类型别名，也就意味着给pojo包下所有的类起了别名（别名就是类名），<font color="red">不区分大小写</font>。内容如下：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--name属性的值是实体类所在包--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p>通过上述的配置，我们就可以简化映射配置文件中 <code>resultType</code> 属性值的编写：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.itheima.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;user&quot;</span>&gt;</span>  <span class="comment">&lt;!-- 如果没配置&lt;typeAliases&gt;的话，必须是类的全限定名 --&gt;</span></span><br><span class="line">        select * from tb_user;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>最后我们总结一下<code>Mybatis</code>进行代理开发的流程：</p>
-<p>1、首先和入门的开发流程相同，需要进行核心配置文件的配置、以及在<code>resource</code>目录下创建sql映射文件。</p>
-<p>核心配置文件可以从mybatis官网上直接copy：<a class="link"   href="https://mybatis.org/mybatis-3/zh/%EF%BC%88%E6%88%91%E5%B1%85%E7%84%B6%E5%9C%A8%E8%B0%B7%E6%AD%8C%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%8A%E6%89%BE%E4%B8%8D%E5%88%B0%EF%BC%8C%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B%EF%BC%89" >https://mybatis.org/mybatis-3/zh/（我居然在谷歌搜索引擎上找不到，这里记录一下）<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<p>配置文件需要注意的两个点，如下图：</p>
-<p><img src="image-20230326142309667.png" alt="image-20230326142309667"></p>
-<ul>
-<li><p>配置类型别名，简化sql映射文件</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.pojo&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
-<li><p>加载sql映射配置时进行包扫描（特别是在以后开发中有多个sql映射文件时）</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--Mapper代理方式--&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;com.Lijiacheng.mapper&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<p>sql映射文件需要注意的几个点：</p>
-<p><img src="image-20230326143114568.png" alt="image-20230326143114568"></p>
-<ul>
-<li><p><code>namespace</code>属性对应的是<code>mapper</code>目录下的mapper接口</p>
-</li>
-<li><p><code>id</code>属性对应的是接口中声明的方法，这里的<font color='red'><code>id</code>属性要和<code>接口方法名</code>一致！</font></p>
-</li>
-<li><p><code>resultType</code>属性可以直接使用别名，习惯上直接用实体类名即可（前提要配置类型别名）</p>
-</li>
-</ul>
-<p>2、在<code>mapper</code>目录下创建和sql映射文件同名的mapper接口，声明方法</p>
-<p>3、实体类一定要有啊，这个不用说了</p>
-<p>4、测试类前面也是一样的，唯一不同的就是需要获取一个接口代理对象：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">UserMapper</span> <span class="variable">usermapper</span> <span class="operator">=</span> sqlSession.getMapper(UserMapper.class);</span><br></pre></td></tr></table></figure></div>
-
-<p>通过这个对象可以调用接口中声明的函数，接口中的函数和sql映射文件中的id值相同，这样就找到了需要执行的sql语句，这样就可以操作数据库了，并通过你调用的函数返回结果。</p>
-<blockquote>
-<p>还有一个比较重要的点：</p>
-<p>当你Bean类中的成员变量和操作数据库的数据名不同时，如何产生映射关系。这个放在后面的帖子里记录会比较容易懂。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>JavaWeb</category>
-      </categories>
-  </entry>
-  <entry>
     <title>03_Servlet</title>
     <url>/2023/03/28/03-Servlet/</url>
     <content><![CDATA[<p>Servlet是JavaWeb最为核心的内容，它是Java提供的一门动态web资源开发技术。</p>
@@ -720,6 +720,147 @@
 <h2 id="XML配置"><a href="#XML配置" class="headerlink" title="XML配置"></a>XML配置</h2><p>前面对应Servlet的配置，我们都使用的是@WebServlet,这个是Servlet从3.0版本后开始支持注解配置，3.0版本前只支持XML配置文件的配置方法。这里只需要了解一下即可，现在几乎不会在web.xml中进行配置了。</p>
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">display-name</span>&gt;</span>Archetype Created Web Application<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">        Servlet 全类名</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- servlet的名称，名字任意--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo2<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--servlet的类全名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.Lijiacheng.web.ServletDemo_02<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">      Servlet 访问路径</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- servlet的名称，要和上面的名称一致--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo2<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- servlet的访问路径--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/demo2<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>05-JSP</title>
+    <url>/2023/04/01/05-JSP/</url>
+    <content><![CDATA[<p>JSP（全称：Java Server Pages），Java 服务端页面。是一种动态的网页技术，其中既可以定义 HTML、JS、CSS等静态内容，还可以定义 Java代码的动态内容， <code>JSP = HTML + Java</code>。虽然说JSP技术早已过时了，但是在很多国企银行还在使用它，可以把JSP当作javaweb的发展史来学习一下。</p>
+<span id="more"></span>
+
+<h1 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h1><p>JSP到底是什么作用呢？在前面我们使用Servlet在网页端进行动态展示，当时使用了<code>writer.write()</code>向前端写html标签内容进行展示，这样我们的代码就显得很麻烦。在JSP中，用html展示静态页面，用java代码展示动态数据，从而简化开发，避免了在Servlet中直接输出HTML标签。</p>
+<h2 id="JSP快速入门"><a href="#JSP快速入门" class="headerlink" title="JSP快速入门"></a>JSP快速入门</h2><div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h2&gt;Hello World!&lt;/h2&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello, JSP!&quot;</span>);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="JSP原理"><a href="#JSP原理" class="headerlink" title="JSP原理"></a>JSP原理</h2><p>JSP 本质上就是一个 Servlet，看一看访问JSP时的流程：</p>
+<img src="image-20230329100053695.png" alt="image-20230329100053695" style="zoom:50%;" />
+
+<p>（1）浏览器第一次访问 <code>hello.jsp</code> 页面</p>
+<p>（2）<code>tomcat</code> 会将 <code>hello.jsp</code> 转换为名为 <code>hello_jsp.java</code> 的一个 <code>Servlet</code></p>
+<p>（3）<code>tomcat</code> 再将转换的 <code>servlet</code> 编译成字节码文件 <code>hello_jsp.class</code></p>
+<p>（4）<code>tomcat</code> 会执行该字节码文件，向外提供服务</p>
+<p>在Servlet当中是需要我们编写代码将数据write到页面上去，但是在JSP中通过生成相应的Servlet，tomcat自动帮我们完成了这项工作。</p>
+<blockquote>
+<p>JSP脚本分类：</p>
+<ul>
+<li>&lt;%…%&gt;：内容会直接放到<code>_jspService()</code>方法之中；</li>
+<li>&lt;%=…%&gt;：内容会放到<code>out.print()</code>中，作为out.print()的参数；</li>
+<li>&lt;%!…%&gt;：内容会放到<code>_jspService()</code>方法之外，被类直接包含</li>
+</ul>
+</blockquote>
+<p><strong>JSP缺点</strong></p>
+<ul>
+<li>书写麻烦：既要写 HTML 标签，还要写 Java 代码</li>
+<li>前后端没有分离</li>
+<li>调试困难：出错后，需要找到自动生成的.java文件进行调试</li>
+</ul>
+<h2 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h2><p>EL（Expression Language ）表达式语言，用于简化 JSP 页面内的 Java 代码。</p>
+<p>EL 表达式的主要作用是获取数据：就是从域对象中获取数据，然后将数据展示在页面上。而 EL 表达式的语法也比较简单，语法形式为：<code>$&#123;expression&#125;</code> 。例如：<code>$&#123;brands&#125; </code>就是获取域中存储的 key 为 brands 的数据。</p>
+<p>我们定义一个Servlet，在域对象中存储一些数据，然后通过数据共享（请求转发）的方式令JSP资源获取数据并展示。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        List&lt;Brand&gt; brands = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Brand&gt;();</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">1</span>,<span class="string">&quot;三只松鼠&quot;</span>,<span class="string">&quot;三只松鼠&quot;</span>,<span class="number">100</span>,<span class="string">&quot;三只松鼠，好吃不上火&quot;</span>,<span class="number">1</span>));</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">2</span>,<span class="string">&quot;优衣库&quot;</span>,<span class="string">&quot;优衣库&quot;</span>,<span class="number">200</span>,<span class="string">&quot;优衣库，服适人生&quot;</span>,<span class="number">0</span>));</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">3</span>,<span class="string">&quot;小米&quot;</span>,<span class="string">&quot;小米科技有限公司&quot;</span>,<span class="number">1000</span>,<span class="string">&quot;为发烧而生&quot;</span>,<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        req.setAttribute(<span class="string">&quot;brands&quot;</span>,brands);</span><br><span class="line">        req.getRequestDispatcher(<span class="string">&quot;/index.jsp&quot;</span>).forward(req,resp);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>在<code>index.jsp</code>资源中通过EL表达式获取数据到页面即可，但是<font color="red">要注意在标签中加入<code>isELIgnored=&quot;false&quot;</code></font>表示不忽略EL表达式。</p>
+<p><strong>域对象</strong></p>
+<p>JavaWeb中有四大域对象，分别是：</p>
+<ul>
+<li>page：当前页面有效</li>
+<li>request：当前请求有效</li>
+<li>session：当前会话有效</li>
+<li>application：当前应用有效</li>
+</ul>
+<img src="image-20230329103637590.png" alt="image-20230329103637590" style="zoom: 50%;" />
+
+<p>例如<code>$&#123;brands&#125;</code>el 表达式获取数据，会先从page域对象中获取数据，如果没有再到 requet 域对象中获取数据，如果再没有再到 session 域对象中获取，如果还没有才会到 application 中获取数据。</p>
+<h2 id="JSTL标签"><a href="#JSTL标签" class="headerlink" title="JSTL标签"></a>JSTL标签</h2><p>JSP标准标签库(Jsp Standarded Tag Library) ，使用标签取代JSP页面上的Java代码。</p>
+<p>JSTL 使用也是比较简单的，分为如下步骤：</p>
+<ul>
+<li><p>导入坐标</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p>在JSP页面上引入JSTL标签库</p>
+<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt; </span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h3 id="if标签"><a href="#if标签" class="headerlink" title="if标签"></a>if标签</h3><div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;status == 1&#125;&quot;</span>&gt;</span><br><span class="line">       启用</span><br><span class="line">   &lt;/c:<span class="keyword">if</span>&gt;</span><br><span class="line">   &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;status == 0&#125;&quot;</span>&gt;</span><br><span class="line">       禁用</span><br><span class="line">   &lt;/c:<span class="keyword">if</span>&gt;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="foreach标签"><a href="#foreach标签" class="headerlink" title="foreach标签"></a>foreach标签</h3><p><em>用法一：</em></p>
+<ul>
+<li><p>items：被遍历的容器</p>
+</li>
+<li><p>var：遍历产生的临时变量</p>
+</li>
+<li><p>varStatus：遍历状态对象</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:forEach items=<span class="string">&quot;$&#123;brands&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;brand&quot;</span> varStatus=<span class="string">&quot;status&quot;</span>&gt;</span><br><span class="line">    &lt;tr align=<span class="string">&quot;center&quot;</span>&gt;</span><br><span class="line">        &lt;td&gt;$&#123;status.count&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.id&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.brandName&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.companyName&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.description&#125;&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>用法二</strong></p>
+<ul>
+<li><p>begin：开始数</p>
+</li>
+<li><p>end：结束数</p>
+</li>
+<li><p>step：步长</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:forEach begin=<span class="string">&quot;0&quot;</span> end=<span class="string">&quot;10&quot;</span> step=<span class="string">&quot;1&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;i&quot;</span>&gt;</span><br><span class="line">    $&#123;i&#125;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="MVC模式和三层架构"><a href="#MVC模式和三层架构" class="headerlink" title="MVC模式和三层架构"></a>MVC模式和三层架构</h2><h3 id="MVC模式"><a href="#MVC模式" class="headerlink" title="MVC模式"></a>MVC模式</h3><p>MVC 是一种分层开发的模式，其中：</p>
+<ul>
+<li><p>M：Model，业务模型，处理业务</p>
+</li>
+<li><p>V：View，视图，界面展示</p>
+</li>
+<li><p>C：Controller，控制器，处理请求，调用模型和视图</p>
+</li>
+</ul>
+<img src="image-20230329105238249.png" alt="image-20230329105238249" style="zoom:67%;" />
+
+<p>控制器（Serlvlet）用来接收浏览器发送过来的请求，控制器调用模型（JavaBean）来获取数据，比如从数据库查询数据；控制器获取到数据后再交由视图（JSP）进行数据展示。</p>
+<p><strong>MVC 好处：</strong></p>
+<ul>
+<li><p>有利于分工协作</p>
+</li>
+<li><p>有利于组件重用</p>
+</li>
+</ul>
+<h3 id="三层架构"><a href="#三层架构" class="headerlink" title="三层架构"></a>三层架构</h3><p>三层架构是将我们的项目分成了三个层面：分别是<strong>表现层</strong>、<strong>业务逻辑层</strong>、<strong>数据访问层</strong>。</p>
+<img src="image-20230329105611759.png" alt="image-20230329105611759" style="zoom:67%;" />
+
+<ul>
+<li>数据访问层：对数据库的CRUD基本操作；</li>
+<li>业务逻辑层：对业务逻辑进行封装，组合数据访问层层中基本功能，形成复杂的业务逻辑功能。例如“注册业务功能” ，我们会先调用 <code>数据访问层</code> 的 <code>selectByName()</code> 方法判断该用户名是否存在，如果不存在再调用 <code>数据访问层</code> 的 <code>insert()</code> 方法进行数据的添加操作；</li>
+<li>表现层：接收请求，封装数据，调用业务逻辑层，响应数据。</li>
+</ul>
+<p>整个流程是，浏览器发送请求，表现层的Servlet接收请求并调用业务逻辑层的方法进行业务逻辑处理，而业务逻辑层方法调用数据访问层方法进行数据的操作，依次返回到Serlvet，然后Servlet将数据交由 JSP 进行展示。</p>
+<p>三层架构的每一层都有特有的包名称：</p>
+<ul>
+<li>表现层： <code>com.Lijiacheng.controller</code> 或者 <code>com.Lijiacheng.web</code></li>
+<li>业务逻辑层：<code>com.Lijiacheng.service</code></li>
+<li>数据访问层：<code>com.Lijiacheng.dao</code> 或者 <code>com.Lijiacheng.mapper</code></li>
+</ul>
+<h3 id="MVC和三层架构"><a href="#MVC和三层架构" class="headerlink" title="MVC和三层架构"></a>MVC和三层架构</h3><p>三层架构是对MVC 模式实现架构的思想。 那么我们以后按照要求将不同层的代码写在不同的包下，每一层里功能职责做到单一，将来如果将表现层的技术换掉，而业务逻辑层和数据访问层的代码不需要发生变化。</p>
+<img src="image-20230329110654633.png" alt="image-20230329110654633" style="zoom:67%;" />
+
+<h2 id="实现增删改查"><a href="#实现增删改查" class="headerlink" title="实现增删改查"></a>实现增删改查</h2><p>这里使用三层架构做增删改查的基础操作，开发流程总结为：</p>
+<ul>
+<li>分析业务（最重要！）</li>
+<li>写sql映射配置文件</li>
+<li>声明与sql配置文件对应的mapper接口函数</li>
+<li>编写<code>service</code>层代码，调用接口函数进行业务实现</li>
+<li>编写<code>Servlet</code>代码，通常是接收数据并将其请求转发进行数据共享</li>
+</ul>
+<p>1、查询全部数据</p>
+<p>​    这个没什么好说的，在Servlet中将<code>brands</code>集合里的数据共享给相应展示的jsp页面即可。</p>
+<p>2、增加数据</p>
+<p>​    业务逻辑是：在查询全部数据页面中点击链接进入添加数据的jsp页面，将jsp页面的表单数据发送给相应的Servlet，在Servlet中接收数据并封装成brand对象，调用业务逻辑层和数据访问层函数将数据添加到数据库当中；最后不要忘记了请求转发回到”查询所有”的资源。</p>
+<p>3、修改数据</p>
+<p>​    业务逻辑是：①在查询全部数据页面中点击<strong>某行数据</strong>的链接，从数据库中根据id找到对应的数据信息将它们回显到修改数据的jsp页面上。回显的流程是，通过调用”根据用户查询“的函数，将数据封装在一个brand对象中，并请求转发给修改数据的jsp页面来接收。②在前端页面修改数据后，通过将form表单中的数据传递到修改数据的Servlet中，将封装了属性的对象作为参数调用业务逻辑层和数据访问层函数将数据在数据库中进行修改，最后仍然是回到”查询所有”的资源。</p>
+<blockquote>
+<p>在”增加“业务和”修改“业务时，需要将表单的数据通过post请求方式传递给服务器，由于存在中文乱码问题，如果不在Servlet中首先通过<code>setCharacterEncoding</code>进行设置，就会出现get到的参数是乱码的问题，这里特别注意一下。</p>
+</blockquote>
+<p>4、删除数据</p>
+<p>​    根据id删除，跟上面的<code>selectById</code>业务基本一致，就不说了。</p>
 ]]></content>
       <categories>
         <category>JavaWeb</category>
@@ -1023,147 +1164,6 @@
       </categories>
   </entry>
   <entry>
-    <title>05-JSP</title>
-    <url>/2023/04/01/05-JSP/</url>
-    <content><![CDATA[<p>JSP（全称：Java Server Pages），Java 服务端页面。是一种动态的网页技术，其中既可以定义 HTML、JS、CSS等静态内容，还可以定义 Java代码的动态内容， <code>JSP = HTML + Java</code>。虽然说JSP技术早已过时了，但是在很多国企银行还在使用它，可以把JSP当作javaweb的发展史来学习一下。</p>
-<span id="more"></span>
-
-<h1 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h1><p>JSP到底是什么作用呢？在前面我们使用Servlet在网页端进行动态展示，当时使用了<code>writer.write()</code>向前端写html标签内容进行展示，这样我们的代码就显得很麻烦。在JSP中，用html展示静态页面，用java代码展示动态数据，从而简化开发，避免了在Servlet中直接输出HTML标签。</p>
-<h2 id="JSP快速入门"><a href="#JSP快速入门" class="headerlink" title="JSP快速入门"></a>JSP快速入门</h2><div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h2&gt;Hello World!&lt;/h2&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello, JSP!&quot;</span>);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="JSP原理"><a href="#JSP原理" class="headerlink" title="JSP原理"></a>JSP原理</h2><p>JSP 本质上就是一个 Servlet，看一看访问JSP时的流程：</p>
-<img src="image-20230329100053695.png" alt="image-20230329100053695" style="zoom:50%;" />
-
-<p>（1）浏览器第一次访问 <code>hello.jsp</code> 页面</p>
-<p>（2）<code>tomcat</code> 会将 <code>hello.jsp</code> 转换为名为 <code>hello_jsp.java</code> 的一个 <code>Servlet</code></p>
-<p>（3）<code>tomcat</code> 再将转换的 <code>servlet</code> 编译成字节码文件 <code>hello_jsp.class</code></p>
-<p>（4）<code>tomcat</code> 会执行该字节码文件，向外提供服务</p>
-<p>在Servlet当中是需要我们编写代码将数据write到页面上去，但是在JSP中通过生成相应的Servlet，tomcat自动帮我们完成了这项工作。</p>
-<blockquote>
-<p>JSP脚本分类：</p>
-<ul>
-<li>&lt;%…%&gt;：内容会直接放到<code>_jspService()</code>方法之中；</li>
-<li>&lt;%=…%&gt;：内容会放到<code>out.print()</code>中，作为out.print()的参数；</li>
-<li>&lt;%!…%&gt;：内容会放到<code>_jspService()</code>方法之外，被类直接包含</li>
-</ul>
-</blockquote>
-<p><strong>JSP缺点</strong></p>
-<ul>
-<li>书写麻烦：既要写 HTML 标签，还要写 Java 代码</li>
-<li>前后端没有分离</li>
-<li>调试困难：出错后，需要找到自动生成的.java文件进行调试</li>
-</ul>
-<h2 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h2><p>EL（Expression Language ）表达式语言，用于简化 JSP 页面内的 Java 代码。</p>
-<p>EL 表达式的主要作用是获取数据：就是从域对象中获取数据，然后将数据展示在页面上。而 EL 表达式的语法也比较简单，语法形式为：<code>$&#123;expression&#125;</code> 。例如：<code>$&#123;brands&#125; </code>就是获取域中存储的 key 为 brands 的数据。</p>
-<p>我们定义一个Servlet，在域对象中存储一些数据，然后通过数据共享（请求转发）的方式令JSP资源获取数据并展示。</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        List&lt;Brand&gt; brands = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Brand&gt;();</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">1</span>,<span class="string">&quot;三只松鼠&quot;</span>,<span class="string">&quot;三只松鼠&quot;</span>,<span class="number">100</span>,<span class="string">&quot;三只松鼠，好吃不上火&quot;</span>,<span class="number">1</span>));</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">2</span>,<span class="string">&quot;优衣库&quot;</span>,<span class="string">&quot;优衣库&quot;</span>,<span class="number">200</span>,<span class="string">&quot;优衣库，服适人生&quot;</span>,<span class="number">0</span>));</span><br><span class="line">        brands.add(<span class="keyword">new</span> <span class="title class_">Brand</span>(<span class="number">3</span>,<span class="string">&quot;小米&quot;</span>,<span class="string">&quot;小米科技有限公司&quot;</span>,<span class="number">1000</span>,<span class="string">&quot;为发烧而生&quot;</span>,<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        req.setAttribute(<span class="string">&quot;brands&quot;</span>,brands);</span><br><span class="line">        req.getRequestDispatcher(<span class="string">&quot;/index.jsp&quot;</span>).forward(req,resp);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>在<code>index.jsp</code>资源中通过EL表达式获取数据到页面即可，但是<font color="red">要注意在标签中加入<code>isELIgnored=&quot;false&quot;</code></font>表示不忽略EL表达式。</p>
-<p><strong>域对象</strong></p>
-<p>JavaWeb中有四大域对象，分别是：</p>
-<ul>
-<li>page：当前页面有效</li>
-<li>request：当前请求有效</li>
-<li>session：当前会话有效</li>
-<li>application：当前应用有效</li>
-</ul>
-<img src="image-20230329103637590.png" alt="image-20230329103637590" style="zoom: 50%;" />
-
-<p>例如<code>$&#123;brands&#125;</code>el 表达式获取数据，会先从page域对象中获取数据，如果没有再到 requet 域对象中获取数据，如果再没有再到 session 域对象中获取，如果还没有才会到 application 中获取数据。</p>
-<h2 id="JSTL标签"><a href="#JSTL标签" class="headerlink" title="JSTL标签"></a>JSTL标签</h2><p>JSP标准标签库(Jsp Standarded Tag Library) ，使用标签取代JSP页面上的Java代码。</p>
-<p>JSTL 使用也是比较简单的，分为如下步骤：</p>
-<ul>
-<li><p>导入坐标</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
-<li><p>在JSP页面上引入JSTL标签库</p>
-<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt; </span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<h3 id="if标签"><a href="#if标签" class="headerlink" title="if标签"></a>if标签</h3><div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;status == 1&#125;&quot;</span>&gt;</span><br><span class="line">       启用</span><br><span class="line">   &lt;/c:<span class="keyword">if</span>&gt;</span><br><span class="line">   &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;status == 0&#125;&quot;</span>&gt;</span><br><span class="line">       禁用</span><br><span class="line">   &lt;/c:<span class="keyword">if</span>&gt;</span><br></pre></td></tr></table></figure></div>
-
-<h3 id="foreach标签"><a href="#foreach标签" class="headerlink" title="foreach标签"></a>foreach标签</h3><p><em>用法一：</em></p>
-<ul>
-<li><p>items：被遍历的容器</p>
-</li>
-<li><p>var：遍历产生的临时变量</p>
-</li>
-<li><p>varStatus：遍历状态对象</p>
-</li>
-</ul>
-<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:forEach items=<span class="string">&quot;$&#123;brands&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;brand&quot;</span> varStatus=<span class="string">&quot;status&quot;</span>&gt;</span><br><span class="line">    &lt;tr align=<span class="string">&quot;center&quot;</span>&gt;</span><br><span class="line">        &lt;td&gt;$&#123;status.count&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.id&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.brandName&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.companyName&#125;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;$&#123;brand.description&#125;&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>用法二</strong></p>
-<ul>
-<li><p>begin：开始数</p>
-</li>
-<li><p>end：结束数</p>
-</li>
-<li><p>step：步长</p>
-</li>
-</ul>
-<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;c:forEach begin=<span class="string">&quot;0&quot;</span> end=<span class="string">&quot;10&quot;</span> step=<span class="string">&quot;1&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;i&quot;</span>&gt;</span><br><span class="line">    $&#123;i&#125;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="MVC模式和三层架构"><a href="#MVC模式和三层架构" class="headerlink" title="MVC模式和三层架构"></a>MVC模式和三层架构</h2><h3 id="MVC模式"><a href="#MVC模式" class="headerlink" title="MVC模式"></a>MVC模式</h3><p>MVC 是一种分层开发的模式，其中：</p>
-<ul>
-<li><p>M：Model，业务模型，处理业务</p>
-</li>
-<li><p>V：View，视图，界面展示</p>
-</li>
-<li><p>C：Controller，控制器，处理请求，调用模型和视图</p>
-</li>
-</ul>
-<img src="image-20230329105238249.png" alt="image-20230329105238249" style="zoom:67%;" />
-
-<p>控制器（Serlvlet）用来接收浏览器发送过来的请求，控制器调用模型（JavaBean）来获取数据，比如从数据库查询数据；控制器获取到数据后再交由视图（JSP）进行数据展示。</p>
-<p><strong>MVC 好处：</strong></p>
-<ul>
-<li><p>有利于分工协作</p>
-</li>
-<li><p>有利于组件重用</p>
-</li>
-</ul>
-<h3 id="三层架构"><a href="#三层架构" class="headerlink" title="三层架构"></a>三层架构</h3><p>三层架构是将我们的项目分成了三个层面：分别是<strong>表现层</strong>、<strong>业务逻辑层</strong>、<strong>数据访问层</strong>。</p>
-<img src="image-20230329105611759.png" alt="image-20230329105611759" style="zoom:67%;" />
-
-<ul>
-<li>数据访问层：对数据库的CRUD基本操作；</li>
-<li>业务逻辑层：对业务逻辑进行封装，组合数据访问层层中基本功能，形成复杂的业务逻辑功能。例如“注册业务功能” ，我们会先调用 <code>数据访问层</code> 的 <code>selectByName()</code> 方法判断该用户名是否存在，如果不存在再调用 <code>数据访问层</code> 的 <code>insert()</code> 方法进行数据的添加操作；</li>
-<li>表现层：接收请求，封装数据，调用业务逻辑层，响应数据。</li>
-</ul>
-<p>整个流程是，浏览器发送请求，表现层的Servlet接收请求并调用业务逻辑层的方法进行业务逻辑处理，而业务逻辑层方法调用数据访问层方法进行数据的操作，依次返回到Serlvet，然后Servlet将数据交由 JSP 进行展示。</p>
-<p>三层架构的每一层都有特有的包名称：</p>
-<ul>
-<li>表现层： <code>com.Lijiacheng.controller</code> 或者 <code>com.Lijiacheng.web</code></li>
-<li>业务逻辑层：<code>com.Lijiacheng.service</code></li>
-<li>数据访问层：<code>com.Lijiacheng.dao</code> 或者 <code>com.Lijiacheng.mapper</code></li>
-</ul>
-<h3 id="MVC和三层架构"><a href="#MVC和三层架构" class="headerlink" title="MVC和三层架构"></a>MVC和三层架构</h3><p>三层架构是对MVC 模式实现架构的思想。 那么我们以后按照要求将不同层的代码写在不同的包下，每一层里功能职责做到单一，将来如果将表现层的技术换掉，而业务逻辑层和数据访问层的代码不需要发生变化。</p>
-<img src="image-20230329110654633.png" alt="image-20230329110654633" style="zoom:67%;" />
-
-<h2 id="实现增删改查"><a href="#实现增删改查" class="headerlink" title="实现增删改查"></a>实现增删改查</h2><p>这里使用三层架构做增删改查的基础操作，开发流程总结为：</p>
-<ul>
-<li>分析业务（最重要！）</li>
-<li>写sql映射配置文件</li>
-<li>声明与sql配置文件对应的mapper接口函数</li>
-<li>编写<code>service</code>层代码，调用接口函数进行业务实现</li>
-<li>编写<code>Servlet</code>代码，通常是接收数据并将其请求转发进行数据共享</li>
-</ul>
-<p>1、查询全部数据</p>
-<p>​    这个没什么好说的，在Servlet中将<code>brands</code>集合里的数据共享给相应展示的jsp页面即可。</p>
-<p>2、增加数据</p>
-<p>​    业务逻辑是：在查询全部数据页面中点击链接进入添加数据的jsp页面，将jsp页面的表单数据发送给相应的Servlet，在Servlet中接收数据并封装成brand对象，调用业务逻辑层和数据访问层函数将数据添加到数据库当中；最后不要忘记了请求转发回到”查询所有”的资源。</p>
-<p>3、修改数据</p>
-<p>​    业务逻辑是：①在查询全部数据页面中点击<strong>某行数据</strong>的链接，从数据库中根据id找到对应的数据信息将它们回显到修改数据的jsp页面上。回显的流程是，通过调用”根据用户查询“的函数，将数据封装在一个brand对象中，并请求转发给修改数据的jsp页面来接收。②在前端页面修改数据后，通过将form表单中的数据传递到修改数据的Servlet中，将封装了属性的对象作为参数调用业务逻辑层和数据访问层函数将数据在数据库中进行修改，最后仍然是回到”查询所有”的资源。</p>
-<blockquote>
-<p>在”增加“业务和”修改“业务时，需要将表单的数据通过post请求方式传递给服务器，由于存在中文乱码问题，如果不在Servlet中首先通过<code>setCharacterEncoding</code>进行设置，就会出现get到的参数是乱码的问题，这里特别注意一下。</p>
-</blockquote>
-<p>4、删除数据</p>
-<p>​    根据id删除，跟上面的<code>selectById</code>业务基本一致，就不说了。</p>
-]]></content>
-      <categories>
-        <category>JavaWeb</category>
-      </categories>
-  </entry>
-  <entry>
     <title>06-会话技术</title>
     <url>/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<p>会话跟踪是web程序中常用的技术，常用的<em>会话跟踪</em>技术是Cookie 和Session。</p>
@@ -1396,102 +1396,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Android平台JNI开发保姆级教程</title>
-    <url>/2023/03/12/Android-jni/</url>
-    <content><![CDATA[<p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
-<span id="more"></span>
-
-<h1 id="Android平台JNI开发保姆级教程"><a href="#Android平台JNI开发保姆级教程" class="headerlink" title="Android平台JNI开发保姆级教程"></a>Android平台JNI开发保姆级教程</h1><h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>​        FFmpeg源码：可以在官网下载，目前我是用的是最新版的6.0版本（只下载源代码即可，不要下载已经编译好的在不同平台可以运行的安装包）。</p>
-<p><img src="pic1.png" alt="image-20230312105234096"></p>
-<p>​        Android NDK：可以在官网下载，但更推荐在Android Studio中的Setting中可以直接下载NDK对应版本，我这里使用的是22.1.7171670版本的NDK（建议不要使用太新的NDK，否则可能会出现一些BUG）。</p>
-<img src="pic2.png" alt="image-20230312103532627" style="zoom: 33%;" />
-
-<p>​        安装msys2：由于我是在Windows下对FFmpeg源码进行交叉编译，所以需要一个类Unix环境；或者你可以直接使用linux操作系统。</p>
-<p>​        由于第一次接触Android开发，对Android程序调用类库的流程不清楚，导致走了很多弯路。其实总结下来也很简单，我这里引用了雷神的流程图：</p>
-<p><img src="pic3.png" alt="img"></p>
-<blockquote>
-<p><strong>在FFmpeg的最新版本6.0中，已经不需要在源码中修改configure设置了（我记得貌似从4.0版本之后就不需要修改了，记不太清了）。</strong></p>
-</blockquote>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="Android-NDK"><a href="#Android-NDK" class="headerlink" title="Android NDK"></a>Android NDK</h3><p>​        NDK 主要提供了一些库和工具，包括交叉编译器、调试器、库文件等，开发者可以使用这些工具将原生代码编译为针对不同 CPU 架构的本地库，然后在 Android 应用中通过 Java Native Interface（JNI）来调用这些本地库，以实现一些高性能、低级别的操作，例如图形处理、音频处理、加密、数据处理等。</p>
-<p>​        Android NDK 是一个允许使用 C、C++ 等本地语言编写 Android 应用的工具包，可以提高应用的运行效率和系统性能。</p>
-<h3 id="JNI"><a href="#JNI" class="headerlink" title="JNI"></a>JNI</h3><p>​        JNI（Java Native Interface）是Java平台提供的一种机制，用于在Java虚拟机中运行本地代码。它允许Java应用程序通过调用本地语言编写的函数来使用底层操作系统和硬件资源，从而实现高性能的计算和底层操作。简单来说，JNI提供了一种在Java程序中调用本地代码的方式，可以扩展Java程序的功能和性能。</p>
-<h3 id="so库"><a href="#so库" class="headerlink" title=".so库"></a>.so库</h3><p>​        在Android中，C语言代码需要被编译为.so库的形式才能被Android应用程序调用。这是因为Android系统是基于Linux内核的，而Linux系统下的.so库是一种常见的代码共享形式，可以被多个进程动态链接使用，避免了代码的重复编写和内存占用。通过将C语言代码编译为.so库的形式，Android应用程序可以在运行时动态加载和链接所需的库，从而实现对底层系统和硬件资源的访问和控制。</p>
-<p>​        通过.so库的形式调用C语言代码，可以让Android应用程序更高效地使用底层系统和硬件资源，从而提高程序的性能和可靠性。同时，.so库也方便了代码的管理和维护，可以将公共的代码打包成库，供多个应用程序共享使用。</p>
-<h2 id="开发流程（敲黑板！）"><a href="#开发流程（敲黑板！）" class="headerlink" title="开发流程（敲黑板！）"></a>开发流程（敲黑板！）</h2><h3 id="编译FFmpeg库"><a href="#编译FFmpeg库" class="headerlink" title="编译FFmpeg库"></a>编译FFmpeg库</h3><p>​        首先要把NDK安装好，路径是在你SDK路径下的NDK目录中，最好把你要用到的版本加入到环境变量当中。</p>
-<p>​        在任意目录中新建一个脚本<code>build_ffmpeg.sh</code>，添加内容：</p>
-<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line">SRC_DIR=D:\Android-Studio\ffmpeg-6.0</span><br><span class="line">DST_DIR=D:\Android-Studio\ffmpeg_build_out</span><br><span class="line">NDK=D:/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64</span><br><span class="line">API=23  </span><br><span class="line"> </span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$SRC_DIR</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">function</span> build_onearch</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&gt;&gt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	./configure --enable-cross-compile --target-os=android  \</span><br><span class="line">	--prefix=<span class="variable">$DST_DIR</span>/<span class="variable">$ANDROID_ABI</span>  --cross-prefix=<span class="variable">$CROSS_PREFIX</span>  \</span><br><span class="line">	--cc=<span class="variable">$CLANG_PREFIX</span> --cxx=<span class="variable">$CLANG_PREFIX</span>++  \</span><br><span class="line">	--<span class="built_in">arch</span>=<span class="variable">$ARCH</span>  --cpu=<span class="variable">$CPU</span>  --sysroot=<span class="variable">$NDK</span>/sysroot \</span><br><span class="line">	--enable-shared --disable-static \</span><br><span class="line">	--enable-small --disable-programs --disable-doc \</span><br><span class="line">	--enable-asm --enable-neon \</span><br><span class="line">	--enable-jni --enable-mediacodec </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&lt;&lt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	make clean</span><br><span class="line">	make</span><br><span class="line">	make install</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">ANDROID_ABI=arm64-v8a</span><br><span class="line">ARCH=arm64</span><br><span class="line">CPU=armv8-a</span><br><span class="line">CROSS_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android-</span><br><span class="line">CLANG_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android<span class="variable">$API</span>-clang</span><br><span class="line">build_onearch</span><br></pre></td></tr></table></figure></div>
-
-<p>​        <font color=red>前面几行要根据自己的电脑路径进行配置，切莫照搬全抄！</font>这里的API的版本是最低版本，注意不要大于自己设备的Android API版本。网上有很多类似的配置脚本，可以对configure响应的修改进行功能增减。</p>
-<p>​        我这里只编译了<code>arm64-v8a</code>的.so库，通常来说64位的CPU架构是对先前的CPU架构是兼容的。</p>
-<p>​        将脚本保存后关闭，然后打开安装好的msys2，在脚本目录下运行脚本：</p>
-<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="code"><pre><span class="line">./build_ffmpeg.sh</span><br></pre></td></tr></table></figure></div>
-
-<p>​        整个编译过程大概有二十多分钟吧，编译好后的动态库会生成在你前面设置的<code>DST_DIR</code>路径下。</p>
-<p><img src="pic4.png" alt="image-20230312111053279"></p>
-<p>​        <code>include</code>目录下是一些头文件，<code>lib</code>目录下就是相应的.so库了。    </p>
-<h3 id="JNI调用C程序"><a href="#JNI调用C程序" class="headerlink" title="JNI调用C程序"></a>JNI调用C程序</h3><p>使用<code>JNI</code>调用C语言代码需要做以下几步：</p>
-<ul>
-<li>编写带有native方法的Java类和声明要加载的类库</li>
-<li>使用javah命令生成.h头文件（也可以用<strong>JNI_OnLoad</strong>动态注册函数，就不用生成.h头文件了）</li>
-<li>编写C代码实现头文件中的方法</li>
-</ul>
-<h4 id="编写Java端代码"><a href="#编写Java端代码" class="headerlink" title="编写Java端代码"></a>编写Java端代码</h4><p>​        用官方文档中的<code>hello_jni</code>例程修改的。</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.hellojni;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloJni</span> <span class="keyword">extends</span> <span class="title class_">Activity</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/** Called when the activity is first created. */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        </span><br><span class="line">        <span class="type">TextView</span>  <span class="variable">tv</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TextView</span>(<span class="built_in">this</span>);</span><br><span class="line">        tv.setText( stringFromJNI() );</span><br><span class="line">        setContentView(tv);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">stringFromJNI</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">unimplementedStringFromJNI</span><span class="params">()</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">&quot;hellojni&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="编写C端代码"><a href="#编写C端代码" class="headerlink" title="编写C端代码"></a>编写C端代码</h4><p>1、获取C语言的接口函数声明</p>
-<p>​        根据Java对于C语言接口的定义，生成相应的接口函数声明。说通俗点就是Java层只是用<strong>native</strong>关键词声明了一个C语言的函数，要在Java层的函数和C语言层的函数之间形成一个映射关系，这一步需要用到JDK中的“javac -h”命令。</p>
-<p>​        尴尬的是在生成头文件的时候出现了<strong>程序包XX.XX不存在</strong>的BUG，网上找了一会发现并没有卵用，于是乎就直接定义<code>JNI_Onload</code>方法形成动态函数映射。<font color=red>（跳过第一步生成.h头文件的步骤即可）</font></p>
-<p>下面的第三步就讲讲如何用<code>JNI_Onload</code>：</p>
-<blockquote>
-<p>传统java  JNI方式： 编写带有native方法的Java类 → 使用javah命令生成.h头文件 → 编写代码实现头文件中的方法</p>
-<p>但是上述每次都需要通过javah依据java类的全类名生成对应的native函数全名称，其实我们可以使用RegisterNatives方法把c/c++中的方法隐射到Java中的native方法，这样就可以随意定义你的函数名而不用写那么长的又看不懂的全名类啦！</p>
-</blockquote>
-<p>2、编写C语言代码</p>
-<p>在项目根目录下创建<code>jni</code>目录：<code>jni</code>目录中新建<code>hellojni.c</code>文件，代码如下：</p>
-<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;libavcodec/avcodec.h&quot;</span></span></span><br><span class="line"><span class="comment">// 用的雷佬的代码 -- 该函数调用了libavcodec的avcodec_configuration()方法，用于获取FFmpeg的配置信息。</span></span><br><span class="line">jstring <span class="title function_">stringFromJNI</span><span class="params">( JNIEnv* env,jobject thiz )</span></span><br><span class="line">&#123;</span><br><span class="line">   	<span class="type">char</span> info[<span class="number">10000</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">   	<span class="built_in">sprintf</span>(info, <span class="string">&quot;%s\n&quot;</span>, avcodec_configuration());</span><br><span class="line">   	<span class="keyword">return</span> (*env)-&gt;NewStringUTF(env, info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>3、定义函数<code>JNI_OnLoad</code>动态注册函数</p>
-<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line">jint <span class="title function_">JNI_OnLoad</span><span class="params">(JavaVM* pVm, <span class="type">void</span>* reserved)</span> &#123;</span><br><span class="line">	JNIEnv* env;</span><br><span class="line">	<span class="keyword">if</span> ((*pVm)-&gt;GetEnv(pVm, (<span class="type">void</span> **)&amp;env, JNI_VERSION_1_6) != JNI_OK) &#123;</span><br><span class="line">	 	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	JNINativeMethod nm[<span class="number">1</span>];</span><br><span class="line">	nm[<span class="number">0</span>].name = <span class="string">&quot;stringFromJNI&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].signature = <span class="string">&quot;()Ljava/lang/String;&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].fnPtr = (<span class="type">void</span>*)stringFromJNI;</span><br><span class="line">	jclass cls = (*env)-&gt;FindClass(env, <span class="string">&quot;com/example/hellojni/HelloJni&quot;</span>);</span><br><span class="line">	(*env)-&gt;RegisterNatives(env, cls, nm, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> JNI_VERSION_1_6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>​        前后都是固定的模板，不需要修改，只需要更改<code>JNINativeMethod</code>中的字段信息，关于JNI编程的简单语法都很简单，去了解一下就可，不在这里说了。其实就是用这个<code>RegisterNatives</code>注册方法，C语言本地的函数与Java层的类和函数进行动态绑定。</p>
-<p><code>JNINativeMethod</code>结构体的字段信息：</p>
-<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span>  </span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;     <span class="comment">// java层对应的方法名称  </span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* signature;<span class="comment">// 该方法的返回值类型和参数类型  </span></span><br><span class="line">    <span class="type">void</span>*       fnPtr;    <span class="comment">// native中对应的函数指针  </span></span><br><span class="line">&#125; JNINativeMethod;  </span><br></pre></td></tr></table></figure></div>
-
-<p>3、<code>Android.mk</code>和 <code>Application.mk</code>编写</p>
-<p>​        在<code>JNI</code>目录下创建<code>Android.mk</code>和 <code>Application.mk</code>文件。这是NDK官方推荐的<code>ndk-build</code>（是一个命令行工具，它用于构建使用C/C++编写的Android Native库）构建方式的脚本文件（不过yysy现在用的更多的是<code>cmake</code>了，反正ndk-build很好用，管他的呢）。</p>
-<p><code>Android.mk</code>的编写规范可以看NDK的官方文档，<code>Android.mk</code>添加如下代码：</p>
-<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">LOCAL<span class="emphasis">_PATH := $(call my-dir)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># FFmpeg library</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avcodec</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavcodec.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avdevice</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavdevice.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avfilter</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavfilter.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avformat</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavformat.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avutil</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavutil.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swresample</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswresample.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swscale</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswscale.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># Program</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := hellojni</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := hellojni.c</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>C<span class="emphasis">_INCLUDES += $(LOCAL_</span>PATH)/include</span><br><span class="line">LOCAL<span class="emphasis">_LDLIBS := -llog -lz</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SHARED<span class="emphasis">_LIBRARIES := avcodec avdevice avfilter avformat avutil swresample swscale</span></span><br><span class="line"><span class="emphasis">include $(BUILD_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br></pre></td></tr></table></figure></div>
-
-<p><code>Application.mk</code>代码如下：</p>
-<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">APP<span class="emphasis">_ABI := arm64-v8a</span></span><br><span class="line"><span class="emphasis">APP_</span>PLATFORM := android-23  # minAPI</span><br></pre></td></tr></table></figure></div>
-
-<p><code>APP_ABI</code> 指定了设备CPU的架构。因为前面编译<code>FFmpeg</code>的时候我只编译了64位版本的，这里就对应上。</p>
-<p>4、NDK-BUILD编译</p>
-<p>​        将先前编译的FFmpeg的<code>include</code>和<code>lib</code>目录复制到<code>jni</code>目录当中来，现在看<code>jni</code>目录结构应该是这样的：</p>
-<img src="pic5.png" alt="image-20230312171910710" style="zoom: 80%;" />
-
-<p>​        命令行<code>cd</code>到这一层目录下，执行<code>ndk-build</code>命令即可。</p>
-<img src="pic6.png" alt="image-20230312172026460" style="zoom:80%;" />
-
-<p>​        然后你还会发现项目的根目录下生成了这两个目录。</p>
-<p><img src="pic7.png" alt="image-20230312172123920"></p>
-<p>​        <code>libs</code>里面就是根据<code>android.mk</code>脚本编译的.so库了，<code>obj</code>没什么用，里面就是一些编译的过程文件。将<code>libs</code>目录中的内容（应该是cpu架构文件夹，下层目录才是.so库）copy到<code>app/src/main</code>目录的<code>jniLibs</code>目录当中（项目运行时默认就是在<code>jniLibs</code>中寻找加载相应的第三方.so库）。</p>
-<img src="pic8.png" alt="image-20230312172450844" style="zoom: 67%;" />
-
-<p>​        接下来就可以在手机上对项目进行测试啦！因为我使用的是<code>arm64-v8a</code>cpu架构，这种架构好像不支持在虚拟机上测试（虚拟机架构是<code>x86</code>和<code>x86_64</code>，但可不可以我也没试过）。</p>
-<p>​        下面是测试的结果啦：</p>
-<img src="result_pic.jpg" alt="result_pic" style="zoom: 33%;" />
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-        <tag>JNI开发</tag>
-        <tag>FFmpeg</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>07-Filter_Listener_Ajax</title>
     <url>/2023/04/01/07-Filter-Listener-Ajax/</url>
     <content><![CDATA[<p>这块知识点比较杂，而且Ajax是代替jsp的前端技术，了解即可。</p>
@@ -1678,6 +1582,102 @@
       <categories>
         <category>JavaWeb</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Android平台JNI开发保姆级教程</title>
+    <url>/2023/03/12/Android-jni/</url>
+    <content><![CDATA[<p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
+<span id="more"></span>
+
+<h1 id="Android平台JNI开发保姆级教程"><a href="#Android平台JNI开发保姆级教程" class="headerlink" title="Android平台JNI开发保姆级教程"></a>Android平台JNI开发保姆级教程</h1><h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>​        FFmpeg源码：可以在官网下载，目前我是用的是最新版的6.0版本（只下载源代码即可，不要下载已经编译好的在不同平台可以运行的安装包）。</p>
+<p><img src="pic1.png" alt="image-20230312105234096"></p>
+<p>​        Android NDK：可以在官网下载，但更推荐在Android Studio中的Setting中可以直接下载NDK对应版本，我这里使用的是22.1.7171670版本的NDK（建议不要使用太新的NDK，否则可能会出现一些BUG）。</p>
+<img src="pic2.png" alt="image-20230312103532627" style="zoom: 33%;" />
+
+<p>​        安装msys2：由于我是在Windows下对FFmpeg源码进行交叉编译，所以需要一个类Unix环境；或者你可以直接使用linux操作系统。</p>
+<p>​        由于第一次接触Android开发，对Android程序调用类库的流程不清楚，导致走了很多弯路。其实总结下来也很简单，我这里引用了雷神的流程图：</p>
+<p><img src="pic3.png" alt="img"></p>
+<blockquote>
+<p><strong>在FFmpeg的最新版本6.0中，已经不需要在源码中修改configure设置了（我记得貌似从4.0版本之后就不需要修改了，记不太清了）。</strong></p>
+</blockquote>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="Android-NDK"><a href="#Android-NDK" class="headerlink" title="Android NDK"></a>Android NDK</h3><p>​        NDK 主要提供了一些库和工具，包括交叉编译器、调试器、库文件等，开发者可以使用这些工具将原生代码编译为针对不同 CPU 架构的本地库，然后在 Android 应用中通过 Java Native Interface（JNI）来调用这些本地库，以实现一些高性能、低级别的操作，例如图形处理、音频处理、加密、数据处理等。</p>
+<p>​        Android NDK 是一个允许使用 C、C++ 等本地语言编写 Android 应用的工具包，可以提高应用的运行效率和系统性能。</p>
+<h3 id="JNI"><a href="#JNI" class="headerlink" title="JNI"></a>JNI</h3><p>​        JNI（Java Native Interface）是Java平台提供的一种机制，用于在Java虚拟机中运行本地代码。它允许Java应用程序通过调用本地语言编写的函数来使用底层操作系统和硬件资源，从而实现高性能的计算和底层操作。简单来说，JNI提供了一种在Java程序中调用本地代码的方式，可以扩展Java程序的功能和性能。</p>
+<h3 id="so库"><a href="#so库" class="headerlink" title=".so库"></a>.so库</h3><p>​        在Android中，C语言代码需要被编译为.so库的形式才能被Android应用程序调用。这是因为Android系统是基于Linux内核的，而Linux系统下的.so库是一种常见的代码共享形式，可以被多个进程动态链接使用，避免了代码的重复编写和内存占用。通过将C语言代码编译为.so库的形式，Android应用程序可以在运行时动态加载和链接所需的库，从而实现对底层系统和硬件资源的访问和控制。</p>
+<p>​        通过.so库的形式调用C语言代码，可以让Android应用程序更高效地使用底层系统和硬件资源，从而提高程序的性能和可靠性。同时，.so库也方便了代码的管理和维护，可以将公共的代码打包成库，供多个应用程序共享使用。</p>
+<h2 id="开发流程（敲黑板！）"><a href="#开发流程（敲黑板！）" class="headerlink" title="开发流程（敲黑板！）"></a>开发流程（敲黑板！）</h2><h3 id="编译FFmpeg库"><a href="#编译FFmpeg库" class="headerlink" title="编译FFmpeg库"></a>编译FFmpeg库</h3><p>​        首先要把NDK安装好，路径是在你SDK路径下的NDK目录中，最好把你要用到的版本加入到环境变量当中。</p>
+<p>​        在任意目录中新建一个脚本<code>build_ffmpeg.sh</code>，添加内容：</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line">SRC_DIR=D:\Android-Studio\ffmpeg-6.0</span><br><span class="line">DST_DIR=D:\Android-Studio\ffmpeg_build_out</span><br><span class="line">NDK=D:/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64</span><br><span class="line">API=23  </span><br><span class="line"> </span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$SRC_DIR</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">function</span> build_onearch</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&gt;&gt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	./configure --enable-cross-compile --target-os=android  \</span><br><span class="line">	--prefix=<span class="variable">$DST_DIR</span>/<span class="variable">$ANDROID_ABI</span>  --cross-prefix=<span class="variable">$CROSS_PREFIX</span>  \</span><br><span class="line">	--cc=<span class="variable">$CLANG_PREFIX</span> --cxx=<span class="variable">$CLANG_PREFIX</span>++  \</span><br><span class="line">	--<span class="built_in">arch</span>=<span class="variable">$ARCH</span>  --cpu=<span class="variable">$CPU</span>  --sysroot=<span class="variable">$NDK</span>/sysroot \</span><br><span class="line">	--enable-shared --disable-static \</span><br><span class="line">	--enable-small --disable-programs --disable-doc \</span><br><span class="line">	--enable-asm --enable-neon \</span><br><span class="line">	--enable-jni --enable-mediacodec </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&lt;&lt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	make clean</span><br><span class="line">	make</span><br><span class="line">	make install</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">ANDROID_ABI=arm64-v8a</span><br><span class="line">ARCH=arm64</span><br><span class="line">CPU=armv8-a</span><br><span class="line">CROSS_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android-</span><br><span class="line">CLANG_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android<span class="variable">$API</span>-clang</span><br><span class="line">build_onearch</span><br></pre></td></tr></table></figure></div>
+
+<p>​        <font color=red>前面几行要根据自己的电脑路径进行配置，切莫照搬全抄！</font>这里的API的版本是最低版本，注意不要大于自己设备的Android API版本。网上有很多类似的配置脚本，可以对configure响应的修改进行功能增减。</p>
+<p>​        我这里只编译了<code>arm64-v8a</code>的.so库，通常来说64位的CPU架构是对先前的CPU架构是兼容的。</p>
+<p>​        将脚本保存后关闭，然后打开安装好的msys2，在脚本目录下运行脚本：</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="code"><pre><span class="line">./build_ffmpeg.sh</span><br></pre></td></tr></table></figure></div>
+
+<p>​        整个编译过程大概有二十多分钟吧，编译好后的动态库会生成在你前面设置的<code>DST_DIR</code>路径下。</p>
+<p><img src="pic4.png" alt="image-20230312111053279"></p>
+<p>​        <code>include</code>目录下是一些头文件，<code>lib</code>目录下就是相应的.so库了。    </p>
+<h3 id="JNI调用C程序"><a href="#JNI调用C程序" class="headerlink" title="JNI调用C程序"></a>JNI调用C程序</h3><p>使用<code>JNI</code>调用C语言代码需要做以下几步：</p>
+<ul>
+<li>编写带有native方法的Java类和声明要加载的类库</li>
+<li>使用javah命令生成.h头文件（也可以用<strong>JNI_OnLoad</strong>动态注册函数，就不用生成.h头文件了）</li>
+<li>编写C代码实现头文件中的方法</li>
+</ul>
+<h4 id="编写Java端代码"><a href="#编写Java端代码" class="headerlink" title="编写Java端代码"></a>编写Java端代码</h4><p>​        用官方文档中的<code>hello_jni</code>例程修改的。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.hellojni;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloJni</span> <span class="keyword">extends</span> <span class="title class_">Activity</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/** Called when the activity is first created. */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        </span><br><span class="line">        <span class="type">TextView</span>  <span class="variable">tv</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TextView</span>(<span class="built_in">this</span>);</span><br><span class="line">        tv.setText( stringFromJNI() );</span><br><span class="line">        setContentView(tv);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">stringFromJNI</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">unimplementedStringFromJNI</span><span class="params">()</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">&quot;hellojni&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="编写C端代码"><a href="#编写C端代码" class="headerlink" title="编写C端代码"></a>编写C端代码</h4><p>1、获取C语言的接口函数声明</p>
+<p>​        根据Java对于C语言接口的定义，生成相应的接口函数声明。说通俗点就是Java层只是用<strong>native</strong>关键词声明了一个C语言的函数，要在Java层的函数和C语言层的函数之间形成一个映射关系，这一步需要用到JDK中的“javac -h”命令。</p>
+<p>​        尴尬的是在生成头文件的时候出现了<strong>程序包XX.XX不存在</strong>的BUG，网上找了一会发现并没有卵用，于是乎就直接定义<code>JNI_Onload</code>方法形成动态函数映射。<font color=red>（跳过第一步生成.h头文件的步骤即可）</font></p>
+<p>下面的第三步就讲讲如何用<code>JNI_Onload</code>：</p>
+<blockquote>
+<p>传统java  JNI方式： 编写带有native方法的Java类 → 使用javah命令生成.h头文件 → 编写代码实现头文件中的方法</p>
+<p>但是上述每次都需要通过javah依据java类的全类名生成对应的native函数全名称，其实我们可以使用RegisterNatives方法把c/c++中的方法隐射到Java中的native方法，这样就可以随意定义你的函数名而不用写那么长的又看不懂的全名类啦！</p>
+</blockquote>
+<p>2、编写C语言代码</p>
+<p>在项目根目录下创建<code>jni</code>目录：<code>jni</code>目录中新建<code>hellojni.c</code>文件，代码如下：</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;libavcodec/avcodec.h&quot;</span></span></span><br><span class="line"><span class="comment">// 用的雷佬的代码 -- 该函数调用了libavcodec的avcodec_configuration()方法，用于获取FFmpeg的配置信息。</span></span><br><span class="line">jstring <span class="title function_">stringFromJNI</span><span class="params">( JNIEnv* env,jobject thiz )</span></span><br><span class="line">&#123;</span><br><span class="line">   	<span class="type">char</span> info[<span class="number">10000</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">   	<span class="built_in">sprintf</span>(info, <span class="string">&quot;%s\n&quot;</span>, avcodec_configuration());</span><br><span class="line">   	<span class="keyword">return</span> (*env)-&gt;NewStringUTF(env, info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>3、定义函数<code>JNI_OnLoad</code>动态注册函数</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line">jint <span class="title function_">JNI_OnLoad</span><span class="params">(JavaVM* pVm, <span class="type">void</span>* reserved)</span> &#123;</span><br><span class="line">	JNIEnv* env;</span><br><span class="line">	<span class="keyword">if</span> ((*pVm)-&gt;GetEnv(pVm, (<span class="type">void</span> **)&amp;env, JNI_VERSION_1_6) != JNI_OK) &#123;</span><br><span class="line">	 	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	JNINativeMethod nm[<span class="number">1</span>];</span><br><span class="line">	nm[<span class="number">0</span>].name = <span class="string">&quot;stringFromJNI&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].signature = <span class="string">&quot;()Ljava/lang/String;&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].fnPtr = (<span class="type">void</span>*)stringFromJNI;</span><br><span class="line">	jclass cls = (*env)-&gt;FindClass(env, <span class="string">&quot;com/example/hellojni/HelloJni&quot;</span>);</span><br><span class="line">	(*env)-&gt;RegisterNatives(env, cls, nm, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> JNI_VERSION_1_6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        前后都是固定的模板，不需要修改，只需要更改<code>JNINativeMethod</code>中的字段信息，关于JNI编程的简单语法都很简单，去了解一下就可，不在这里说了。其实就是用这个<code>RegisterNatives</code>注册方法，C语言本地的函数与Java层的类和函数进行动态绑定。</p>
+<p><code>JNINativeMethod</code>结构体的字段信息：</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span>  </span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;     <span class="comment">// java层对应的方法名称  </span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* signature;<span class="comment">// 该方法的返回值类型和参数类型  </span></span><br><span class="line">    <span class="type">void</span>*       fnPtr;    <span class="comment">// native中对应的函数指针  </span></span><br><span class="line">&#125; JNINativeMethod;  </span><br></pre></td></tr></table></figure></div>
+
+<p>3、<code>Android.mk</code>和 <code>Application.mk</code>编写</p>
+<p>​        在<code>JNI</code>目录下创建<code>Android.mk</code>和 <code>Application.mk</code>文件。这是NDK官方推荐的<code>ndk-build</code>（是一个命令行工具，它用于构建使用C/C++编写的Android Native库）构建方式的脚本文件（不过yysy现在用的更多的是<code>cmake</code>了，反正ndk-build很好用，管他的呢）。</p>
+<p><code>Android.mk</code>的编写规范可以看NDK的官方文档，<code>Android.mk</code>添加如下代码：</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">LOCAL<span class="emphasis">_PATH := $(call my-dir)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># FFmpeg library</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avcodec</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavcodec.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avdevice</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavdevice.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avfilter</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavfilter.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avformat</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavformat.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avutil</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavutil.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swresample</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswresample.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swscale</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswscale.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># Program</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := hellojni</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := hellojni.c</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>C<span class="emphasis">_INCLUDES += $(LOCAL_</span>PATH)/include</span><br><span class="line">LOCAL<span class="emphasis">_LDLIBS := -llog -lz</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SHARED<span class="emphasis">_LIBRARIES := avcodec avdevice avfilter avformat avutil swresample swscale</span></span><br><span class="line"><span class="emphasis">include $(BUILD_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>Application.mk</code>代码如下：</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="code"><pre><span class="line">APP<span class="emphasis">_ABI := arm64-v8a</span></span><br><span class="line"><span class="emphasis">APP_</span>PLATFORM := android-23  # minAPI</span><br></pre></td></tr></table></figure></div>
+
+<p><code>APP_ABI</code> 指定了设备CPU的架构。因为前面编译<code>FFmpeg</code>的时候我只编译了64位版本的，这里就对应上。</p>
+<p>4、NDK-BUILD编译</p>
+<p>​        将先前编译的FFmpeg的<code>include</code>和<code>lib</code>目录复制到<code>jni</code>目录当中来，现在看<code>jni</code>目录结构应该是这样的：</p>
+<img src="pic5.png" alt="image-20230312171910710" style="zoom: 80%;" />
+
+<p>​        命令行<code>cd</code>到这一层目录下，执行<code>ndk-build</code>命令即可。</p>
+<img src="pic6.png" alt="image-20230312172026460" style="zoom:80%;" />
+
+<p>​        然后你还会发现项目的根目录下生成了这两个目录。</p>
+<p><img src="pic7.png" alt="image-20230312172123920"></p>
+<p>​        <code>libs</code>里面就是根据<code>android.mk</code>脚本编译的.so库了，<code>obj</code>没什么用，里面就是一些编译的过程文件。将<code>libs</code>目录中的内容（应该是cpu架构文件夹，下层目录才是.so库）copy到<code>app/src/main</code>目录的<code>jniLibs</code>目录当中（项目运行时默认就是在<code>jniLibs</code>中寻找加载相应的第三方.so库）。</p>
+<img src="pic8.png" alt="image-20230312172450844" style="zoom: 67%;" />
+
+<p>​        接下来就可以在手机上对项目进行测试啦！因为我使用的是<code>arm64-v8a</code>cpu架构，这种架构好像不支持在虚拟机上测试（虚拟机架构是<code>x86</code>和<code>x86_64</code>，但可不可以我也没试过）。</p>
+<p>​        下面是测试的结果啦：</p>
+<img src="result_pic.jpg" alt="result_pic" style="zoom: 33%;" />
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+        <tag>JNI开发</tag>
+        <tag>FFmpeg</tag>
+      </tags>
   </entry>
   <entry>
     <title>Algorithm01 数组</title>
@@ -1935,34 +1935,6 @@
       </categories>
   </entry>
   <entry>
-    <title>algorithm03 链表</title>
-    <url>/2023/02/03/algorithm03/</url>
-    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-<span id="more"></span>
-
-<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
-<p>链表的入口节点称为链表的头结点也就是head。</p>
-<p>如图所示：</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
-
-<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
-<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
-<p>双链表 既可以向前查询也可以向后查询。</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
-
-<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
-<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
-
-<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
-<p>链表是通过指针域的指针链接在内存中各个节点。</p>
-<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
-<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-  </entry>
-  <entry>
     <title>algorithm02 哈希表</title>
     <url>/2022/12/21/algorithm02/</url>
     <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
@@ -2188,6 +2160,34 @@
       </categories>
   </entry>
   <entry>
+    <title>algorithm03 链表</title>
+    <url>/2023/02/03/algorithm03/</url>
+    <content><![CDATA[<p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
+<span id="more"></span>
+
+<h2 id="链表基础知识"><a href="#链表基础知识" class="headerlink" title="链表基础知识"></a>链表基础知识</h2><p>链表是一种通过指针串联在一起的线性结构，每一个节点由两部分组成，一个是数据域一个是指针域（存放指向下一个节点的指针），最后一个节点的指针域指向null（空指针的意思）。</p>
+<p>链表的入口节点称为链表的头结点也就是head。</p>
+<p>如图所示：</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343532393831352e706e67.png" alt="链表1" style="zoom:67%;" />
+
+<h3 id="链表类型"><a href="#链表类型" class="headerlink" title="链表类型"></a>链表类型</h3><h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表中的指针域只能指向节点的下一个节点。上面说的就是单链表。</p>
+<h4 id="双链表"><a href="#双链表" class="headerlink" title="双链表"></a>双链表</h4><p>双链表：每一个节点有两个指针域，一个指向下一个节点，一个指向上一个节点。</p>
+<p>双链表 既可以向前查询也可以向后查询。</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343535393331372e706e67.png" alt="链表2" style="zoom:67%;" />
+
+<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表，顾名思义，就是链表首尾相连。（解决约瑟夫环问题）</p>
+<img src="algorithm03/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303230303830363139343632393630332e706e67.png" alt="链表4" style="zoom:67%;" />
+
+<h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
+<p>链表是通过指针域的指针链接在内存中各个节点。</p>
+<p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
+<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>OpenCV特征检测</title>
     <url>/2023/03/10/opencv01/</url>
     <content><![CDATA[<p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
@@ -2229,7 +2229,7 @@
       </tags>
   </entry>
   <entry>
-    <title>spring_01</title>
+    <title>spring-01</title>
     <url>/2023/04/05/spring-01/</url>
     <content><![CDATA[<p>Spring框架主要的优势是在<strong>简化开发</strong>和<strong>框架整合</strong>上，针对特点Spring的学习主线就是IOC、AOP、声明式事务和整合MyBais框架。Part1主要学习IOC容器中的bean、依赖注入以及核心容器。</p>
 <span id="more"></span>
