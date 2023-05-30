@@ -274,12 +274,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-solid fa-file-word"></i>&nbsp;<span>423 Words</span>
+            <i class="fa-solid fa-file-word"></i>&nbsp;<span>655 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-solid fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-solid fa-clock"></i>&nbsp;<span>2 Mins</span>
         </span>
     
     
@@ -314,7 +314,21 @@
 <h3 id="链表存储方式"><a href="#链表存储方式" class="headerlink" title="链表存储方式"></a>链表存储方式</h3><p>数组是在内存中是连续分布的，但是链表在内存中可不是连续分布的。</p>
 <p>链表是通过指针域的指针链接在内存中各个节点。</p>
 <p>所以链表中的节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上，分配机制取决于操作系统的内存管理。</p>
-<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><p><font color=red>后面补充</font></p>
+<img src="algorithm03/image-20230530204103935.png" alt="image-20230530204103935" style="zoom:67%;" />
+
+<h3 id="链表定义"><a href="#链表定义" class="headerlink" title="链表定义"></a>链表定义</h3><p>下面我给出java定义链表节点的方式：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListNode</span> &#123;</span><br><span class="line">    <span class="type">int</span> val;  <span class="comment">// 节点上存储的元素</span></span><br><span class="line">    ListNode next;  <span class="comment">// 指向下一个节点的指针</span></span><br><span class="line">    ListNode() &#123;&#125;  <span class="comment">// 节点的构造函数</span></span><br><span class="line">    ListNode(<span class="type">int</span> val) &#123; <span class="built_in">this</span>.val = val; &#125;</span><br><span class="line">    ListNode(<span class="type">int</span> val, ListNode next) &#123; <span class="built_in">this</span>.val = val; <span class="built_in">this</span>.next = next; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="链表基本操作"><a href="#链表基本操作" class="headerlink" title="链表基本操作"></a>链表基本操作</h3><h4 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h4><p>删除D节点，只要将C节点的next指针指向E节点就可以了。Java语言有自己的内存回收机制，就不用像C++那样手动释放D节点了。</p>
+<img src="algorithm03/image-20230530204626695.png" alt="image-20230530204626695" style="zoom:67%;" />
+
+<h4 id="添加节点"><a href="#添加节点" class="headerlink" title="添加节点"></a>添加节点</h4><p>链表的增添和删除都是O(1)操作，也不会影响到其他节点。</p>
+<img src="algorithm03/image-20230530205536030.png" alt="image-20230530205536030" style="zoom:67%;" />
+
+<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><img src="algorithm03/image-20230530205917354.png" alt="image-20230530205917354" style="zoom:67%;" />
+
+<p>数组在定义的时候，长度就是固定的，如果想改动数组的长度，就需要重新定义一个新的数组。</p>
+<p>链表的长度可以是不固定的，并且可以动态增删， 适合数据量不固定，频繁增删，较少查询的场景。</p>
 
             </div>
 
@@ -384,7 +398,7 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">链表基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">链表类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">单链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">双链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">循环链表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">链表存储方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.</span> <span class="nav-text">链表定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">链表基本操作</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">链表基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">链表类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">单链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">双链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">循环链表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">链表存储方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.</span> <span class="nav-text">链表定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">链表基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="nav-number">1.4.1.</span> <span class="nav-text">删除节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E8%8A%82%E7%82%B9"><span class="nav-number">1.4.2.</span> <span class="nav-text">添加节点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">性能分析</span></a></li></ol></li></ol>
     </div>
 </div>
             </div>
