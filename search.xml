@@ -557,131 +557,6 @@
       </categories>
   </entry>
   <entry>
-    <title>02_Maven</title>
-    <url>/2023/03/28/02-Maven/</url>
-    <content><![CDATA[<p>Maven是专门用于管理和构建Java项目的工具。</p>
-<span id="more"></span>
-
-<h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><p>他的主要功能有：</p>
-<p>提供一套<strong>标准化的项目结构：</strong></p>
-<p>​        所有的IDE使用Maven构建的项目完全一样，IDE创建的Maven项目可以通用。如下图就是Maven构建的项目结构：</p>
-<img src="image-20230325163946659.png" alt="image-20230325163946659" style="zoom: 50%;" />
-
-<p><strong>标准化的构建流程：</strong></p>
-<img src="image-20230325164020995.png" alt="image-20230325164020995" style="zoom: 67%;" />
-
-<p>​        代码需要进行编译、测试、打包、发布，这些操作如果需要反复进行就显得特别麻烦，而Maven提供了一套简单的命令来完成项目构建。</p>
-<p><strong>依赖管理：</strong></p>
-<p>​        依赖管理其实就是管理你项目所依赖的第三方资源（jar包、插件）。如之前我们项目中需要使用JDBC和Druid的话，就需要去网上下载对应的依赖包，复制到项目中，还要将jar包加入工作环境这一系列的操作。</p>
-<p>​        而Maven使用标准的 <strong>坐标</strong> 配置来管理各种依赖，只需要简单的配置就可以完成依赖管理。</p>
-<h2 id="Maven简介"><a href="#Maven简介" class="headerlink" title="Maven简介"></a>Maven简介</h2><h3 id="Maven模型"><a href="#Maven模型" class="headerlink" title="Maven模型"></a>Maven模型</h3><img src="image-20230325165659563.png" alt="image-20230325165659563" style="zoom:67%;" />
-
-<p>​        紫色框框起来的部分，他就是用来完成<strong>标准化构建流程</strong> 。如我们需要编译，Maven提供了一个编译插件供我们使用，我们需要打包，Maven就提供了一个打包插件提供我们使用等。</p>
-<p>​                                           <img src="image-20230325165737480.png" alt="image-20230325165737480" style="zoom: 67%;" /></p>
-<p>​        上图中紫色框起来的部分，项目对象模型就是将我们自己抽象成一个对象模型，有自己专属的坐标。依赖管理模型则是使用坐标来描述当前项目依赖哪儿些第三方jar包。</p>
-<h3 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h3><p>​        我们创建Maven项目，在项目中使用坐标来指定项目的依赖，那么依赖的jar包到底存储在什么地方呢？其实依赖jar包是存储在我们的本地仓库中。而项目运行时从本地仓库中拿需要的依赖jar包。</p>
-<p><strong>仓库分类：</strong></p>
-<ul>
-<li><p>本地仓库：自己计算机上的一个目录</p>
-</li>
-<li><p>中央仓库：由Maven团队维护的全球唯一的仓库</p>
-<ul>
-<li>地址： <a class="link"   href="https://repo1.maven.org/maven2/" >https://repo1.maven.org/maven2/<i class="fa-solid fa-up-right-from-square"></i></a></li>
-</ul>
-</li>
-<li><p>远程仓库(私服)：一般由公司团队搭建的私有仓库</p>
-<p>​        我们在使用坐标指定项目依赖时，如果是之前使用过的依赖，那么它在本地仓库中（你电脑上设置的maven本地仓库目录）就存在，直接从本地拿；如果是第一次导入该依赖，会先从远程仓库中找，再从中央仓库中找，把相应的jar包下载到本地仓库中，再导入maven项目中。</p>
-</li>
-</ul>
-<img src="image-20230328095806245.png" alt="image-20230328095806245" style="zoom: 67%;" />
-
-<h2 id="Maven配置"><a href="#Maven配置" class="headerlink" title="Maven配置"></a>Maven配置</h2><p>1、配置本地仓库</p>
-<p>​        修改 conf/settings.xml 中的 <localRepository> 为一个指定目录作为本地仓库，用来存储jar包。        </p>
-<p><img src="image-20230325170948329.png" alt="image-20230325170948329"></p>
-<p>2、配置私服</p>
-<p>中央仓库在国外，所以下载jar包速度可能比较慢，而阿里公司提供了一个远程仓库，里面基本也都有开源项目的jar包。</p>
-<p>修改 conf/settings.xml 中的 <mirrors>标签。</p>
-<img src="image-20230325171049898.png" alt="image-20230325171049898" style="zoom: 67%;" />
-
-<h2 id="Maven生命周期"><a href="#Maven生命周期" class="headerlink" title="Maven生命周期"></a>Maven生命周期</h2><p>Maven 构建项目生命周期描述的是一次构建过程经历经历了多少个事件。</p>
-<p>Maven 对项目构建的生命周期划分为3套，默认(default)生命周期如下：</p>
-<img src="image-20230325171645821.png" alt="image-20230325171645821" style="zoom: 67%;" />
-
-<p>同一套生命周期内，执行后边的命令，前面的所有命令会自动执行。</p>
-<h2 id="Maven使用"><a href="#Maven使用" class="headerlink" title="Maven使用"></a>Maven使用</h2><h3 id="Maven坐标"><a href="#Maven坐标" class="headerlink" title="Maven坐标"></a>Maven坐标</h3><p>坐标是Maven项目资源的唯一标识，用坐标来定义项目或引入项目中需要的依赖。</p>
-<p>Maven坐标组成：</p>
-<ul>
-<li>groupId：定义当前Maven项目隶属组织名称（通常是域名反写）</li>
-<li>artifactId：定义当前Maven项目名称</li>
-<li>version：定义当前项目版本号</li>
-</ul>
-<img src="image-20230325172258113.png" alt="image-20230325172258113" style="zoom:67%;" />
-
-<blockquote>
-<p>上述的资源坐标可以指项目、依赖、插件。当我们的项目被作为其他项目的依赖时，也是需要坐标来导入的。</p>
-</blockquote>
-<h3 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h3><p>在项目的 pom.xml 中编写 <dependencies> 标签，在子标签 <dependencie> 中定义坐标的 groupId，artifactId，version。具体的坐标可以在<a class="link"   href="https://mvnrepository.com/%E4%B8%8A%E6%9F%A5%E6%89%BE%E3%80%82" >https://mvnrepository.com/上查找。<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<blockquote>
-<p>快捷方式：Alt+Fn+Insert导入常用依赖。</p>
-</blockquote>
-<p>​                                                                        <font color="blue">（我的评价是不如Springboot！！！）</font></p>
-<p><strong>依赖范围：</strong> </p>
-<p>通过设置坐标的依赖范围<scope>，可以设置对应jar包的作用范围：编译环境、测试环境、运行环境。</p>
-<table>
-<thead>
-<tr>
-<th><strong>依赖范围</strong></th>
-<th>编译classpath</th>
-<th>测试classpath</th>
-<th>运行classpath</th>
-<th>例子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>compile</strong></td>
-<td>Y</td>
-<td>Y</td>
-<td>Y</td>
-<td>logback</td>
-</tr>
-<tr>
-<td><strong>test</strong></td>
-<td>-</td>
-<td>Y</td>
-<td>-</td>
-<td>Junit</td>
-</tr>
-<tr>
-<td><strong>provided</strong></td>
-<td>Y</td>
-<td>Y</td>
-<td>-</td>
-<td>servlet-api</td>
-</tr>
-<tr>
-<td><strong>runtime</strong></td>
-<td>-</td>
-<td>Y</td>
-<td>Y</td>
-<td>jdbc驱动</td>
-</tr>
-<tr>
-<td><strong>system</strong></td>
-<td>Y</td>
-<td>Y</td>
-<td>-</td>
-<td>存储在本地的jar包</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>如果引入坐标不指定 <code>scope</code> 标签时，默认就是 compile  值。以后大部分jar包都是使用默认值。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>JavaWeb</category>
-      </categories>
-  </entry>
-  <entry>
     <title>02_Mybatis</title>
     <url>/2023/03/28/02-Mybatis/</url>
     <content><![CDATA[<p>Mybatis是一款很重要的开发框架！</p>
@@ -816,6 +691,257 @@
 <p>还有一个比较重要的点：</p>
 <p>当你Bean类中的成员变量和操作数据库的数据名不同时，如何产生映射关系。这个放在后面的帖子里记录会比较容易懂。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>02_Maven</title>
+    <url>/2023/03/28/02-Maven/</url>
+    <content><![CDATA[<p>Maven是专门用于管理和构建Java项目的工具。</p>
+<span id="more"></span>
+
+<h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><p>他的主要功能有：</p>
+<p>提供一套<strong>标准化的项目结构：</strong></p>
+<p>​        所有的IDE使用Maven构建的项目完全一样，IDE创建的Maven项目可以通用。如下图就是Maven构建的项目结构：</p>
+<img src="image-20230325163946659.png" alt="image-20230325163946659" style="zoom: 50%;" />
+
+<p><strong>标准化的构建流程：</strong></p>
+<img src="image-20230325164020995.png" alt="image-20230325164020995" style="zoom: 67%;" />
+
+<p>​        代码需要进行编译、测试、打包、发布，这些操作如果需要反复进行就显得特别麻烦，而Maven提供了一套简单的命令来完成项目构建。</p>
+<p><strong>依赖管理：</strong></p>
+<p>​        依赖管理其实就是管理你项目所依赖的第三方资源（jar包、插件）。如之前我们项目中需要使用JDBC和Druid的话，就需要去网上下载对应的依赖包，复制到项目中，还要将jar包加入工作环境这一系列的操作。</p>
+<p>​        而Maven使用标准的 <strong>坐标</strong> 配置来管理各种依赖，只需要简单的配置就可以完成依赖管理。</p>
+<h2 id="Maven简介"><a href="#Maven简介" class="headerlink" title="Maven简介"></a>Maven简介</h2><h3 id="Maven模型"><a href="#Maven模型" class="headerlink" title="Maven模型"></a>Maven模型</h3><img src="image-20230325165659563.png" alt="image-20230325165659563" style="zoom:67%;" />
+
+<p>​        紫色框框起来的部分，他就是用来完成<strong>标准化构建流程</strong> 。如我们需要编译，Maven提供了一个编译插件供我们使用，我们需要打包，Maven就提供了一个打包插件提供我们使用等。</p>
+<p>​                                           <img src="image-20230325165737480.png" alt="image-20230325165737480" style="zoom: 67%;" /></p>
+<p>​        上图中紫色框起来的部分，项目对象模型就是将我们自己抽象成一个对象模型，有自己专属的坐标。依赖管理模型则是使用坐标来描述当前项目依赖哪儿些第三方jar包。</p>
+<h3 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h3><p>​        我们创建Maven项目，在项目中使用坐标来指定项目的依赖，那么依赖的jar包到底存储在什么地方呢？其实依赖jar包是存储在我们的本地仓库中。而项目运行时从本地仓库中拿需要的依赖jar包。</p>
+<p><strong>仓库分类：</strong></p>
+<ul>
+<li><p>本地仓库：自己计算机上的一个目录</p>
+</li>
+<li><p>中央仓库：由Maven团队维护的全球唯一的仓库</p>
+<ul>
+<li>地址： <a class="link"   href="https://repo1.maven.org/maven2/" >https://repo1.maven.org/maven2/<i class="fa-solid fa-up-right-from-square"></i></a></li>
+</ul>
+</li>
+<li><p>远程仓库(私服)：一般由公司团队搭建的私有仓库</p>
+<p>​        我们在使用坐标指定项目依赖时，如果是之前使用过的依赖，那么它在本地仓库中（你电脑上设置的maven本地仓库目录）就存在，直接从本地拿；如果是第一次导入该依赖，会先从远程仓库中找，再从中央仓库中找，把相应的jar包下载到本地仓库中，再导入maven项目中。</p>
+</li>
+</ul>
+<img src="image-20230328095806245.png" alt="image-20230328095806245" style="zoom: 67%;" />
+
+<h2 id="Maven配置"><a href="#Maven配置" class="headerlink" title="Maven配置"></a>Maven配置</h2><p>1、配置本地仓库</p>
+<p>​        修改 conf/settings.xml 中的 <localRepository> 为一个指定目录作为本地仓库，用来存储jar包。        </p>
+<p><img src="image-20230325170948329.png" alt="image-20230325170948329"></p>
+<p>2、配置私服</p>
+<p>中央仓库在国外，所以下载jar包速度可能比较慢，而阿里公司提供了一个远程仓库，里面基本也都有开源项目的jar包。</p>
+<p>修改 conf/settings.xml 中的 <mirrors>标签。</p>
+<img src="image-20230325171049898.png" alt="image-20230325171049898" style="zoom: 67%;" />
+
+<h2 id="Maven生命周期"><a href="#Maven生命周期" class="headerlink" title="Maven生命周期"></a>Maven生命周期</h2><p>Maven 构建项目生命周期描述的是一次构建过程经历经历了多少个事件。</p>
+<p>Maven 对项目构建的生命周期划分为3套，默认(default)生命周期如下：</p>
+<img src="image-20230325171645821.png" alt="image-20230325171645821" style="zoom: 67%;" />
+
+<p>同一套生命周期内，执行后边的命令，前面的所有命令会自动执行。</p>
+<h2 id="Maven使用"><a href="#Maven使用" class="headerlink" title="Maven使用"></a>Maven使用</h2><h3 id="Maven坐标"><a href="#Maven坐标" class="headerlink" title="Maven坐标"></a>Maven坐标</h3><p>坐标是Maven项目资源的唯一标识，用坐标来定义项目或引入项目中需要的依赖。</p>
+<p>Maven坐标组成：</p>
+<ul>
+<li>groupId：定义当前Maven项目隶属组织名称（通常是域名反写）</li>
+<li>artifactId：定义当前Maven项目名称</li>
+<li>version：定义当前项目版本号</li>
+</ul>
+<img src="image-20230325172258113.png" alt="image-20230325172258113" style="zoom:67%;" />
+
+<blockquote>
+<p>上述的资源坐标可以指项目、依赖、插件。当我们的项目被作为其他项目的依赖时，也是需要坐标来导入的。</p>
+</blockquote>
+<h3 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h3><p>在项目的 pom.xml 中编写 <dependencies> 标签，在子标签 <dependencie> 中定义坐标的 groupId，artifactId，version。具体的坐标可以在<a class="link"   href="https://mvnrepository.com/%E4%B8%8A%E6%9F%A5%E6%89%BE%E3%80%82" >https://mvnrepository.com/上查找。<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<blockquote>
+<p>快捷方式：Alt+Fn+Insert导入常用依赖。</p>
+</blockquote>
+<p>​                                                                        <font color="blue">（我的评价是不如Springboot！！！）</font></p>
+<p><strong>依赖范围：</strong> </p>
+<p>通过设置坐标的依赖范围<scope>，可以设置对应jar包的作用范围：编译环境、测试环境、运行环境。</p>
+<table>
+<thead>
+<tr>
+<th><strong>依赖范围</strong></th>
+<th>编译classpath</th>
+<th>测试classpath</th>
+<th>运行classpath</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>compile</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>logback</td>
+</tr>
+<tr>
+<td><strong>test</strong></td>
+<td>-</td>
+<td>Y</td>
+<td>-</td>
+<td>Junit</td>
+</tr>
+<tr>
+<td><strong>provided</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>-</td>
+<td>servlet-api</td>
+</tr>
+<tr>
+<td><strong>runtime</strong></td>
+<td>-</td>
+<td>Y</td>
+<td>Y</td>
+<td>jdbc驱动</td>
+</tr>
+<tr>
+<td><strong>system</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>-</td>
+<td>存储在本地的jar包</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>如果引入坐标不指定 <code>scope</code> 标签时，默认就是 compile  值。以后大部分jar包都是使用默认值。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>02_Mybatis练习</title>
+    <url>/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/</url>
+    <content><![CDATA[<p>前面记录了mybatis，它是一种简化jdbc开发操作关系型数据库的持久层框架。下面我们用mybatis进行一些简单的业务来操作mysql数据库。基础的操作和代码我就不完整的展示了，我就记录一下比较容易出错的地方和需要注意的细节了。</p>
+<span id="more"></span>
+
+<h1 id="Mybatis-CRUD"><a href="#Mybatis-CRUD" class="headerlink" title="Mybatis CRUD"></a>Mybatis CRUD</h1><h2 id="查询全部"><a href="#查询全部" class="headerlink" title="查询全部"></a>查询全部</h2><p><code>selectAll</code>操作很简单，但是我们发现有些数据没有被封装成功，仍然是null：</p>
+<p><img src="image-20230326151900257.png" alt="image-20230326151900257"></p>
+<p>这是为什么呢，原因还要从mapper代理开发的过程来说起。因为在代理开发中通过接口代理对象调用接口中的函数，再在相应的sql映射文件中找sql语句：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from tb_brand;</span><br></pre></td></tr></table></figure></div>
+
+<p>找到的sql语句没问题，而它在编译的时候是变成了：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select id,brand_name,company_name,ordered,description,status from tb_brand;</span><br></pre></td></tr></table></figure></div>
+
+<p>sql语句执行后会从数据库中select出满足条件的数据，将其封装成定义的<code>Brand</code>类的对象并通过<code>List</code>集合的形式返回。但是在mapper代理开发的过程中封装成Brand对象的过程是自动进行的，那么mybatis并不知道<code>brand_name</code>数据应该被set成Brand对象中的<code>brandName</code>属性，这就是问题的关键。</p>
+<p>要解决这个问题的思路就是将二者形成映射关系，让<code>mybatis</code>在封装的时候能将其对应上。目前在mybatis上有两种解决的方案：</p>
+<ul>
+<li><p>给字段起别名</p>
+<ul>
+<li><p>直接在sql语句中用<code>AS</code>起别名即可，但是这样操作非常麻烦！</p>
+</li>
+<li><p>还有一种方法，mybatis提供了sql片段可以提高sql语句的复用性，但仍然非常麻烦而且不灵活：将需要复用的sql片段抽取到<sql>标签中，在sql语句中使用<include refid="sql的id"/>引用即可。</p>
+</li>
+</ul>
+</li>
+<li><p>使用<code>resultMap</code>映射</p>
+<p>在<code>sql映射配置文件</code>中使用<code>resultMap</code>定义属性和字段的映射关系：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">           id：完成主键字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">           result：完成一般字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">       --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;brand_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;brandName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;company_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;companyName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><resultMap>标签的<code>id</code>属性，要在下面sql映射文件的sql语句标签中引用，表示在这段sql代码中使用了如上的resultMap映射关系以自动封装数据；而<code>type</code>属性则和sql语句中的<code>type</code>一致即可，都指向pojo中的某个实体类。</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>现在再看从封装到Brand对象中的数据就没问题了：</p>
+<p><img src="image-20230326154957319.png" alt="image-20230326154957319"></p>
+<h2 id="按照id查询"><a href="#按照id查询" class="headerlink" title="按照id查询"></a>按照id查询</h2><p>在这里记录一下如何在映射配置文件的sql语句中使用<strong>参数占位符</strong>。</p>
+<p>这是在映射文件中的sql语句：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectById&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand where id = #&#123;id&#125;;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>mybatis中提供了两种参数占位符：</p>
+<ul>
+<li><p>#{} ：执行SQL时，会将 #{} 占位符替换为？，将来自动设置参数值，可以看出使用#{} 底层使用的是 <code>PreparedStatement</code></p>
+</li>
+<li><p>${} ：拼接SQL。底层使用的是 <code>Statement</code>，会存在SQL注入问题，所以不使用它。</p>
+</li>
+</ul>
+<img src="image-20230326160640669.png" alt="image-20230326160640669" style="zoom: 50%;" />
+
+<blockquote>
+<p>对于有参数的mapper接口方法，我们在sql映射配置文件中应该配置 <code>ParameterType</code> 来指定参数类型。只不过该属性都可以省略。</p>
+</blockquote>
+<p>还需要注意的一点是可能会在sql映射文件中的sql语句中用到一些特殊字符，比方说：</p>
+<img src="image-20230326160952157.png" alt="image-20230326160952157" style="zoom:67%;" />
+
+<p>xml文件会将sql中的”&lt;”、”&gt;”识别成标签符号，所以需要用相应的转义字符替代，这个用到的时候网上一搜就行了。</p>
+<h2 id="多条件查询"><a href="#多条件查询" class="headerlink" title="多条件查询"></a>多条件查询</h2><p><strong>如何编写接口方法：</strong></p>
+<ul>
+<li>使用 <code>@Param(&quot;参数名称&quot;)</code> 标记每一个参数，在映射配置文件中就需要使用 <code>#&#123;参数名称&#125;</code> 进行占位</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(<span class="meta">@Param(&quot;status&quot;)</span> <span class="type">int</span> status, <span class="meta">@Param(&quot;companyName&quot;)</span> String companyName,<span class="meta">@Param(&quot;brandName&quot;)</span> String brandName)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>将多个参数封装成一个 实体对象 ，将该实体对象作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和实体类属性名保持一致。</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Brand brand)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>将多个参数封装到map集合中，将map集合作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和map集合中Key的名称一致。</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Map map)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>如何使用动态SQL：</strong>用户在输入条件时，肯定不会所有的条件都填写</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectByCondition&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand</span><br><span class="line">       <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;brandName != null and brandName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and brand_name like #&#123;brandName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;companyName != null and companyName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and company_name like #&#123;companyName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;status != null&quot;</span>&gt;</span></span><br><span class="line">               and status = #&#123;status&#125;;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>单个条件的动态sql：</p>
+<p>用<choose></choose>里面<when test="条件"></when>标签，相当于<code>switch</code>和<code>case</code>。</p>
+</blockquote>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><ul>
+<li><p><font color="red">注意1：</font>如果要通过add、update等对数据库里的数据进行改动，那需要在测试类中手动使用<code>sqlSession.commit()</code>提交事务。</p>
+</li>
+<li><p><font color="red">注意2：</font>主键返回——在数据添加成功后，有时候需要获取插入数据库数据的主键。</p>
+<ul>
+<li>useGeneratedKeys：是够获取自动增长的主键值。true表示获取</li>
+<li>keyProperty  ：指定将获取到的主键值封装到哪儿个属性里</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;add&quot;</span> <span class="attr">useGeneratedKeys</span>=<span class="string">&quot;true&quot;</span> <span class="attr">keyProperty</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><p>修改肯定不会修改数据所有的属性，&lt;*set*&gt; 标签可以用于动态包含需要更新的列，忽略其它不更新的列。</p>
+<h2 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h2><p>编写SQL时需要遍历数组来拼接SQL语句，Mybatis 提供了 <code>foreach</code> 标签供我们使用。</p>
+<p><strong>foreach 标签</strong></p>
+<p>用来迭代任何可迭代的对象（如数组，集合）。</p>
+<ul>
+<li>collection 属性：<ul>
+<li>mybatis会将数组参数，封装为一个Map集合。<ul>
+<li>默认：array = 数组</li>
+<li>使用@Param注解改变map集合的默认key的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>item 属性：本次迭代获取到的元素。</li>
+<li>separator 属性：集合项迭代之间的分隔符。<code>foreach</code> 标签不会错误地添加多余的分隔符。也就是最后一次迭代不会加分隔符。</li>
+<li>open 属性：该属性值是在拼接SQL语句之前拼接的语句，只会拼接一次</li>
+<li>close 属性：该属性值是在拼接SQL语句拼接后拼接的语句，只会拼接一次</li>
+</ul>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 批量删除 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteByIds&quot;</span>&gt;</span></span><br><span class="line">        delete from tb_brand where id in</span><br><span class="line">        <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;array&quot;</span> <span class="attr">item</span>=<span class="string">&quot;id&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;,&quot;</span> <span class="attr">open</span>=<span class="string">&quot;(&quot;</span> <span class="attr">close</span>=<span class="string">&quot;)&quot;</span>&gt;</span></span><br><span class="line">            #&#123;id&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">        ;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>接口参数是多个时，在每个参数上都使用 <code>@Param</code> 注解。这样代码的可读性更高。</p>
+</blockquote>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">User <span class="title function_">select</span><span class="params">(<span class="meta">@Param(&quot;username&quot;)</span> String username,<span class="meta">@Param(&quot;password&quot;)</span> String password)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="注解开发CRUD"><a href="#注解开发CRUD" class="headerlink" title="注解开发CRUD"></a>注解开发CRUD</h2><p>使用注解开发会比使用sql配置文件开发更加方便，使用了注解，就不需要再映射配置文件中书写对应的 <code>statement</code>。</p>
+<p>官方文档是这么说的：</p>
+<p><img src="image-20230327154233410.png" alt="image-20230327154233410"></p>
+<p>所以给出的结论是：简单sql用注解开发，复杂sql仍然用sql映射配置文件。</p>
+<p>举个例子：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="meta">@Delete(&quot;delete from tb_brand where id = #&#123;id&#125;;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deleteById</span><span class="params">(<span class="type">int</span> id)</span>;</span><br></pre></td></tr></table></figure></div>
+
 ]]></content>
       <categories>
         <category>JavaWeb</category>
@@ -980,132 +1106,6 @@
       </categories>
   </entry>
   <entry>
-    <title>02_Mybatis练习</title>
-    <url>/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/</url>
-    <content><![CDATA[<p>前面记录了mybatis，它是一种简化jdbc开发操作关系型数据库的持久层框架。下面我们用mybatis进行一些简单的业务来操作mysql数据库。基础的操作和代码我就不完整的展示了，我就记录一下比较容易出错的地方和需要注意的细节了。</p>
-<span id="more"></span>
-
-<h1 id="Mybatis-CRUD"><a href="#Mybatis-CRUD" class="headerlink" title="Mybatis CRUD"></a>Mybatis CRUD</h1><h2 id="查询全部"><a href="#查询全部" class="headerlink" title="查询全部"></a>查询全部</h2><p><code>selectAll</code>操作很简单，但是我们发现有些数据没有被封装成功，仍然是null：</p>
-<p><img src="image-20230326151900257.png" alt="image-20230326151900257"></p>
-<p>这是为什么呢，原因还要从mapper代理开发的过程来说起。因为在代理开发中通过接口代理对象调用接口中的函数，再在相应的sql映射文件中找sql语句：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from tb_brand;</span><br></pre></td></tr></table></figure></div>
-
-<p>找到的sql语句没问题，而它在编译的时候是变成了：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">select id,brand_name,company_name,ordered,description,status from tb_brand;</span><br></pre></td></tr></table></figure></div>
-
-<p>sql语句执行后会从数据库中select出满足条件的数据，将其封装成定义的<code>Brand</code>类的对象并通过<code>List</code>集合的形式返回。但是在mapper代理开发的过程中封装成Brand对象的过程是自动进行的，那么mybatis并不知道<code>brand_name</code>数据应该被set成Brand对象中的<code>brandName</code>属性，这就是问题的关键。</p>
-<p>要解决这个问题的思路就是将二者形成映射关系，让<code>mybatis</code>在封装的时候能将其对应上。目前在mybatis上有两种解决的方案：</p>
-<ul>
-<li><p>给字段起别名</p>
-<ul>
-<li><p>直接在sql语句中用<code>AS</code>起别名即可，但是这样操作非常麻烦！</p>
-</li>
-<li><p>还有一种方法，mybatis提供了sql片段可以提高sql语句的复用性，但仍然非常麻烦而且不灵活：将需要复用的sql片段抽取到<sql>标签中，在sql语句中使用<include refid="sql的id"/>引用即可。</p>
-</li>
-</ul>
-</li>
-<li><p>使用<code>resultMap</code>映射</p>
-<p>在<code>sql映射配置文件</code>中使用<code>resultMap</code>定义属性和字段的映射关系：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">           id：完成主键字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">           result：完成一般字段的映射</span></span><br><span class="line"><span class="comment">               column：表的列名</span></span><br><span class="line"><span class="comment">               property：实体类的属性名</span></span><br><span class="line"><span class="comment">       --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;brand_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;brandName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;company_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;companyName&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p><resultMap>标签的<code>id</code>属性，要在下面sql映射文件的sql语句标签中引用，表示在这段sql代码中使用了如上的resultMap映射关系以自动封装数据；而<code>type</code>属性则和sql语句中的<code>type</code>一致即可，都指向pojo中的某个实体类。</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<p>现在再看从封装到Brand对象中的数据就没问题了：</p>
-<p><img src="image-20230326154957319.png" alt="image-20230326154957319"></p>
-<h2 id="按照id查询"><a href="#按照id查询" class="headerlink" title="按照id查询"></a>按照id查询</h2><p>在这里记录一下如何在映射配置文件的sql语句中使用<strong>参数占位符</strong>。</p>
-<p>这是在映射文件中的sql语句：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectById&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;brand&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand where id = #&#123;id&#125;;</span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p>mybatis中提供了两种参数占位符：</p>
-<ul>
-<li><p>#{} ：执行SQL时，会将 #{} 占位符替换为？，将来自动设置参数值，可以看出使用#{} 底层使用的是 <code>PreparedStatement</code></p>
-</li>
-<li><p>${} ：拼接SQL。底层使用的是 <code>Statement</code>，会存在SQL注入问题，所以不使用它。</p>
-</li>
-</ul>
-<img src="image-20230326160640669.png" alt="image-20230326160640669" style="zoom: 50%;" />
-
-<blockquote>
-<p>对于有参数的mapper接口方法，我们在sql映射配置文件中应该配置 <code>ParameterType</code> 来指定参数类型。只不过该属性都可以省略。</p>
-</blockquote>
-<p>还需要注意的一点是可能会在sql映射文件中的sql语句中用到一些特殊字符，比方说：</p>
-<img src="image-20230326160952157.png" alt="image-20230326160952157" style="zoom:67%;" />
-
-<p>xml文件会将sql中的”&lt;”、”&gt;”识别成标签符号，所以需要用相应的转义字符替代，这个用到的时候网上一搜就行了。</p>
-<h2 id="多条件查询"><a href="#多条件查询" class="headerlink" title="多条件查询"></a>多条件查询</h2><p><strong>如何编写接口方法：</strong></p>
-<ul>
-<li>使用 <code>@Param(&quot;参数名称&quot;)</code> 标记每一个参数，在映射配置文件中就需要使用 <code>#&#123;参数名称&#125;</code> 进行占位</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(<span class="meta">@Param(&quot;status&quot;)</span> <span class="type">int</span> status, <span class="meta">@Param(&quot;companyName&quot;)</span> String companyName,<span class="meta">@Param(&quot;brandName&quot;)</span> String brandName)</span>;</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>将多个参数封装成一个 实体对象 ，将该实体对象作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和实体类属性名保持一致。</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Brand brand)</span>;</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>将多个参数封装到map集合中，将map集合作为接口的方法参数。该方式要求在映射配置文件的SQL中使用 <code>#&#123;内容&#125;</code> 时，里面的内容必须和map集合中Key的名称一致。</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Brand&gt; <span class="title function_">selectByCondition</span><span class="params">(Map map)</span>;</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>如何使用动态SQL：</strong>用户在输入条件时，肯定不会所有的条件都填写</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectByCondition&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;brandResultMap&quot;</span>&gt;</span></span><br><span class="line">       select * from tb_brand</span><br><span class="line">       <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;brandName != null and brandName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and brand_name like #&#123;brandName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;companyName != null and companyName != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">               and company_name like #&#123;companyName&#125;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;status != null&quot;</span>&gt;</span></span><br><span class="line">               and status = #&#123;status&#125;;</span><br><span class="line">           <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>单个条件的动态sql：</p>
-<p>用<choose></choose>里面<when test="条件"></when>标签，相当于<code>switch</code>和<code>case</code>。</p>
-</blockquote>
-<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><ul>
-<li><p><font color="red">注意1：</font>如果要通过add、update等对数据库里的数据进行改动，那需要在测试类中手动使用<code>sqlSession.commit()</code>提交事务。</p>
-</li>
-<li><p><font color="red">注意2：</font>主键返回——在数据添加成功后，有时候需要获取插入数据库数据的主键。</p>
-<ul>
-<li>useGeneratedKeys：是够获取自动增长的主键值。true表示获取</li>
-<li>keyProperty  ：指定将获取到的主键值封装到哪儿个属性里</li>
-</ul>
-</li>
-</ul>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;add&quot;</span> <span class="attr">useGeneratedKeys</span>=<span class="string">&quot;true&quot;</span> <span class="attr">keyProperty</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><p>修改肯定不会修改数据所有的属性，&lt;*set*&gt; 标签可以用于动态包含需要更新的列，忽略其它不更新的列。</p>
-<h2 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h2><p>编写SQL时需要遍历数组来拼接SQL语句，Mybatis 提供了 <code>foreach</code> 标签供我们使用。</p>
-<p><strong>foreach 标签</strong></p>
-<p>用来迭代任何可迭代的对象（如数组，集合）。</p>
-<ul>
-<li>collection 属性：<ul>
-<li>mybatis会将数组参数，封装为一个Map集合。<ul>
-<li>默认：array = 数组</li>
-<li>使用@Param注解改变map集合的默认key的名称</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>item 属性：本次迭代获取到的元素。</li>
-<li>separator 属性：集合项迭代之间的分隔符。<code>foreach</code> 标签不会错误地添加多余的分隔符。也就是最后一次迭代不会加分隔符。</li>
-<li>open 属性：该属性值是在拼接SQL语句之前拼接的语句，只会拼接一次</li>
-<li>close 属性：该属性值是在拼接SQL语句拼接后拼接的语句，只会拼接一次</li>
-</ul>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 批量删除 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteByIds&quot;</span>&gt;</span></span><br><span class="line">        delete from tb_brand where id in</span><br><span class="line">        <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;array&quot;</span> <span class="attr">item</span>=<span class="string">&quot;id&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;,&quot;</span> <span class="attr">open</span>=<span class="string">&quot;(&quot;</span> <span class="attr">close</span>=<span class="string">&quot;)&quot;</span>&gt;</span></span><br><span class="line">            #&#123;id&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">        ;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>接口参数是多个时，在每个参数上都使用 <code>@Param</code> 注解。这样代码的可读性更高。</p>
-</blockquote>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">User <span class="title function_">select</span><span class="params">(<span class="meta">@Param(&quot;username&quot;)</span> String username,<span class="meta">@Param(&quot;password&quot;)</span> String password)</span>;</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="注解开发CRUD"><a href="#注解开发CRUD" class="headerlink" title="注解开发CRUD"></a>注解开发CRUD</h2><p>使用注解开发会比使用sql配置文件开发更加方便，使用了注解，就不需要再映射配置文件中书写对应的 <code>statement</code>。</p>
-<p>官方文档是这么说的：</p>
-<p><img src="image-20230327154233410.png" alt="image-20230327154233410"></p>
-<p>所以给出的结论是：简单sql用注解开发，复杂sql仍然用sql映射配置文件。</p>
-<p>举个例子：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="meta">@Delete(&quot;delete from tb_brand where id = #&#123;id&#125;;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deleteById</span><span class="params">(<span class="type">int</span> id)</span>;</span><br></pre></td></tr></table></figure></div>
-
-]]></content>
-      <categories>
-        <category>JavaWeb</category>
-      </categories>
-  </entry>
-  <entry>
     <title>03_HTTP&amp;Tomcat</title>
     <url>/2023/03/28/03-HTTP-Tomcat/</url>
     <content><![CDATA[<p>今天记录一下HTTP协议和一种目前使用最广泛的轻量级web服务器——Tomcat！</p>
@@ -1218,17 +1218,6 @@
       </categories>
   </entry>
   <entry>
-    <title>03-Spring整合三方框架</title>
-    <url>/2023/06/01/03-Spring%E6%95%B4%E5%90%88%E4%B8%89%E6%96%B9%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>Spring有一个容器，叫做IoC容器，里面保存bean。在进行企业级开发的时候，除了将自己写的类让Spring管理之外，还有一部分重要的工作就是使用第三方的技术。前面已经讲了如何管理第三方Bean了，下面结合IoC和DI，整合Mybatis框架，加深对Spring的理解。</p>
-<span id="more"></span>
-
-<h2 id="Spring整合Mybatis（2）"><a href="#Spring整合Mybatis（2）" class="headerlink" title="Spring整合Mybatis（2）"></a>Spring整合Mybatis（2）</h2>]]></content>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>03_Servlet</title>
     <url>/2023/03/28/03-Servlet/</url>
     <content><![CDATA[<p>Servlet是JavaWeb最为核心的内容，它是Java提供的一门动态web资源开发技术。</p>
@@ -1329,6 +1318,17 @@
 ]]></content>
       <categories>
         <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>03-Spring整合三方框架</title>
+    <url>/2023/06/01/03-Spring%E6%95%B4%E5%90%88%E4%B8%89%E6%96%B9%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>Spring有一个容器，叫做IoC容器，里面保存bean。在进行企业级开发的时候，除了将自己写的类让Spring管理之外，还有一部分重要的工作就是使用第三方的技术。前面已经讲了如何管理第三方Bean了，下面结合IoC和DI，整合Mybatis框架，加深对Spring的理解。</p>
+<span id="more"></span>
+
+<h2 id="Spring整合Mybatis（2）"><a href="#Spring整合Mybatis（2）" class="headerlink" title="Spring整合Mybatis（2）"></a>Spring整合Mybatis（2）</h2>]]></content>
+      <categories>
+        <category>Spring</category>
       </categories>
   </entry>
   <entry>
@@ -3258,7 +3258,7 @@
 
 <blockquote>
 <p>输出如下：</p>
-<p>origin  <a class="link"   href="mailto:&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#109;" >&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (fetch)<br>origin  <a class="link"   href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#99;&#x6f;&#109;" >&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#99;&#x6f;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (push)</p>
+<p>origin  <a class="link"   href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;" >&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (fetch)<br>origin  <a class="link"   href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#109;" >&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (push)</p>
 </blockquote>
 <p>删除与远程仓库的关联：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure></div></li>
