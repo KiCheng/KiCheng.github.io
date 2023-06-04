@@ -9,6 +9,8 @@
     
     <title>
         
+            spring-02_mybatis |
+        
         KiCheng Home
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,7 +75,7 @@
                     
                         <li class="menu-item">
                             <!-- Menu -->
-                            <a class="active" 
+                            <a class="" 
                                 href="/" >
                                  
                                     HOME
@@ -157,7 +159,7 @@
         <ul class="drawer-menu-list">
             
                 <li class="drawer-menu-item flex-center">
-                    <a class="active" 
+                    <a class="" 
                        href="/" >
                          
                             HOME
@@ -229,456 +231,140 @@
             <div class="main-content">
 
                 
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+            <div class="article-title">
+                <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">spring-02_mybatis</h1></span>
+            </div>
 
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/28/03-HTTP-Tomcat/">
-                        03_HTTP&amp;Tomcat
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>今天记录一下HTTP协议和一种目前使用最广泛的轻量级web服务器——Tomcat！</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Tue Mar 28 2023 10:10:41 GMT+0800">2023-03-28</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/avatar.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">KiCheng</span>
                             
-                            <a href="/categories/JavaWeb/">JavaWeb</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-line"></i>&nbsp;
+        <span class="pc">2023-06-02 22:39:40</span>
+        <span class="mobile">2023-06-02 22:39</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Spring/">Spring</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
 
-    <a href="/2023/03/28/03-HTTP-Tomcat/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-solid fa-file-word"></i>&nbsp;<span>105 Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-solid fa-clock"></i>&nbsp;<span>1 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">
-                        02_Mybatis练习
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>前面记录了mybatis，它是一种简化jdbc开发操作关系型数据库的持久层框架。下面我们用mybatis进行一些简单的业务来操作mysql数据库。基础的操作和代码我就不完整的展示了，我就记录一下比较容易出错的地方和需要注意的细节了。</p>
-                    
+                        </div>
+                    </div>
                 </div>
+            
 
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Tue Mar 28 2023 10:05:29 GMT+0800">2023-03-28</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/JavaWeb/">JavaWeb</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
+            <div class="article-content markdown-body">
+                <p>Spring有一个容器，叫做IoC容器，里面保存bean。在进行企业级开发的时候，除了将自己写的类让Spring管理之外，还有一部分重要的工作就是使用第三方的技术。前面已经讲了如何管理第三方Bean了，下面结合IoC和DI，整合Mybatis框架，加深对Spring的理解。</p>
+<span id="more"></span>
 
-    <a href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
+<h1 id="Spring整合第三方框架"><a href="#Spring整合第三方框架" class="headerlink" title="Spring整合第三方框架"></a>Spring整合第三方框架</h1><h2 id="Spring整合Mybatis（2）"><a href="#Spring整合Mybatis（2）" class="headerlink" title="Spring整合Mybatis（2）"></a>Spring整合Mybatis（2）</h2>
+            </div>
 
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/28/02-Mybatis/">
-                        02_Mybatis
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>Mybatis是一款很重要的开发框架！</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Tue Mar 28 2023 10:02:05 GMT+0800">2023-03-28</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/JavaWeb/">JavaWeb</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2023/03/28/02-Mybatis/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/28/02-Maven/">
-                        02_Maven
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>Maven是专门用于管理和构建Java项目的工具。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Tue Mar 28 2023 09:53:53 GMT+0800">2023-03-28</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/JavaWeb/">JavaWeb</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2023/03/28/02-Maven/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/28/01-JDBC/">
-                        01_JDBC
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>​        现在企业早就不使用这种繁琐的技术了，但是学过了<code>JDBC</code>才能更好的理解后面的开发框架。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Tue Mar 28 2023 09:44:15 GMT+0800">2023-03-28</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/JavaWeb/">JavaWeb</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2023/03/28/01-JDBC/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/12/Android-jni/">
-                        Android平台JNI开发保姆级教程
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Sun Mar 12 2023 21:41:38 GMT+0800">2023-03-12</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/Android/">Android</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/Android/">Android</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/JNI%E5%BC%80%E5%8F%91/">JNI开发</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/FFmpeg/">FFmpeg</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/03/12/Android-jni/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/03/10/opencv01/">
-                        OpenCV特征检测
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Fri Mar 10 2023 15:54:34 GMT+0800">2023-03-10</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/OpenCV/">OpenCV</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/OpenCV/">OpenCV</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/03/10/opencv01/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/02/03/algorithm03/">
-                        algorithm03 链表
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Fri Feb 03 2023 17:53:36 GMT+0800">2023-02-03</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2023/02/03/algorithm03/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/12/21/algorithm02/">
-                        algorithm02 哈希表
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Wed Dec 21 2022 15:54:34 GMT+0800">2022-12-21</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2022/12/21/algorithm02/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/12/18/algorithm01/">
-                        Algorithm01 数组
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>说在前面：之前刷题都没有按照知识点分类整理过，最近在网上看到推荐<strong>代码随想录</strong>的算法讲义，就想按照他的推荐系统的把算法这一块拾起来，在自己的博客里做一个记录，也当做日后自己复习的笔记了。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;<span class="home-article-date" data-date="Sun Dec 18 2022 10:10:51 GMT+0800">2022-12-18</span></span>
-        
-            <span class="home-article-category"><i class="fa-solid fa-folders"></i></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2022/12/18/algorithm01/">阅读全文&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：spring-02_mybatis</li>
+        <li>Post author：KiCheng</li>
+        <li>Create time：2023-06-02 22:39:40</li>
+        <li>
+            Post link：https://kicheng.github.io/2023/06/02/spring-02-mybatis/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
     </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
-    
-        <a class="prev btn"
-           href="/"
-        >Prev</a>
-    
-
-    
 </div>
 
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Spring/">#Spring</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/06/02/spring-03/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">spring-03</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring%E6%95%B4%E5%90%88%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">Spring整合第三方框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E6%95%B4%E5%90%88Mybatis%EF%BC%882%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">Spring整合Mybatis（2）</span></a></li></ol></li></ol>
+    </div>
+</div>
+            </div>
+        
     </div>
 </div>
 
@@ -753,6 +439,23 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-bottom-side-tools">
@@ -838,7 +541,6 @@
 
 
 
-
 <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/utils.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/main.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/header-shrink.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/back2top.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/dark-light-toggle.js"></script>
 
 
@@ -858,6 +560,8 @@
 
 
 <div class="post-scripts pjax">
+    
+        <script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/toc-toggle.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/libs/anime.min.js"></script><script src="//evan.beee.top/projects/hexo-theme-redefine/v0.4.1/source/js/toc.js"></script>
     
 </div>
 
