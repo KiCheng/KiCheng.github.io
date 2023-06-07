@@ -557,6 +557,339 @@
       </categories>
   </entry>
   <entry>
+    <title>01-SpringMVC入门</title>
+    <url>/2023/06/05/01-SpringMVC%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<p>SpringMVC是隶属于Spring框架的一部分吗，是对Servlet进行了封装。SpringMVC是处于Web层的框架，所以其主要的作用就是用来接收前端发过来的请求和数据然后经过处理并将处理的结果响应给前端，所以如何处理请求和响应是SpringMVC中非常重要的一块内容。</p>
+<span id="more"></span>
+
+<h2 id="SpringMVC概述"><a href="#SpringMVC概述" class="headerlink" title="SpringMVC概述"></a>SpringMVC概述</h2><h3 id="Web架构"><a href="#Web架构" class="headerlink" title="Web架构"></a>Web架构</h3><p>现在web程序大都基于三层架构来实现：</p>
+<img src="image-20230605105629968.png" alt="image-20230605105629968" style="zoom:67%;" />
+
+<ul>
+<li><p>浏览器发送一个请求给后端服务器，后端服务器现在是使用Servlet来接收请求和数据；</p>
+</li>
+<li><p>如果所有的处理都交给Servlet来处理的话，所有的东西都耦合在一起，对后期的维护和扩展极为不利；将后端服务器Servlet拆分成三层，分别是web、service和dao；</p>
+<ul>
+<li>web层主要由servlet来处理，负责页面请求和数据的收集以及响应结果给前端；</li>
+<li>service层主要负责业务逻辑的处理；</li>
+<li>dao层主要负责连接数据库，进行数据的增删改查操作；</li>
+</ul>
+</li>
+<li><p>servlet处理请求和数据的时候，存在的问题是一个servlet只能处理一个请求；针对web层进行了优化，采用了MVC设计模式，将其设计为controller、view和model：</p>
+<img src="image-20230605110015709.png" alt="image-20230605110015709" style="zoom:67%;" />
+
+<ul>
+<li><p>controller负责请求和数据的接收，接收后将其转发给service进行业务处理；</p>
+</li>
+<li><p>service根据需要调用dao对数据进行增删改查；</p>
+</li>
+<li><p>dao把数据处理完后将结果交给service，service再交给controller；</p>
+</li>
+<li><p><font color="red"><strong>同步请求：</strong></font>controller根据需求组装成Model和View，Model和View组合起来生成页面转发给前端浏览器（这样做的好处就是controller可以处理多个请求，并对请求进行分发，执行不同的业务操作）；</p>
+<p>现在更多使用的是<font color="red"><strong>异步请求</strong></font>方式，后端不需要返回view视图，而是将数据以json格式返回</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="SpringMVC"><a href="#SpringMVC" class="headerlink" title="SpringMVC"></a>SpringMVC</h3><p>SpringMVC是一种基于Java实现MVC模型的轻量级Web框架，相比于Servlet使用更加简单、开发更加便捷。</p>
+<p>SpringMVC主要负责的就是：① controller如何接收请求和数据；② 如何将请求和数据转发给业务层；③ 如何将响应数据转换成json发回到前端。</p>
+<h2 id="SpringMVC入门案例"><a href="#SpringMVC入门案例" class="headerlink" title="SpringMVC入门案例"></a>SpringMVC入门案例</h2><p>SpringMVC是一个Web框架，是用来替换Servlet的，在JavaWeb中如何使用Servlet进行开发呢？忘记的话看前面的文章【<a href="https://kicheng.github.io/2023/03/28/03-Servlet/">JavaWeb_Servlet</a>】</p>
+<p>SpringMVC的制作流程与Servlet几乎一致：</p>
+<p>1、创建Maven结构的web工程</p>
+<p>2、设置tomcat服务器：tomcat插件</p>
+<p>3、导入坐标（SpringMVC+Servlet）</p>
+<p>4、定义处理请求的功能类（Controller）</p>
+<p>5、设置请求映射</p>
+<p>6、将SpringMVC设定加载到tomcat容器中</p>
+<h3 id="SpringMVC实现流程"><a href="#SpringMVC实现流程" class="headerlink" title="SpringMVC实现流程"></a>SpringMVC实现流程</h3><p>步骤1：创建webapp内核的Maven项目</p>
+<p>步骤2：导入依赖坐标（Servlet、SpringMVC）</p>
+<p>​    注意导入的版本，建议使用JDK8以及5.3.0以下的SpringMVC版本配置，否则后面会出现奇奇怪怪的bug…到现在不知道如何解决jdk17不兼容的问题，后面做大项目的时候一定解决这个问题！</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javax.servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.0.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 如果不设置默认是compile在编译、运行、测试时均有效；如果运行有效的话就会和tomcat中的servlet-api包发生冲突 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.2.24.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>步骤3：创建SpringMvcConfig配置类</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.Lijiacheng.controller&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringMvcConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>步骤4：创建Controller类</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;User save...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;info&#x27;:&#x27;springMVC&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​    Controller要注意的点有如下几个：</p>
+<p>（1）<code>@Controller</code>将其作为Bean交给Spring管理；</p>
+<p>（2）<code>@RequestMapping(&quot;/save&quot;)</code>指定request请求访问的地址，相当于Servlet中的<code>WebServlet</code>；</p>
+<p>（3）<code>@ResponseBody</code>指定后端返回的response响应是json数据；</p>
+<p>步骤5：使用Servlet容器启动配置类替换web.xml</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServletInitConfig</span> <span class="keyword">extends</span> <span class="title class_">AbstractDispatcherServletInitializer</span> &#123;</span><br><span class="line">    <span class="comment">//加载springmvc配置类</span></span><br><span class="line">    <span class="keyword">protected</span> WebApplicationContext <span class="title function_">createServletApplicationContext</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//初始化WebApplicationContext对象</span></span><br><span class="line">        <span class="type">AnnotationConfigWebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigWebApplicationContext</span>();</span><br><span class="line">        <span class="comment">//加载指定配置类</span></span><br><span class="line">        ctx.register(SpringMvcConfig.class);</span><br><span class="line">        <span class="keyword">return</span> ctx;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置由springmvc控制器处理的请求映射路径(设置为接收所有路径)</span></span><br><span class="line">    <span class="keyword">protected</span> String[] getServletMappings() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;/&quot;</span>&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加载spring配置类</span></span><br><span class="line">    <span class="keyword">protected</span> WebApplicationContext <span class="title function_">createRootApplicationContext</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​    配置类要继承这个<code>AbstractDispatcherServletInitializer</code>类；并且初始化时所需的对象和前面的不同，是<code>AnnotationConfigWebApplicationContext</code>。</p>
+<p>步骤6：配置Tomcat环境</p>
+<p>我一般是习惯用IDEA自带的Tomcat插件，唯一的缺点是只能用Tomcat7，但是Tomcat7和JDK17已经不兼容了，所以我这里降低版本到JDK8了。</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat.maven<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tomcat7-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>步骤7：运行Tomcat服务器，在浏览器访问<code>/save</code></p>
+<p><img src="image-20230605164950934.png" alt="image-20230605164950934"></p>
+<h3 id="流程解析"><a href="#流程解析" class="headerlink" title="流程解析"></a>流程解析</h3><p>将SpringMVC的使用过程总共分两个阶段来分析，分别是启动服务器初始化过程和单次请求过程。</p>
+<img src="image-20230605165432219.png" alt="image-20230605165432219" style="zoom: 50%;" />
+
+<h4 id="启动服务器初始化"><a href="#启动服务器初始化" class="headerlink" title="启动服务器初始化"></a>启动服务器初始化</h4><p>1、服务器启动，执行ServletInitConfig类，初始化web容器（功能类似于以前的web.xml）</p>
+<p>2、执行createServletApplicationContext方法，创建了WebApplicationContext对象，加载SpringMvcConfig配置类来初始化SpringMVC的容器</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//初始化WebApplicationContext对象</span></span><br><span class="line"><span class="type">AnnotationConfigWebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigWebApplicationContext</span>();</span><br><span class="line"><span class="comment">//加载指定配置类</span></span><br><span class="line">ctx.register(SpringMvcConfig.class);</span><br></pre></td></tr></table></figure></div>
+
+<p>3、加载SpringMvcConfig配置类，执行@ComponentScan加载对应的bean，扫描指定包及其子包下所有类上的注解，这里是<code>@Controller</code></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ComponentScan(&quot;com.Lijiacheng.controller&quot;)</span></span><br></pre></td></tr></table></figure></div>
+
+<p>4、加载Controller类，每个@RequestMapping的名称对应一个具体的方法：建立了<code>/save</code>和save方法的对应关系</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;User save...&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;info&#x27;:&#x27;springMVC&#x27;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>5、执行getServletMappings方法，设定SpringMVC拦截请求的路径规则：<code>/</code>代表所拦截请求的路径规则，只有被拦截后才能交给SpringMVC来处理请求</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;/&quot;</span>&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="单次请求过程"><a href="#单次请求过程" class="headerlink" title="单次请求过程"></a>单次请求过程</h4><p>1、发送请求 <a class="link"   href="http://localhost:8080/springmvc_01_quickstart/save" >http://localhost:8080/springmvc_01_quickstart/save<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>2、web容器发现该请求满足SpringMVC拦截规则，将请求交给SpringMVC处理</p>
+<p>3、解析请求路径<code>/save</code>，由<code>/save</code>匹配执行对应的方法save()</p>
+<p>4、检测到有<code>@ResponseBody</code>直接将save()方法的返回值作为响应体返回给请求方</p>
+<h3 id="Bean加载控制"><a href="#Bean加载控制" class="headerlink" title="Bean加载控制"></a>Bean加载控制</h3><h4 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h4><p>之前我们创建过SpringConfig配置类，在MVC中也创建了SpringMvcConfig配置类，它们都需要加载资源，它们分别都加载哪些内容呢？</p>
+<blockquote>
+<p>我们目前写过的Config配置类有：ServletInitConfig, SpringConfig, SpringMvcConfig, JdbcConfig, MybatisConfig。</p>
+</blockquote>
+<p>controller目录存放的是SpringMVC的controller类、service目录存放的是service接口和实现类、dao目录存放的是dao/Mapper接口。controller、service和dao这些类都需要被容器管理成bean对象，SpringMVC加载表现层bean，也就是controller包下的类；Spring控制业务层service的bean和功能bean（DataSource, SqlSessionFactoryBean, MapperScannerConfigurer等），我们需要让Spring和SpringMVC分开加载各自的内容。</p>
+<p>在SpringMVC的配置类SpringMvcConfig中使用注解<code>@ComponentScan</code>，我们只需要将其扫描范围设置到controller即可：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.Lijiacheng.controller&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringMvcConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>在Spring的配置类SpringConfig中使用注解<code>@ComponentScan </code>，当时扫描的范围中其实是已经包含了controller：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.Lijiacheng&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>因为功能不同，所以我们需要避免Spring错误加载到SpringMVC的bean。</p>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><img src="image-20230605192715499.png" alt="image-20230605192715499" style="zoom:67%;" />
+
+<h4 id="设置Bean加载控制"><a href="#设置Bean加载控制" class="headerlink" title="设置Bean加载控制"></a>设置Bean加载控制</h4><p>方式一：修改Spring配置类，设定扫描范围为精准范围</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&#123;&quot;com.itheima.service&quot;,&quot;comitheima.dao&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>上述只是通过例子说明可以精确指定让Spring扫描对应的包结构，真正在做开发的时候，因为Dao最终是交给MapperScannerConfigurer对象来进行扫描处理的，我们只需要将其扫描到service包即可。</p>
+</blockquote>
+<p>方式二：修改Spring配置类，排除掉controller包中的bean</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &quot;com.Lijiacheng&quot;,</span></span><br><span class="line"><span class="meta">        excludeFilters = @ComponentScan.Filter(  // 设置扫描加载bean时，排除的过滤规则</span></span><br><span class="line"><span class="meta">                type = FilterType.ANNOTATION,  // 设置排除规则，当前使用按照bean定义时的注解类型进行排除</span></span><br><span class="line"><span class="meta">                classes = Controller.class  // 设置具体排除的注解类</span></span><br><span class="line"><span class="meta">        )</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>这样，通过getBean获取Controller类，如果获取不到就说明在SpringConfig配置类中排除成功了。</p>
+<blockquote>
+<p>需要把SpringMvcConfig配置类上的<code>@ComponentScan</code>注解注释掉才可以测试成功。因为SpringConfig类中扫描的包是com.Lijiacheng下除了controller包，config中的SpringMvcConfig就会被扫描到，里面又有一个<code>@ComponentScan</code>又将controller类扫描进来了。</p>
+</blockquote>
+<p>最后一点也很重要，有了SpringConfig配置类，要想在tomcat服务器启动将其加载，我们需要修改ServletInitConfig配置类中的最后一个函数，将Spring配置也加载进来，很简单：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> WebApplicationContext <span class="title function_">createRootApplicationContext</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="type">AnnotationConfigWebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigWebApplicationContext</span>();</span><br><span class="line">      ctx.register(SpringConfig.class);</span><br><span class="line">      <span class="keyword">return</span> ctx;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>简化ServletInitConfig配置类开发</strong>（以后用它更简单，不过上面的是老母子）</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServletInitConfig</span> <span class="keyword">extends</span> <span class="title class_">AbstractAnnotationConfigDispatcherServletInitializer</span> &#123;</span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt;[] getRootConfigClasses() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;SpringConfig.class&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt;[] getServletConfigClasses() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;SpringMvcConfig.class&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> String[] getServletMappings() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;/&quot;</span>&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Bean加载控制总结</strong></p>
+<p><code>@ComponentScan</code>有个很重要的属性：<code>excludeFilters</code>排除扫描路径中加载的bean，需要指定类别（type）和具体项（classes）；<code>includeFilter</code>相反。</p>
+<h2 id="SpringMVC的请求与响应"><a href="#SpringMVC的请求与响应" class="headerlink" title="SpringMVC的请求与响应"></a>SpringMVC的请求与响应</h2><p>SpringMVC是web层的框架，主要的作用是接收请求、响应结果，所以这一部分是学习SpringMVC的重点内容。</p>
+<h3 id="设置请求映射路径"><a href="#设置请求映射路径" class="headerlink" title="设置请求映射路径"></a>设置请求映射路径</h3><h4 id="环境准备-1"><a href="#环境准备-1" class="headerlink" title="环境准备"></a>环境准备</h4><img src="image-20230606101301421.png" alt="image-20230606101301421" style="zoom:77%;" />
+
+<p>开启Tomcat服务器，发生报错：</p>
+<p><img src="image-20230606102344014.png" alt="image-20230606102344014"></p>
+<p>意思是<code>/save</code>已经是bookController这个bean的方法进行匹配了，而另一个UserController这个bean也有一个<code>/save</code>，出现了request请求的匹配模糊。</p>
+<h4 id="问题分析-1"><a href="#问题分析-1" class="headerlink" title="问题分析"></a>问题分析</h4><p>前面说到报错，是因为两个Controller中出现了重复的请求路径：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BookController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Book save...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;book save&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// =====================================</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;User save...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;user save&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/delete&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">delete</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;User delete...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;user delete&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>解决思路其实也很好想到：为不同模块设置模块名作为请求路径前缀。</p>
+<p>对于BookController的save，将其访问路径设置 <a class="link"   href="http://localhost:8080/springmvc_03_request_mapping/book/save%EF%BC%9B%E5%AF%B9%E4%BA%8EUserController%E7%9A%84save%EF%BC%8C%E5%B0%86%E5%85%B6%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E8%AE%BE%E7%BD%AE" >http://localhost:8080/springmvc_03_request_mapping/book/save；对于UserController的save，将其访问路径设置<i class="fa-solid fa-up-right-from-square"></i></a> <a class="link"   href="http://localhost:8080/springmvc_03_request_mapping/User/save%E3%80%82" >http://localhost:8080/springmvc_03_request_mapping/User/save。<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<h4 id="设置映射路径"><a href="#设置映射路径" class="headerlink" title="设置映射路径"></a>设置映射路径</h4><p>类上也可以添加<code>@RequestMapping</code>注解：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/book&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BookController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Book save...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;book save&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// =====================================</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;User save...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;user save&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/delete&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">delete</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;User delete...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;user delete&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606105142414.png" alt="image-20230606105142414"></p>
+<blockquote>
+<p><code>@RequestMapping</code>注解value属性前面加不加<code>/</code>都可以，这一点和Servlet有所不同！</p>
+</blockquote>
+<h3 id="请求参数"><a href="#请求参数" class="headerlink" title="请求参数"></a>请求参数</h3><p>请求路径设置好后，只要确保页面发送请求地址和后台Controller类中配置的路径一致，就可以接收到前端的请求，接收到请求后，如何接收页面传递的参数。请求参数的传递与接收是和请求方式有关系的，目前比较常见的两种请求方式POST和GET。</p>
+<h4 id="环境准备-2"><a href="#环境准备-2" class="headerlink" title="环境准备"></a>环境准备</h4><img src="image-20230606114451105.png" alt="image-20230606114451105" style="zoom:77%;" />
+
+<h4 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h4><p><strong>GET发送单个参数</strong></p>
+<p>客户端发送请求与参数：</p>
+<img src="image-20230606115900208.png" alt="image-20230606115900208" style="zoom:80%;" />
+
+<p>服务端接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/commonParam&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">commonParam</span><span class="params">(String name)</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;来自浏览器的普通参数传递 name =====&gt;&quot;</span> + name);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;commonParam&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>这里controller方法的形参负责接收来自客户端的请求参数（<font color="blue">注意形参名要和请求参数名一致！</font>）</p>
+<p><img src="image-20230606120718965.png" alt="image-20230606120718965"></p>
+<p>客户端接收到的返回数据：</p>
+<p><img src="image-20230606120053621.png" alt="image-20230606120053621"></p>
+<p><strong>GET发送多个参数</strong></p>
+<p>发送请求与参数：</p>
+<img src="image-20230606122327297.png" alt="image-20230606122327297" style="zoom:80%;" />
+
+<p>服务端接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/commonParam&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">commonParam</span><span class="params">(String name, Integer age)</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;来自浏览器的普通参数传递 name =====&gt;&quot;</span> + name);</span><br><span class="line">        System.out.println(<span class="string">&quot;来自浏览器的普通参数传递 age =====&gt;&quot;</span> + age);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;commonParam&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606122229281.png" alt="image-20230606122229281"></p>
+<p><strong>GET请求中文乱码问题</strong></p>
+<p>如果我们传递的请求参数中有中文，你会发现接收到的参数会出现中文乱码问题。</p>
+<p>出现乱码的原因相信大家都清楚（忘了的话回去看JavaWeb的博客），Tomcat8以后的版本已经处理了中文乱码的问题，但是IDEA中的Tomcat插件目前只更新到Tomcat7，所以需要修改pom.xml中<strong>tomcat插件的配置</strong>来解决<font color="red">GET请求</font>中文乱码问题。</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span>&gt;</span>/<span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">uriEncoding</span>&gt;</span>utf-8<span class="tag">&lt;/<span class="name">uriEncoding</span>&gt;</span>  <span class="comment">&lt;!--访问路径编解码字符集--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606122858098.png" alt="image-20230606122858098"></p>
+<p><strong>POST发送参数</strong></p>
+<p>发送请求与参数：post的请求参数在请求体上</p>
+<img src="image-20230606123252732.png" alt="image-20230606123252732" style="zoom:80%;" />
+
+<p>接收参数和GET完全一致！</p>
+<p><strong>POST请求中文乱码问题</strong></p>
+<p>解决方案：在ServletInitConfig中配置过滤器</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 乱码处理 */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> Filter[] getServletFilters()&#123;</span><br><span class="line">      <span class="type">CharacterEncodingFilter</span> <span class="variable">filter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CharacterEncodingFilter</span>();</span><br><span class="line">      filter.setEncoding(<span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Filter</span>[]&#123;filter&#125;;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606161430634.png" alt="image-20230606161430634"></p>
+<blockquote>
+<p>CharacterEncodingFilter是在spring-web包中，而spring-web包又在SpringMVC包里。</p>
+</blockquote>
+<h3 id="五种类型的参数传递"><a href="#五种类型的参数传递" class="headerlink" title="五种类型的参数传递"></a>五种类型的参数传递</h3><p>前面我们已经能够使用GET或POST来发送请求和数据，所携带的数据都是比较简单的数据，接下来在这个基础上，我们来研究一些比较复杂的参数传递：普通参数、POJO类型参数、嵌套POJO类型参数、数组类型参数、集合类型参数。</p>
+<h4 id="普通参数"><a href="#普通参数" class="headerlink" title="普通参数"></a>普通参数</h4><p>普通参数：url地址传参，地址参数名与形参变量名相同，定义形参即可接收参数。</p>
+<p>能接收到参数的前提是：这两个值必须一致！</p>
+<img src="image-20230606162700080.png" alt="image-20230606162700080" style="zoom:80%;" />
+
+<p>那如果方法形参和请求参数名不一致怎么办？</p>
+<p><img src="image-20230606163422184.png" alt="image-20230606163422184"></p>
+<p>使用<code>@RequestParam</code>注解：写上<code>@RequestParam</code>注解框架就不需要自己去解析注入，能提升框架处理性能。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/commonParam&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">commonParam</span><span class="params">(<span class="meta">@RequestParam(&quot;name&quot;)</span> String username, Integer age)</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;来自浏览器的普通参数传递 name =====&gt;&quot;</span> + username);</span><br><span class="line">        System.out.println(<span class="string">&quot;来自浏览器的普通参数传递 age =====&gt;&quot;</span> + age);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;:&#x27;commonParam&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="POJO类型参数"><a href="#POJO类型参数" class="headerlink" title="POJO类型参数"></a>POJO类型参数</h4><p>简单数据类型一般处理的是参数个数比较少的请求，如果参数比较多，那么后台接收参数的时候就比较复杂，这个时候我们可以考虑使用POJO数据类型。</p>
+<p>POJO参数：请求参数名与形参对象属性名相同，定义POJO类型形参即可接收参数（<font color="red">请求参数key的名称要和POJO中属性的名称一致，否则无法封装</font>）。</p>
+<p>先看看前面封装的pojo类：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">  <span class="comment">// ...后部分省略...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>发送请求和参数（<font color="red">请求参数key的名称要和POJO中属性的名称一致，否则无法封装</font>）：</p>
+<img src="image-20230606164837627.png" alt="image-20230606164837627" style="zoom:80%;" />
+
+<p>服务器接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/pojoParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">pojoParam</span><span class="params">(User user)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的pojo参数传递 user =====&gt;&quot;</span> + user);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;pojoParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606165101676.png" alt="image-20230606165101676"></p>
+<h4 id="嵌套POJO类型参数"><a href="#嵌套POJO类型参数" class="headerlink" title="嵌套POJO类型参数"></a>嵌套POJO类型参数</h4><p>嵌套POJO参数：请求参数名与形参对象属性名相同，按照对象层次结构关系即可接收嵌套POJO属性参数。</p>
+<p>发送请求和参数（<font color="red">请求参数key的名称要和POJO中属性的名称一致，否则无法封装</font>）：</p>
+<img src="image-20230606171638166.png" alt="image-20230606171638166" style="zoom:80%;" />
+
+<p>服务器接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/containPojoParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">containPojoParam</span><span class="params">(User user)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的嵌套pojo参数传递 user =====&gt;&quot;</span> + user.toString());</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;pojoParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606171728620.png" alt="image-20230606171728620"></p>
+<h4 id="数组类型参数"><a href="#数组类型参数" class="headerlink" title="数组类型参数"></a>数组类型参数</h4><p>数组参数：请求参数名与形参对象属性名<strong>相同</strong>且请求参数为多个，定义数组类型即可接收参数。</p>
+<p>发送请求和参数（请求参数名必须一致才能封装到一个数组当中）：</p>
+<img src="image-20230606172710261.png" alt="image-20230606172710261" style="zoom:80%;" />
+
+<p>服务器接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/arrayParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">arrayParam</span><span class="params">(String[] likes)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的数组参数传递 likes =====&gt;&quot;</span> + Arrays.toString(likes));</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;arrayParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606172647070.png" alt="image-20230606172647070"></p>
+<h4 id="集合类型数据"><a href="#集合类型数据" class="headerlink" title="集合类型数据"></a>集合类型数据</h4><p>发送请求和参数：</p>
+<p><img src="image-20230606184441837.png" alt="image-20230606184441837"></p>
+<p>服务器接收参数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/listParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">listParam</span><span class="params">(List&lt;String&gt; likes)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的列表参数传递 likes =====&gt;&quot;</span> + likes);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;arrayParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>出现报错：</p>
+<p><img src="image-20230606184417780.png" alt="image-20230606184417780"></p>
+<p>错误的原因是：SpringMVC将List看做是一个POJO对象来处理，将其创建一个对象并准备把前端的数据封装到对象中，但是List是一个接口无法创建对象，所以报错。</p>
+<p>解决方案：<code>RequestParam</code>注解（对于简单数据类型使用数组会比集合更简单些）</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/listParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">listParam</span><span class="params">(<span class="meta">@RequestParam</span> List&lt;String&gt; likes)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的列表参数传递 likes =====&gt;&quot;</span> + likes);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;listParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>总结</strong></p>
+<p><code>RequestParam</code>注解用在SpringMVC控制器方法形参定义前面：情况1——简单数据类型参数名和请求参数名不一致时进行映射；情况2——对于List列表形参前要加该注释将其标明为非POJO对象。</p>
+<h3 id="JSON数据传输参数"><a href="#JSON数据传输参数" class="headerlink" title="JSON数据传输参数"></a>JSON数据传输参数</h3><p>前面我们说过，现在比较流行的开发方式为异步调用。前后端以异步方式进行交换，传输的数据使用的是JSON，所以前端如果发送的是JSON数据，后端该如何接收。</p>
+<p>SpringMVC接收JSON数据的实现步骤为：</p>
+<ul>
+<li>导入jackson包；</li>
+<li>客户端发送JSON数据；</li>
+<li>开启SpringMVC注解驱动，在SpringMvcConfig配置类上添加<code>@EnableWebMvc</code>注解；</li>
+<li>Controller方法的参数前添加<code>@RequestBody</code>注解.</li>
+</ul>
+<h4 id="JSON普通数组"><a href="#JSON普通数组" class="headerlink" title="JSON普通数组"></a>JSON普通数组</h4><p>步骤1：pom.xml添加依赖</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">   &lt;version&gt;<span class="number">2.15</span><span class="number">.2</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>步骤2：PostMan发送JSON数据</p>
+<img src="image-20230606201238403.png" alt="image-20230606201238403" style="zoom:80%;" />
+
+<p>步骤3：开启SpringMVC注解支持</p>
+<p>​    在SpringMVC的配置类中开启SpringMVC的注解支持，这里面就包含了将JSON转换成对象的功能。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.Lijiacheng.controller&quot;)</span></span><br><span class="line"><span class="comment">//开启json数据类型自动转换</span></span><br><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringMvcConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>步骤4：参数前添加<code>@RequestBody</code>将外部传递的json数组数据映射到形参的集合对象中作为数据</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用@RequestBody注解将外部传递的json数组数据映射到形参的集合对象中作为数据</span></span><br><span class="line">  <span class="meta">@RequestMapping(&quot;/listParamForJson&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">listParamForJson</span><span class="params">(<span class="meta">@RequestBody</span> List&lt;String&gt; likes)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的JSON普通数组参数传递 likes =====&gt;&quot;</span> + likes);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;listParamForJson&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>因为json数据是异步请求，参数和数据在表单中，所以不能用<code>@RequestParam</code>，而用<code>@RequestBody</code>.</p>
+</blockquote>
+<p><img src="image-20230606201541316.png" alt="image-20230606201541316"></p>
+<h4 id="JSON对象数据"><a href="#JSON对象数据" class="headerlink" title="JSON对象数据"></a>JSON对象数据</h4><p>请求和数据的发送：</p>
+<img src="image-20230606202729677.png" alt="image-20230606202729677" style="zoom:80%;" />
+
+<p>后端接收数据：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/pojoForJson&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">pojoForJson</span><span class="params">(<span class="meta">@RequestBody</span> User user)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的JSON实体类对象参数传递 User =====&gt;&quot;</span> + user);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;pojoForJson&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p><font color="blue">这里也不要忘记在controller方法形参对象前加上<code>@RequestBody</code>进行json类型转换。</font></p>
+</blockquote>
+<p><img src="image-20230606202648795.png" alt="image-20230606202648795"></p>
+<h4 id="JSON对象数组"><a href="#JSON对象数组" class="headerlink" title="JSON对象数组"></a>JSON对象数组</h4><p>json对象数组即为在集合中保存多个POJO。</p>
+<p>请求和数据的发送：</p>
+<img src="image-20230606204127055.png" alt="image-20230606204127055" style="zoom:80%;" />
+
+<p>后端接收数据：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/listPojoForJson&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">listPojoForJson</span><span class="params">(<span class="meta">@RequestBody</span> List&lt;User&gt; users)</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的JSON对象数组参数传递 users =====&gt;&quot;</span> + users);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;listPojoForJson&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230606204104084.png" alt="image-20230606204104084"></p>
+<blockquote>
+<p><strong><code>@RequestBody</code>与<code>@RequestParam</code>的区别：</strong></p>
+<p><code>@RequestParam</code>用于接收url地址传参，表单传参【application/x-www-form-urlencoded】；<code>@RequestBody</code>用于接收json数据【application/json】.</p>
+<p>后期开发中，发送json格式数据为主，<code>@RequestBody</code>应用较广；如果发送非json格式数据，选用<code>@RequestParam</code>接收请求参数。</p>
+</blockquote>
+<h3 id="日期类型参数传递"><a href="#日期类型参数传递" class="headerlink" title="日期类型参数传递"></a>日期类型参数传递</h3><p>前面我们处理过简单数据类型、POJO数据类型、数组和集合数据类型以及JSON数据类型，接下来我们还得处理一种开发中比较常见的一种数据类型：日期类型。</p>
+<p>日期的格式有N多中输入方式，比如：2088-08-18、2088/08/18、08/18/2088……这么多日期格式，SpringMVC如何接收。</p>
+<p>步骤1：编写方法接收日期数据</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/dataParam&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">dataParam</span><span class="params">(Date date,</span></span><br><span class="line"><span class="params">                          <span class="meta">@DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;)</span> Date date1,</span></span><br><span class="line"><span class="params">                          <span class="meta">@DateTimeFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)</span> Date date2)</span></span><br><span class="line">  &#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的日期参数传递 date =====&gt;&quot;</span> + date);</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的日期参数传递 date1(YYYY-MM-dd) =====&gt;&quot;</span> + date1);</span><br><span class="line">      System.out.println(<span class="string">&quot;来自浏览器的日期参数传递 date2(YYYY-MM-dd HH:mm:ss)&quot;</span> + date2);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&#123;&#x27;module&#x27;,&#x27;dataParam&#x27;&#125;&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>步骤2：客户端发送请求</p>
+<img src="image-20230606225853557.png" alt="image-20230606225853557" style="zoom:80%;" />
+
+<blockquote>
+<p>SpringMVC默认支持的字符串转日期的格式为yyyy/MM/dd ，而如果传递的不符合其默认格式，SpringMVC就无法进行格式转换，所以报错：<img src="image-20230606205513452.png" alt="image-20230606205513452"></p>
+<p>所以使用<code>@DateTimeFormat</code>注解的<code>pattern</code>值来解决这个问题。</p>
+</blockquote>
+<p><img src="image-20230606225051826.png" alt="image-20230606225051826"></p>
+<h3 id="参数传递的内部实现原理"><a href="#参数传递的内部实现原理" class="headerlink" title="参数传递的内部实现原理"></a>参数传递的内部实现原理</h3><p>前端传递字符串，后端使用日期Date接收；前端传递JSON数据，后端使用对象接收；前端传递字符串，后端使用Integer接收。在数据的传递过程中存在很多类型的转换，那么谁来做这个类型转换——是<strong>SpringMVC</strong>提供的很多类型转换接口和实现类。</p>
+<p>在框架中，有一些类型转换接口，其中有：</p>
+<ul>
+<li> Converter接口：convert方法就是将从页面上接收的数据(S)转换成我们想要的数据类型(T)返回，框架中有提供很多对应Converter接口的实现类，用来实现不同数据类型之间的转换，如：请求参数年龄数据（String→Integer）、日期格式转换（String → Date）。</li>
+<li>HttpMessageConverter接口：该接口是实现对象与JSON之间的转换工作（配置<code>@EnableWebMvc</code>）。</li>
+</ul>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>SpringMVC接收到请求和数据后，进行一些了的处理，当然这个处理可以是转发给Service，Service层再调用Dao层完成的，不管怎样，处理完以后都需要将结果告知给用户。对于响应，主要就包含两部分内容：响应页面、响应数据（文本数据、json数据），因为异步调用是目前常用的主流方式，所以我们需要更关注的就是如何返回JSON数据。</p>
+<h4 id="环境准备-3"><a href="#环境准备-3" class="headerlink" title="环境准备"></a>环境准备</h4><img src="image-20230607100531074.png" alt="image-20230607100531074" style="zoom:80%;" />
+
+<h4 id="响应页面（了解）"><a href="#响应页面（了解）" class="headerlink" title="响应页面（了解）"></a>响应页面（了解）</h4><p>响应页面时不能使用<code>@responseBody</code>注解，否则会把”page.jsp”当做字符串返回，这里需要返回页面：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不能使用@responseBody，否则会把&quot;page.jsp&quot;当做字符串返回，这里需要返回页面</span></span><br><span class="line">  <span class="meta">@RequestMapping(&quot;/jumpToPage&quot;)</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">jumpToPage</span><span class="params">()</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;跳转页面&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;page.jsp&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230607101201195.png" alt="image-20230607101201195"></p>
+<h4 id="响应文本数据"><a href="#响应文本数据" class="headerlink" title="响应文本数据"></a>响应文本数据</h4><p>响应文本时一定要使用<code>@responseBody</code>注解，返回纯文本字符串类型数据。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/toText&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">toText</span><span class="params">()</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;返回纯文本数据&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;response text&quot;</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20230607101757278.png" alt="image-20230607101757278" style="zoom:80%;" />
+
+<h4 id="响应JSON数据"><a href="#响应JSON数据" class="headerlink" title="响应JSON数据"></a>响应JSON数据</h4><p><strong>响应POJO对象</strong></p>
+<p>返回值为实体类对象，设置返回值为实体类类型，即可实现返回对应对象的json数据，需要依赖<code>@ResponseBody</code>注解和<code>@EnableWebMvc</code>注解。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/toPojoJson&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> User <span class="title function_">toPojoJson</span><span class="params">()</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;返回json格式的对象类型&quot;</span>);</span><br><span class="line">      <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">      user.setName(<span class="string">&quot;李嘉诚123&quot;</span>);</span><br><span class="line">      user.setAge(<span class="number">22</span>);</span><br><span class="line">      <span class="keyword">return</span> user;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20230607103941400.png" alt="image-20230607103941400" style="zoom:80%;" />
+
+<p><strong>响应POJO集合对象</strong></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/toJsonList&quot;)</span></span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="keyword">public</span> List&lt;User&gt; <span class="title function_">toJsonList</span><span class="params">()</span>&#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;返回json对象列表的类型&quot;</span>);</span><br><span class="line">      <span class="type">User</span> <span class="variable">u1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">      u1.setName(<span class="string">&quot;李嘉诚&quot;</span>);</span><br><span class="line">      u1.setAge(<span class="number">21</span>);</span><br><span class="line">      <span class="type">User</span> <span class="variable">u2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">      u2.setName(<span class="string">&quot;廖梓汀&quot;</span>);</span><br><span class="line">      u2.setAge(<span class="number">22</span>);</span><br><span class="line">      List&lt;User&gt; users = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;User&gt;();</span><br><span class="line">      users.add(u1);</span><br><span class="line">      users.add(u2);</span><br><span class="line">      <span class="keyword">return</span> users;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20230607104901315.png" alt="image-20230607104901315" style="zoom:80%;" />
+
+<p> <strong><code>@ResponseBody</code>总结</strong></p>
+<p>位置：SpringMVC控制器方法定义上方和控制类上，写在类上则该类的所有方法都有该注解功能；</p>
+<p>作用：设置当前控制器返回值作为响应体（除了返回页面之外都要加该注释）：① 方法的返回值为字符串，会将其作为文本内容直接响应给前端；② 方法的返回值为对象，会将对象转换成JSON响应给前端（通过Converter接口）。</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>02_Maven</title>
     <url>/2023/03/28/02-Maven/</url>
     <content><![CDATA[<p>Maven是专门用于管理和构建Java项目的工具。</p>
@@ -2187,194 +2520,6 @@
       </categories>
   </entry>
   <entry>
-    <title>07-Filter_Listener_Ajax</title>
-    <url>/2023/04/01/07-Filter-Listener-Ajax/</url>
-    <content><![CDATA[<p>这块知识点比较杂，而且Ajax是代替jsp的前端技术，了解即可。</p>
-<span id="more"></span>
-
-<h1 id="Filter-amp-Listener-amp-Ajax"><a href="#Filter-amp-Listener-amp-Ajax" class="headerlink" title="Filter&amp;Listener&amp;Ajax"></a>Filter&amp;Listener&amp;Ajax</h1><h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><p>Filter表示过滤器，是 JavaWeb 三大组件(Servlet、Filter、Listener)之一。Servlet 我们之前都已经学习过了，Filter和Listener我们今天都会进行学习。过滤器可以把对资源的请求拦截下来，从而实现一些特殊的功能。</p>
-<p>正常情况下浏览器可以访问服务器上的所有的资源，而在访问到这些资源之前可以使过滤器拦截来下，也就是说在访问资源之前会先经过 Filter：</p>
-<img src="image-20230330163113415.png" alt="image-20230330163113415" style="zoom:67%;" />
-
-<p>过滤器一般完成一些通用的操作：比如每个资源都要写一些代码完成某个功能，我们总不能在每个资源中写这样的代码，而此时我们可以将这些代码写在过滤器中，因为请求每一个资源都要经过过滤器。</p>
-<p>我们之前做的品牌数据管理就已经做了登录的功能，但不登录的时候也可以通过首页的超链接访问到全部数据，这显然不符合我们的要求。我们希望如果登录过就跳转到品牌数据展示的页面，没有登录就跳转到登录界面，但如果要实现这个效果就要在每个资源中写上这段逻辑。像这种通用的操作，就可以用过滤器来实现，这就是过滤器的权限控制。</p>
-<h3 id="Filter快速开发"><a href="#Filter快速开发" class="headerlink" title="Filter快速开发"></a>Filter快速开发</h3><ul>
-<li><p>定义类，实现Filter接口，并重写其中的所有方法；</p>
-</li>
-<li><p>配置Filter拦截资源的路径：在类上定义 <code>@WebFilter</code> 注解。而注解的 <code>value</code> 属性值 <code>/*</code> 表示拦截所有的资源；</p>
-</li>
-<li><p>在doFilter方法中执行通用业务，并放行（<code>chain.doFilter(req,resp);</code> 就是放行，也就是让其访问本该访问的资源）</p>
-</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebFilter(&quot;/*&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FilterDemo01</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;FilterDemo01...&quot;</span>);</span><br><span class="line">        filterChain.doFilter(servletRequest,servletResponse);  <span class="comment">// 放行</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h3 id="Filter执行流程"><a href="#Filter执行流程" class="headerlink" title="Filter执行流程"></a>Filter执行流程</h3><img src="image-20230330165523793.png" alt="image-20230330165523793" style="zoom: 67%;" />
-
-<p>可以总结Filter的执行流程如下：</p>
-<img src="image-20230330165658889.png" alt="image-20230330165658889" style="zoom:80%;" />
-
-<p>以后我们可以将对请求进行处理的代码在放行之前进行处理，而如果请求完资源后还要对响应的数据进行处理时可以在放行后进行处理。</p>
-<h3 id="Filter拦截路径配置"><a href="#Filter拦截路径配置" class="headerlink" title="Filter拦截路径配置"></a>Filter拦截路径配置</h3><p>拦截路径表示 Filter 会对请求的哪些资源进行拦截，使用 <code>@WebFilter</code> 注解进行配置。</p>
-<ul>
-<li>拦截具体的资源：<code>/index.jsp</code>：只有访问index.jsp时才会被拦截；</li>
-<li>目录拦截：<code>/user/*</code>：访问/user下的所有资源，都会被拦截；</li>
-<li>后缀名拦截：<code>*.jsp</code>：访问后缀名为jsp的资源，都会被拦截；</li>
-<li>拦截所有：<code>/*</code>：访问所有资源，都会被拦截。</li>
-</ul>
-<h3 id="过滤器链"><a href="#过滤器链" class="headerlink" title="过滤器链"></a>过滤器链</h3><p>指在一个Web应用，可以配置多个过滤器，这多个过滤器称为过滤器链。</p>
-<img src="image-20230330171958846.png" alt="image-20230330171958846" style="zoom: 50%;" />
-
-<p>在<code>FilterDemo01</code>中：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;1.FilterDemo...&quot;</span>);</span><br><span class="line">filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">System.out.println(<span class="string">&quot;5.FilterDemo...&quot;</span>);</span><br></pre></td></tr></table></figure></div>
-
-<p>在<code>FilterDemo2</code>中：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;2.FilterDemo...&quot;</span>);</span><br><span class="line">   filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">   System.out.println(<span class="string">&quot;4.FilterDemo...&quot;</span>);</span><br></pre></td></tr></table></figure></div>
-
-<p>在服务器动态资源<code>hello.jsp</code>中：</p>
-<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">  System.out.println(<span class="string">&quot;3.hello jsp...&quot;</span>);</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure></div>
-
-<p>访问服务器中的jsp资源，可以根据打印的信息看到web请求和响应是如何通过过滤器链执行的：</p>
-<img src="image-20230330172922401.png" alt="image-20230330172922401" style="zoom:67%;" />
-
-<blockquote>
-<p>但是为什么，我们配置的<code>FilterDemo1</code>和<code>FilterDemo2</code>的拦截路径是一致的，为什么会先执行1再执行2呢？使用的是注解配置Filter，这种配置方式的优先级是按照过滤器类名（字符串）的自然排序。</p>
-</blockquote>
-<h3 id="Filter应用——登录校验"><a href="#Filter应用——登录校验" class="headerlink" title="Filter应用——登录校验"></a>Filter应用——登录校验</h3><img src="image-20230330173546835.png" alt="image-20230330173546835" style="zoom: 67%;" />
-
-<p>这块应用在上一个project<code>JavaWeb_06_Cookie_Session</code>里补充代码。在<code>web</code>目录下创建<code>filter</code>目录新建<code>LoginFilter</code>过滤器即可，通过判断session中是否有user对象就可以判断用户是否登录，代码很简单就不记录了。</p>
-<img src="image-20230330175255343.png" alt="image-20230330175255343" style="zoom: 50%;" />
-
-<p>但是我们看到的效果是这样的（先删除浏览器缓存的记录），这是为什么呢？因为登陆页面需要 <code>css/login.css</code> 文件进行样式渲染，但是这个文件在filter中被拦截了，导致没有加载到样式文件，为了解决这个问题，<strong>需要对所有的登陆相关的资源进行放行</strong>。<strong>还有一种情况就是当我没有用户信息时需要进行注册，而注册时也希望被过滤器放行</strong>。</p>
-<p>过滤器<code>LoginFilter</code>的完整代码：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebFilter(&quot;/*&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        <span class="comment">// 在数组中存储登陆和注册相关的资源路径，优先将他们放行</span></span><br><span class="line">        String[] urls = &#123;<span class="string">&quot;/login.jsp&quot;</span>,<span class="string">&quot;/imgs/&quot;</span>,<span class="string">&quot;/css/&quot;</span>,<span class="string">&quot;/loginServlet&quot;</span>,<span class="string">&quot;/register.jsp&quot;</span>,<span class="string">&quot;/registerServlet&quot;</span>,<span class="string">&quot;/checkCodeServlet&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="type">HttpServletRequest</span> <span class="variable">request</span> <span class="operator">=</span> (HttpServletRequest) servletRequest;</span><br><span class="line">        <span class="type">String</span> <span class="variable">requestURL</span> <span class="operator">=</span> request.getRequestURL().toString();</span><br><span class="line">        <span class="keyword">for</span>(String url: urls)&#123;</span><br><span class="line">            <span class="keyword">if</span>(requestURL.contains(url))&#123;</span><br><span class="line">                <span class="comment">// 需要放行的资源url</span></span><br><span class="line">                filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 放行前 -- 判断用户是否登录</span></span><br><span class="line">        <span class="type">HttpSession</span> <span class="variable">session</span> <span class="operator">=</span> request.getSession();</span><br><span class="line">        <span class="type">Object</span> <span class="variable">user</span> <span class="operator">=</span> session.getAttribute(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(user != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 已经登录过 -- 放行</span></span><br><span class="line">            filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 未登录 -- 跳转到登录界面</span></span><br><span class="line">            request.setAttribute(<span class="string">&quot;login_msg&quot;</span>,<span class="string">&quot;未登录，请先登录！&quot;</span>);</span><br><span class="line">            request.getRequestDispatcher(<span class="string">&quot;/login.jsp&quot;</span>).forward(servletRequest,servletResponse);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="Listener"><a href="#Listener" class="headerlink" title="Listener"></a>Listener</h2><p>Listener 表示监听器，是 JavaWeb 三大组件(Servlet、Filter、Listener)之一。监听器可以监听在 <code>application</code>，<code>session</code>，<code>request</code> 三个对象创建、销毁或者往其中添加修改删除属性时自动执行代码的功能组件。</p>
-<p>request和session我们学习过。而 <code>application</code> 是 <code>ServletContext</code> 类型的对象（<code>ServletContext</code> 代表整个web应用，在服务器启动的时候，tomcat会自动创建该对象。在服务器关闭时会自动销毁该对象）。</p>
-<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>JavaWeb 提供了8个监听器，只有 <code>ServletContextListener</code> 这个监听器后面会用到，<code>ServletContextListener</code> 是用来监听 <code>ServletContext</code> 对象的创建和销毁。</p>
-<p><code>ServletContextListener</code> 接口中有以下两个方法：</p>
-<ul>
-<li><code>void contextInitialized(ServletContextEvent sce)</code>：<code>ServletContext</code> 对象被创建了会自动执行的方法；</li>
-<li><code>void contextDestroyed(ServletContextEvent sce)</code>：<code>ServletContext</code> 对象被销毁时会自动执行的方法。</li>
-</ul>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>对于 <code>ServletContextListener</code> 监听器：</p>
-<ul>
-<li>定义一个类，实现<code>ServletContextListener</code> 接口，重写所有的抽象方法</li>
-<li>使用 <code>@WebListener</code> 进行配置</li>
-</ul>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ContextLoaderListener</span> <span class="keyword">implements</span> <span class="title class_">ServletContextListener</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextInitialized</span><span class="params">(ServletContextEvent sce)</span> &#123;</span><br><span class="line">        <span class="comment">//加载资源</span></span><br><span class="line">        System.out.println(<span class="string">&quot;ContextLoaderListener...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextDestroyed</span><span class="params">(ServletContextEvent sce)</span> &#123;</span><br><span class="line">        <span class="comment">//释放资源</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h2><p>AJAX (Asynchronous JavaScript And XML)是异步的 JavaScript 和 XML。</p>
-<h3 id="AJAX概述"><a href="#AJAX概述" class="headerlink" title="AJAX概述"></a>AJAX概述</h3><h4 id="AJAX作用"><a href="#AJAX作用" class="headerlink" title="AJAX作用"></a>AJAX作用</h4><p>1、<strong>与服务器进行数据交换</strong>：通过AJAX可以给服务器发送请求，服务器将数据直接响应回给浏览器。</p>
-<p>之前我们是这样做功能：</p>
-<p><img src="image-20230330213503973.png" alt="image-20230330213503973"></p>
-<p>Servlet 调用完业务逻辑层后将数据存储到域对象中，然后跳转到指定的 jsp 页面，在页面上使用 EL表达式 和 JSTL标签库 进行数据的展示。</p>
-<p>而我们学习了AJAX 后，就可以使用AJAX和服务器进行通信，以达到使用 HTML+AJAX 来替换JSP页面了。如下图，浏览器发送请求servlet，servlet 调用完业务逻辑层后将数据直接响应回给浏览器页面，页面使用 HTML 来进行数据展示。</p>
-<p><img src="image-20230330213640794.png" alt="image-20230330213640794"></p>
-<p>2、<strong>异步交互</strong>：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术（搜索联想、用户名是否可用校验）。</p>
-<h4 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h4><ul>
-<li>同步发送请求</li>
-</ul>
-<img src="image-20230330214009570.png" alt="image-20230330214009570" style="zoom:67%;" />
-
-<p>浏览器页面在发送请求给服务器，在服务器处理请求的过程中，浏览器页面不能做其他的操作。只能等到服务器响应结束后才能，浏览器页面才能继续做其他的操作。</p>
-<ul>
-<li><p>异步发送请求过程如下</p>
-<img src="image-20230330214043364.png" alt="image-20230330214043364" style="zoom:67%;" /></li>
-</ul>
-<p>浏览器页面发送请求给服务器，在服务器处理请求的过程中，浏览器页面还可以做其他的操作。</p>
-<h3 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h3><p><strong>服务端实现</strong></p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet(&quot;/ajaxServlet&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AjaxServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;hello ajax~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        <span class="built_in">this</span>.doGet(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>客户端实现</strong></p>
-<div class="highlight-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//1. 创建核心对象</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">var</span> xhttp;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    xhttp = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">  &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// code for IE6, IE5</span></span></span><br><span class="line"><span class="language-javascript">    xhttp = <span class="keyword">new</span> <span class="title class_">ActiveXObject</span>(<span class="string">&quot;Microsoft.XMLHTTP&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//2. 发送请求</span></span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="title function_">open</span>(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/ajaxServlet&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//3. 获取响应</span></span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="property">onreadystatechange</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">readyState</span> == <span class="number">4</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">status</span> == <span class="number">200</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">responseText</span>);</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p><img src="image-20230330220341705.png" alt="image-20230330220341705"></p>
-<p>查看异步请求：</p>
-<p><img src="image-20230330220604851.png" alt="image-20230330220604851"></p>
-<h3 id="Ajax应用"><a href="#Ajax应用" class="headerlink" title="Ajax应用"></a>Ajax应用</h3><p>需求：在完成用户注册时，当用户名输入框失去焦点时，校验用户名是否在数据库已存在。</p>
-<img src="image-20230330220940894.png" alt="image-20230330220940894" style="zoom:67%;" />
-
-<h4 id="后端实现"><a href="#后端实现" class="headerlink" title="后端实现"></a>后端实现</h4><div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">    <span class="comment">// 接收用户名数据</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> request.getAttribute(<span class="string">&quot;username&quot;</span>).toString();</span><br><span class="line">    <span class="comment">// 调用service查询User对象，此处不进行业务逻辑处理，直接给 flag 赋值为 true，表明用户名占用</span></span><br><span class="line">    <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 响应标记</span></span><br><span class="line">    response.getWriter().write(<span class="string">&quot;&quot;</span> + flag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="前端实现"><a href="#前端实现" class="headerlink" title="前端实现"></a>前端实现</h4><div class="highlight-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">//1. 给用户名输入框绑定 失去焦点事件</span></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username&quot;</span>).<span class="property">onblur</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2. 发送ajax请求</span></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 获取用户名的值</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">var</span> username = <span class="variable language_">this</span>.<span class="property">value</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.1. 创建核心对象</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">var</span> xhttp;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            xhttp = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// code for IE6, IE5</span></span></span><br><span class="line"><span class="language-javascript">            xhttp = <span class="keyword">new</span> <span class="title class_">ActiveXObject</span>(<span class="string">&quot;Microsoft.XMLHTTP&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.2. 发送请求</span></span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="title function_">open</span>(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/selectUserServlet?username=&quot;</span> + username);</span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.3. 获取响应</span></span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="property">onreadystatechange</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">readyState</span> == <span class="number">4</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">status</span> == <span class="number">200</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="comment">//判断</span></span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">if</span>(<span class="variable language_">this</span>.<span class="property">responseText</span> == <span class="string">&quot;true&quot;</span>)&#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">//用户名存在，显示提示信息</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username_err&quot;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                &#125;<span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">//用户名不存在 ，清楚提示信息</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username_err&quot;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;none&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<h2 id="Axios"><a href="#Axios" class="headerlink" title="Axios"></a>Axios</h2><p>Axios 对原生的AJAX进行封装，简化书写。</p>
-<blockquote>
-<p>Axios官网：<a class="link"   href="https://www.axios-http.cn/" >https://www.axios-http.cn<i class="fa-solid fa-up-right-from-square"></i></a></p>
-</blockquote>
-<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><ul>
-<li><p>引入 axios 的 js 文件</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;js/axios-0.18.0.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></div></li>
-<li><p>使用axios发送请求，并获取响应结果</p>
-<ul>
-<li><p>get请求</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">axios</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;get&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/ajax-demo1/aJAXDemo1?username=zhangsan&quot;</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>)&#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div></li>
-<li><p>post请求</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">axios</span>(&#123;  </span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;post&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/ajax-demo/axiosServlet&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>:<span class="string">&quot;username=zhangsan&quot;</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div></li>
-</ul>
-</li>
-</ul>
-<h2 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h2><h3 id="JSON概述"><a href="#JSON概述" class="headerlink" title="JSON概述"></a>JSON概述</h3><p>JSON是JavaScript对象的表示法。</p>
-<ul>
-<li><p>JavaScript对象的定义格式：</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">name</span>:<span class="string">&quot;zhangsan&quot;</span>,</span><br><span class="line">	<span class="attr">age</span>:<span class="number">23</span>,</span><br><span class="line">	<span class="attr">city</span>:<span class="string">&quot;北京&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
-<li><p>JSON格式</p>
-<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	name<span class="punctuation">:</span><span class="string">&quot;zhangsan&quot;</span><span class="punctuation">,</span></span><br><span class="line">	age<span class="punctuation">:</span><span class="number">23</span><span class="punctuation">,</span></span><br><span class="line">	city<span class="punctuation">:</span><span class="string">&quot;北京&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<p> js对象中的属性名可以使用引号（单引号或双引号）；而json格式中的键要求必须使用双引号括起来，这是 json格式的规定。</p>
-<p><strong>作用</strong>：由于其语法格式简单，层次结构鲜明，现多用于作为数据载体，在网络中进行数据传输。像通过<code>response.getWriter()</code>就是服务端给浏览器响应的数据，有些数据比较简单，如果现需要将 JAVA 对象中封装的数据响应回给浏览器的话，应该怎么做呢？</p>
-<p>以前是通过xml进行数据传递：</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">student</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">age</span>&gt;</span>23<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">city</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">city</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">student</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-
-<p>json描述（ 格式数据的简单、所占的字节数少）：</p>
-<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>	</span><br><span class="line">	<span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;张三&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span><span class="number">23</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span><span class="string">&quot;北京&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
-
-<h3 id="JSON基础语法"><a href="#JSON基础语法" class="headerlink" title="JSON基础语法"></a>JSON基础语法</h3><h4 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h4><p>JSON本质就是一个字符串，但是该字符串内容是有一定的格式要求的：键要求必须使用双引号括起来，而值根据要表示的类型确定。</p>
-<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line">var 变量名 = &#x27;<span class="punctuation">&#123;</span><span class="attr">&quot;key&quot;</span><span class="punctuation">:</span>value<span class="punctuation">,</span><span class="attr">&quot;key&quot;</span><span class="punctuation">:</span>value<span class="punctuation">,</span>...<span class="punctuation">&#125;</span>&#x27;;</span><br></pre></td></tr></table></figure></div>
-
-<p>value的数据类型如下：数字（整数或浮点数）、字符串（双引号）、逻辑值（true或false）、数组（在方括号中）、对象（在花括号中）、null。</p>
-<p>如果需要获取到该 JSON串中的属性值，应该怎么处理呢？</p>
-<p>如果它是一个 js 对象，我们就可以通过 <code>js对象.属性名</code> 的方式来获取数据。JS 提供了一个对象<code>JSON</code>，该对象有如下两个方法：</p>
-<ul>
-<li><code>parse(str)</code> ：将 JSON串转换为 js 对象。使用方式是：<code>var jsObject = JSON.parse(jsonStr);</code></li>
-<li><code>stringify(obj)</code> ：将 js 对象转换为 JSON 串。使用方式是：<code>var jsonStr = JSON.stringify(jsObject)</code></li>
-</ul>
-<p>代码演示：</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//1. 定义JSON字符串</span></span><br><span class="line">    <span class="keyword">var</span> jsonStr = <span class="string">&#x27;&#123;&quot;name&quot;:&quot;zhangsan&quot;,&quot;age&quot;:23,&quot;addr&quot;:[&quot;北京&quot;,&quot;上海&quot;,&quot;西安&quot;]&#125;&#x27;</span></span><br><span class="line">    <span class="title function_">alert</span>(jsonStr);</span><br><span class="line">    <span class="comment">//2. 将 JSON 字符串转为 JS 对象</span></span><br><span class="line">    <span class="keyword">let</span> jsObject = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(jsonStr);</span><br><span class="line">    <span class="title function_">alert</span>(jsObject)</span><br><span class="line">    <span class="title function_">alert</span>(jsObject.<span class="property">name</span>)</span><br><span class="line">    <span class="comment">//3. 将 JS 对象转换为 JSON 字符串</span></span><br><span class="line">    <span class="keyword">let</span> jsonStr2 = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(jsObject);</span><br><span class="line">    <span class="title function_">alert</span>(jsonStr2)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="发送异步请求携带参数"><a href="#发送异步请求携带参数" class="headerlink" title="发送异步请求携带参数"></a>发送异步请求携带参数</h4><p>使用 axios 发送请求时，如果要携带复杂的数据时都会以 JSON格式进行传递。可以提前定义一个 js 对象，用来封装需要提交的参数，然后使用 <code>JSON.stringify(js对象)</code> 转换为JSON串，再将该 JSON串作为 axios 的 data 属性值进行请求参数的提交（axios会自动将 js 对象转换为JSON串进行提交）。</p>
-<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> jsObject = &#123;<span class="attr">name</span>:<span class="string">&quot;张三&quot;</span>&#125;;</span><br><span class="line"><span class="title function_">axios</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;post&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/axiosServlet&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>:jsObject  <span class="comment">//这里 axios 会将该js对象转换为 json 串的</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>发送异步请求时，如果请求参数是JSON格式，那请求方式必须是POST。因为JSON串需要放在请求体中。</p>
-</blockquote>
-<h3 id="JSON串和Java对象的相互转换"><a href="#JSON串和Java对象的相互转换" class="headerlink" title="JSON串和Java对象的相互转换"></a>JSON串和Java对象的相互转换</h3><p>以后我们会以 json 格式的数据进行前后端交互。前端发送请求时，如果是复杂的数据就会以 json 提交给后端；而后端如果需要响应一些复杂的数据时，也需要以 json 格式将数据响应回给浏览器。</p>
-<img src="image-20230330233339635.png" alt="image-20230330233339635" style="zoom:50%;" />
-
-<p>在后端我们就需要重点学习以下两部分操作：</p>
-<ul>
-<li>请求数据：JSON字符串转为Java对象；</li>
-<li>响应数据：Java对象转为JSON字符串；</li>
-</ul>
-<h4 id="Fastjson-概述"><a href="#Fastjson-概述" class="headerlink" title="Fastjson 概述"></a>Fastjson 概述</h4><p>阿里巴巴提供的一个Java语言编写的高性能功能完善的JSON库，可以实现 Java对象和 JSON字符串的相互转换。</p>
-<p><strong>基本使用</strong></p>
-<ul>
-<li><p>导入坐标</p>
-<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.fastjson2<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.23<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
-<li><p>JSON对象转换成Java对象</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> JSON.parseObject(jsonStr, User.class);</span><br></pre></td></tr></table></figure></div></li>
-<li><p>Java对象转换成JSON对象</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">jsonStr</span> <span class="operator">=</span> JSON.toJSONString(obj);</span><br></pre></td></tr></table></figure></div></li>
-</ul>
-<p>JSON对象和Java对象的相互转换：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将Java对象转换成Json对象</span></span><br><span class="line">   <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">   user.setId(<span class="number">1</span>);</span><br><span class="line">   user.setUsername(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">   user.setPassword(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">   <span class="type">String</span> <span class="variable">jsonString</span> <span class="operator">=</span> JSON.toJSONString(user);</span><br><span class="line">   System.out.println(jsonString);</span><br><span class="line">   <span class="comment">// 将Json对象转换城Java对象</span></span><br><span class="line">   <span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> JSON.parseObject(jsonString,User.class);</span><br><span class="line">   System.out.println(u);</span><br></pre></td></tr></table></figure></div>
-
-]]></content>
-      <categories>
-        <category>JavaWeb</category>
-      </categories>
-  </entry>
-  <entry>
     <title>06-会话技术</title>
     <url>/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<p>会话跟踪是web程序中常用的技术，常用的<em>会话跟踪</em>技术是Cookie 和Session。</p>
@@ -2601,6 +2746,194 @@
 
 <p>（2）在RegisterServlet中，获取页面的和session对象中的验证码，进行对比</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 获取用户输入的验证码</span><br><span class="line">String checkCode = request.getParameter(&quot;checkCode&quot;);</span><br><span class="line">// 获取Session中的验证码</span><br><span class="line">HttpSession session = request.getSession();</span><br><span class="line">Object s_checkCode = session.getAttribute(&quot;checkCode&quot;);</span><br><span class="line">// 将二者进行比对</span><br><span class="line">if(!s_checkCode.equals(checkCode))&#123;</span><br><span class="line">     // 验证码错误，无法注册 -- 跳转到注册jsp并给予提示</span><br><span class="line">     request.setAttribute(&quot;register_msg&quot;,&quot;验证码错误，请重新输入！&quot;);</span><br><span class="line">     request.getRequestDispatcher(&quot;/register.jsp&quot;).forward(request,response);</span><br><span class="line">     return ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>JavaWeb</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>07-Filter_Listener_Ajax</title>
+    <url>/2023/04/01/07-Filter-Listener-Ajax/</url>
+    <content><![CDATA[<p>这块知识点比较杂，而且Ajax是代替jsp的前端技术，了解即可。</p>
+<span id="more"></span>
+
+<h1 id="Filter-amp-Listener-amp-Ajax"><a href="#Filter-amp-Listener-amp-Ajax" class="headerlink" title="Filter&amp;Listener&amp;Ajax"></a>Filter&amp;Listener&amp;Ajax</h1><h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><p>Filter表示过滤器，是 JavaWeb 三大组件(Servlet、Filter、Listener)之一。Servlet 我们之前都已经学习过了，Filter和Listener我们今天都会进行学习。过滤器可以把对资源的请求拦截下来，从而实现一些特殊的功能。</p>
+<p>正常情况下浏览器可以访问服务器上的所有的资源，而在访问到这些资源之前可以使过滤器拦截来下，也就是说在访问资源之前会先经过 Filter：</p>
+<img src="image-20230330163113415.png" alt="image-20230330163113415" style="zoom:67%;" />
+
+<p>过滤器一般完成一些通用的操作：比如每个资源都要写一些代码完成某个功能，我们总不能在每个资源中写这样的代码，而此时我们可以将这些代码写在过滤器中，因为请求每一个资源都要经过过滤器。</p>
+<p>我们之前做的品牌数据管理就已经做了登录的功能，但不登录的时候也可以通过首页的超链接访问到全部数据，这显然不符合我们的要求。我们希望如果登录过就跳转到品牌数据展示的页面，没有登录就跳转到登录界面，但如果要实现这个效果就要在每个资源中写上这段逻辑。像这种通用的操作，就可以用过滤器来实现，这就是过滤器的权限控制。</p>
+<h3 id="Filter快速开发"><a href="#Filter快速开发" class="headerlink" title="Filter快速开发"></a>Filter快速开发</h3><ul>
+<li><p>定义类，实现Filter接口，并重写其中的所有方法；</p>
+</li>
+<li><p>配置Filter拦截资源的路径：在类上定义 <code>@WebFilter</code> 注解。而注解的 <code>value</code> 属性值 <code>/*</code> 表示拦截所有的资源；</p>
+</li>
+<li><p>在doFilter方法中执行通用业务，并放行（<code>chain.doFilter(req,resp);</code> 就是放行，也就是让其访问本该访问的资源）</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebFilter(&quot;/*&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FilterDemo01</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;FilterDemo01...&quot;</span>);</span><br><span class="line">        filterChain.doFilter(servletRequest,servletResponse);  <span class="comment">// 放行</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Filter执行流程"><a href="#Filter执行流程" class="headerlink" title="Filter执行流程"></a>Filter执行流程</h3><img src="image-20230330165523793.png" alt="image-20230330165523793" style="zoom: 67%;" />
+
+<p>可以总结Filter的执行流程如下：</p>
+<img src="image-20230330165658889.png" alt="image-20230330165658889" style="zoom:80%;" />
+
+<p>以后我们可以将对请求进行处理的代码在放行之前进行处理，而如果请求完资源后还要对响应的数据进行处理时可以在放行后进行处理。</p>
+<h3 id="Filter拦截路径配置"><a href="#Filter拦截路径配置" class="headerlink" title="Filter拦截路径配置"></a>Filter拦截路径配置</h3><p>拦截路径表示 Filter 会对请求的哪些资源进行拦截，使用 <code>@WebFilter</code> 注解进行配置。</p>
+<ul>
+<li>拦截具体的资源：<code>/index.jsp</code>：只有访问index.jsp时才会被拦截；</li>
+<li>目录拦截：<code>/user/*</code>：访问/user下的所有资源，都会被拦截；</li>
+<li>后缀名拦截：<code>*.jsp</code>：访问后缀名为jsp的资源，都会被拦截；</li>
+<li>拦截所有：<code>/*</code>：访问所有资源，都会被拦截。</li>
+</ul>
+<h3 id="过滤器链"><a href="#过滤器链" class="headerlink" title="过滤器链"></a>过滤器链</h3><p>指在一个Web应用，可以配置多个过滤器，这多个过滤器称为过滤器链。</p>
+<img src="image-20230330171958846.png" alt="image-20230330171958846" style="zoom: 50%;" />
+
+<p>在<code>FilterDemo01</code>中：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;1.FilterDemo...&quot;</span>);</span><br><span class="line">filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">System.out.println(<span class="string">&quot;5.FilterDemo...&quot;</span>);</span><br></pre></td></tr></table></figure></div>
+
+<p>在<code>FilterDemo2</code>中：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;2.FilterDemo...&quot;</span>);</span><br><span class="line">   filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">   System.out.println(<span class="string">&quot;4.FilterDemo...&quot;</span>);</span><br></pre></td></tr></table></figure></div>
+
+<p>在服务器动态资源<code>hello.jsp</code>中：</p>
+<div class="highlight-container" data-rel="Jsp"><figure class="iseeu highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">  System.out.println(<span class="string">&quot;3.hello jsp...&quot;</span>);</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>访问服务器中的jsp资源，可以根据打印的信息看到web请求和响应是如何通过过滤器链执行的：</p>
+<img src="image-20230330172922401.png" alt="image-20230330172922401" style="zoom:67%;" />
+
+<blockquote>
+<p>但是为什么，我们配置的<code>FilterDemo1</code>和<code>FilterDemo2</code>的拦截路径是一致的，为什么会先执行1再执行2呢？使用的是注解配置Filter，这种配置方式的优先级是按照过滤器类名（字符串）的自然排序。</p>
+</blockquote>
+<h3 id="Filter应用——登录校验"><a href="#Filter应用——登录校验" class="headerlink" title="Filter应用——登录校验"></a>Filter应用——登录校验</h3><img src="image-20230330173546835.png" alt="image-20230330173546835" style="zoom: 67%;" />
+
+<p>这块应用在上一个project<code>JavaWeb_06_Cookie_Session</code>里补充代码。在<code>web</code>目录下创建<code>filter</code>目录新建<code>LoginFilter</code>过滤器即可，通过判断session中是否有user对象就可以判断用户是否登录，代码很简单就不记录了。</p>
+<img src="image-20230330175255343.png" alt="image-20230330175255343" style="zoom: 50%;" />
+
+<p>但是我们看到的效果是这样的（先删除浏览器缓存的记录），这是为什么呢？因为登陆页面需要 <code>css/login.css</code> 文件进行样式渲染，但是这个文件在filter中被拦截了，导致没有加载到样式文件，为了解决这个问题，<strong>需要对所有的登陆相关的资源进行放行</strong>。<strong>还有一种情况就是当我没有用户信息时需要进行注册，而注册时也希望被过滤器放行</strong>。</p>
+<p>过滤器<code>LoginFilter</code>的完整代码：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebFilter(&quot;/*&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        <span class="comment">// 在数组中存储登陆和注册相关的资源路径，优先将他们放行</span></span><br><span class="line">        String[] urls = &#123;<span class="string">&quot;/login.jsp&quot;</span>,<span class="string">&quot;/imgs/&quot;</span>,<span class="string">&quot;/css/&quot;</span>,<span class="string">&quot;/loginServlet&quot;</span>,<span class="string">&quot;/register.jsp&quot;</span>,<span class="string">&quot;/registerServlet&quot;</span>,<span class="string">&quot;/checkCodeServlet&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="type">HttpServletRequest</span> <span class="variable">request</span> <span class="operator">=</span> (HttpServletRequest) servletRequest;</span><br><span class="line">        <span class="type">String</span> <span class="variable">requestURL</span> <span class="operator">=</span> request.getRequestURL().toString();</span><br><span class="line">        <span class="keyword">for</span>(String url: urls)&#123;</span><br><span class="line">            <span class="keyword">if</span>(requestURL.contains(url))&#123;</span><br><span class="line">                <span class="comment">// 需要放行的资源url</span></span><br><span class="line">                filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 放行前 -- 判断用户是否登录</span></span><br><span class="line">        <span class="type">HttpSession</span> <span class="variable">session</span> <span class="operator">=</span> request.getSession();</span><br><span class="line">        <span class="type">Object</span> <span class="variable">user</span> <span class="operator">=</span> session.getAttribute(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(user != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 已经登录过 -- 放行</span></span><br><span class="line">            filterChain.doFilter(servletRequest,servletResponse);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 未登录 -- 跳转到登录界面</span></span><br><span class="line">            request.setAttribute(<span class="string">&quot;login_msg&quot;</span>,<span class="string">&quot;未登录，请先登录！&quot;</span>);</span><br><span class="line">            request.getRequestDispatcher(<span class="string">&quot;/login.jsp&quot;</span>).forward(servletRequest,servletResponse);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Listener"><a href="#Listener" class="headerlink" title="Listener"></a>Listener</h2><p>Listener 表示监听器，是 JavaWeb 三大组件(Servlet、Filter、Listener)之一。监听器可以监听在 <code>application</code>，<code>session</code>，<code>request</code> 三个对象创建、销毁或者往其中添加修改删除属性时自动执行代码的功能组件。</p>
+<p>request和session我们学习过。而 <code>application</code> 是 <code>ServletContext</code> 类型的对象（<code>ServletContext</code> 代表整个web应用，在服务器启动的时候，tomcat会自动创建该对象。在服务器关闭时会自动销毁该对象）。</p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>JavaWeb 提供了8个监听器，只有 <code>ServletContextListener</code> 这个监听器后面会用到，<code>ServletContextListener</code> 是用来监听 <code>ServletContext</code> 对象的创建和销毁。</p>
+<p><code>ServletContextListener</code> 接口中有以下两个方法：</p>
+<ul>
+<li><code>void contextInitialized(ServletContextEvent sce)</code>：<code>ServletContext</code> 对象被创建了会自动执行的方法；</li>
+<li><code>void contextDestroyed(ServletContextEvent sce)</code>：<code>ServletContext</code> 对象被销毁时会自动执行的方法。</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>对于 <code>ServletContextListener</code> 监听器：</p>
+<ul>
+<li>定义一个类，实现<code>ServletContextListener</code> 接口，重写所有的抽象方法</li>
+<li>使用 <code>@WebListener</code> 进行配置</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ContextLoaderListener</span> <span class="keyword">implements</span> <span class="title class_">ServletContextListener</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextInitialized</span><span class="params">(ServletContextEvent sce)</span> &#123;</span><br><span class="line">        <span class="comment">//加载资源</span></span><br><span class="line">        System.out.println(<span class="string">&quot;ContextLoaderListener...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextDestroyed</span><span class="params">(ServletContextEvent sce)</span> &#123;</span><br><span class="line">        <span class="comment">//释放资源</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h2><p>AJAX (Asynchronous JavaScript And XML)是异步的 JavaScript 和 XML。</p>
+<h3 id="AJAX概述"><a href="#AJAX概述" class="headerlink" title="AJAX概述"></a>AJAX概述</h3><h4 id="AJAX作用"><a href="#AJAX作用" class="headerlink" title="AJAX作用"></a>AJAX作用</h4><p>1、<strong>与服务器进行数据交换</strong>：通过AJAX可以给服务器发送请求，服务器将数据直接响应回给浏览器。</p>
+<p>之前我们是这样做功能：</p>
+<p><img src="image-20230330213503973.png" alt="image-20230330213503973"></p>
+<p>Servlet 调用完业务逻辑层后将数据存储到域对象中，然后跳转到指定的 jsp 页面，在页面上使用 EL表达式 和 JSTL标签库 进行数据的展示。</p>
+<p>而我们学习了AJAX 后，就可以使用AJAX和服务器进行通信，以达到使用 HTML+AJAX 来替换JSP页面了。如下图，浏览器发送请求servlet，servlet 调用完业务逻辑层后将数据直接响应回给浏览器页面，页面使用 HTML 来进行数据展示。</p>
+<p><img src="image-20230330213640794.png" alt="image-20230330213640794"></p>
+<p>2、<strong>异步交互</strong>：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术（搜索联想、用户名是否可用校验）。</p>
+<h4 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h4><ul>
+<li>同步发送请求</li>
+</ul>
+<img src="image-20230330214009570.png" alt="image-20230330214009570" style="zoom:67%;" />
+
+<p>浏览器页面在发送请求给服务器，在服务器处理请求的过程中，浏览器页面不能做其他的操作。只能等到服务器响应结束后才能，浏览器页面才能继续做其他的操作。</p>
+<ul>
+<li><p>异步发送请求过程如下</p>
+<img src="image-20230330214043364.png" alt="image-20230330214043364" style="zoom:67%;" /></li>
+</ul>
+<p>浏览器页面发送请求给服务器，在服务器处理请求的过程中，浏览器页面还可以做其他的操作。</p>
+<h3 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h3><p><strong>服务端实现</strong></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet(&quot;/ajaxServlet&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AjaxServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;hello ajax~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        <span class="built_in">this</span>.doGet(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>客户端实现</strong></p>
+<div class="highlight-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//1. 创建核心对象</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">var</span> xhttp;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    xhttp = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">  &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// code for IE6, IE5</span></span></span><br><span class="line"><span class="language-javascript">    xhttp = <span class="keyword">new</span> <span class="title class_">ActiveXObject</span>(<span class="string">&quot;Microsoft.XMLHTTP&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//2. 发送请求</span></span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="title function_">open</span>(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/ajaxServlet&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//3. 获取响应</span></span></span><br><span class="line"><span class="language-javascript">  xhttp.<span class="property">onreadystatechange</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">readyState</span> == <span class="number">4</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">status</span> == <span class="number">200</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">responseText</span>);</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img src="image-20230330220341705.png" alt="image-20230330220341705"></p>
+<p>查看异步请求：</p>
+<p><img src="image-20230330220604851.png" alt="image-20230330220604851"></p>
+<h3 id="Ajax应用"><a href="#Ajax应用" class="headerlink" title="Ajax应用"></a>Ajax应用</h3><p>需求：在完成用户注册时，当用户名输入框失去焦点时，校验用户名是否在数据库已存在。</p>
+<img src="image-20230330220940894.png" alt="image-20230330220940894" style="zoom:67%;" />
+
+<h4 id="后端实现"><a href="#后端实现" class="headerlink" title="后端实现"></a>后端实现</h4><div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">    <span class="comment">// 接收用户名数据</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> request.getAttribute(<span class="string">&quot;username&quot;</span>).toString();</span><br><span class="line">    <span class="comment">// 调用service查询User对象，此处不进行业务逻辑处理，直接给 flag 赋值为 true，表明用户名占用</span></span><br><span class="line">    <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 响应标记</span></span><br><span class="line">    response.getWriter().write(<span class="string">&quot;&quot;</span> + flag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="前端实现"><a href="#前端实现" class="headerlink" title="前端实现"></a>前端实现</h4><div class="highlight-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">//1. 给用户名输入框绑定 失去焦点事件</span></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username&quot;</span>).<span class="property">onblur</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2. 发送ajax请求</span></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 获取用户名的值</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">var</span> username = <span class="variable language_">this</span>.<span class="property">value</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.1. 创建核心对象</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">var</span> xhttp;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            xhttp = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// code for IE6, IE5</span></span></span><br><span class="line"><span class="language-javascript">            xhttp = <span class="keyword">new</span> <span class="title class_">ActiveXObject</span>(<span class="string">&quot;Microsoft.XMLHTTP&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.2. 发送请求</span></span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="title function_">open</span>(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/selectUserServlet?username=&quot;</span> + username);</span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">//2.3. 获取响应</span></span></span><br><span class="line"><span class="language-javascript">        xhttp.<span class="property">onreadystatechange</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">readyState</span> == <span class="number">4</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">status</span> == <span class="number">200</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="comment">//判断</span></span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">if</span>(<span class="variable language_">this</span>.<span class="property">responseText</span> == <span class="string">&quot;true&quot;</span>)&#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">//用户名存在，显示提示信息</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username_err&quot;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                &#125;<span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">//用户名不存在 ，清楚提示信息</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;username_err&quot;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;none&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Axios"><a href="#Axios" class="headerlink" title="Axios"></a>Axios</h2><p>Axios 对原生的AJAX进行封装，简化书写。</p>
+<blockquote>
+<p>Axios官网：<a class="link"   href="https://www.axios-http.cn/" >https://www.axios-http.cn<i class="fa-solid fa-up-right-from-square"></i></a></p>
+</blockquote>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><ul>
+<li><p>引入 axios 的 js 文件</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;js/axios-0.18.0.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></div></li>
+<li><p>使用axios发送请求，并获取响应结果</p>
+<ul>
+<li><p>get请求</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">axios</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;get&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/ajax-demo1/aJAXDemo1?username=zhangsan&quot;</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>)&#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div></li>
+<li><p>post请求</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">axios</span>(&#123;  </span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;post&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/ajax-demo/axiosServlet&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>:<span class="string">&quot;username=zhangsan&quot;</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<h2 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h2><h3 id="JSON概述"><a href="#JSON概述" class="headerlink" title="JSON概述"></a>JSON概述</h3><p>JSON是JavaScript对象的表示法。</p>
+<ul>
+<li><p>JavaScript对象的定义格式：</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">name</span>:<span class="string">&quot;zhangsan&quot;</span>,</span><br><span class="line">	<span class="attr">age</span>:<span class="number">23</span>,</span><br><span class="line">	<span class="attr">city</span>:<span class="string">&quot;北京&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<li><p>JSON格式</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	name<span class="punctuation">:</span><span class="string">&quot;zhangsan&quot;</span><span class="punctuation">,</span></span><br><span class="line">	age<span class="punctuation">:</span><span class="number">23</span><span class="punctuation">,</span></span><br><span class="line">	city<span class="punctuation">:</span><span class="string">&quot;北京&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p> js对象中的属性名可以使用引号（单引号或双引号）；而json格式中的键要求必须使用双引号括起来，这是 json格式的规定。</p>
+<p><strong>作用</strong>：由于其语法格式简单，层次结构鲜明，现多用于作为数据载体，在网络中进行数据传输。像通过<code>response.getWriter()</code>就是服务端给浏览器响应的数据，有些数据比较简单，如果现需要将 JAVA 对象中封装的数据响应回给浏览器的话，应该怎么做呢？</p>
+<p>以前是通过xml进行数据传递：</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">student</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">age</span>&gt;</span>23<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">city</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">city</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">student</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>json描述（ 格式数据的简单、所占的字节数少）：</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>	</span><br><span class="line">	<span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;张三&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span><span class="number">23</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span><span class="string">&quot;北京&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="JSON基础语法"><a href="#JSON基础语法" class="headerlink" title="JSON基础语法"></a>JSON基础语法</h3><h4 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h4><p>JSON本质就是一个字符串，但是该字符串内容是有一定的格式要求的：键要求必须使用双引号括起来，而值根据要表示的类型确定。</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="code"><pre><span class="line">var 变量名 = &#x27;<span class="punctuation">&#123;</span><span class="attr">&quot;key&quot;</span><span class="punctuation">:</span>value<span class="punctuation">,</span><span class="attr">&quot;key&quot;</span><span class="punctuation">:</span>value<span class="punctuation">,</span>...<span class="punctuation">&#125;</span>&#x27;;</span><br></pre></td></tr></table></figure></div>
+
+<p>value的数据类型如下：数字（整数或浮点数）、字符串（双引号）、逻辑值（true或false）、数组（在方括号中）、对象（在花括号中）、null。</p>
+<p>如果需要获取到该 JSON串中的属性值，应该怎么处理呢？</p>
+<p>如果它是一个 js 对象，我们就可以通过 <code>js对象.属性名</code> 的方式来获取数据。JS 提供了一个对象<code>JSON</code>，该对象有如下两个方法：</p>
+<ul>
+<li><code>parse(str)</code> ：将 JSON串转换为 js 对象。使用方式是：<code>var jsObject = JSON.parse(jsonStr);</code></li>
+<li><code>stringify(obj)</code> ：将 js 对象转换为 JSON 串。使用方式是：<code>var jsonStr = JSON.stringify(jsObject)</code></li>
+</ul>
+<p>代码演示：</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//1. 定义JSON字符串</span></span><br><span class="line">    <span class="keyword">var</span> jsonStr = <span class="string">&#x27;&#123;&quot;name&quot;:&quot;zhangsan&quot;,&quot;age&quot;:23,&quot;addr&quot;:[&quot;北京&quot;,&quot;上海&quot;,&quot;西安&quot;]&#125;&#x27;</span></span><br><span class="line">    <span class="title function_">alert</span>(jsonStr);</span><br><span class="line">    <span class="comment">//2. 将 JSON 字符串转为 JS 对象</span></span><br><span class="line">    <span class="keyword">let</span> jsObject = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(jsonStr);</span><br><span class="line">    <span class="title function_">alert</span>(jsObject)</span><br><span class="line">    <span class="title function_">alert</span>(jsObject.<span class="property">name</span>)</span><br><span class="line">    <span class="comment">//3. 将 JS 对象转换为 JSON 字符串</span></span><br><span class="line">    <span class="keyword">let</span> jsonStr2 = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(jsObject);</span><br><span class="line">    <span class="title function_">alert</span>(jsonStr2)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="发送异步请求携带参数"><a href="#发送异步请求携带参数" class="headerlink" title="发送异步请求携带参数"></a>发送异步请求携带参数</h4><p>使用 axios 发送请求时，如果要携带复杂的数据时都会以 JSON格式进行传递。可以提前定义一个 js 对象，用来封装需要提交的参数，然后使用 <code>JSON.stringify(js对象)</code> 转换为JSON串，再将该 JSON串作为 axios 的 data 属性值进行请求参数的提交（axios会自动将 js 对象转换为JSON串进行提交）。</p>
+<div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> jsObject = &#123;<span class="attr">name</span>:<span class="string">&quot;张三&quot;</span>&#125;;</span><br><span class="line"><span class="title function_">axios</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>:<span class="string">&quot;post&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>:<span class="string">&quot;http://localhost:8080/JavaWeb_07_Filter_Listener_Ajax/axiosServlet&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>:jsObject  <span class="comment">//这里 axios 会将该js对象转换为 json 串的</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">resp</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(resp.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>发送异步请求时，如果请求参数是JSON格式，那请求方式必须是POST。因为JSON串需要放在请求体中。</p>
+</blockquote>
+<h3 id="JSON串和Java对象的相互转换"><a href="#JSON串和Java对象的相互转换" class="headerlink" title="JSON串和Java对象的相互转换"></a>JSON串和Java对象的相互转换</h3><p>以后我们会以 json 格式的数据进行前后端交互。前端发送请求时，如果是复杂的数据就会以 json 提交给后端；而后端如果需要响应一些复杂的数据时，也需要以 json 格式将数据响应回给浏览器。</p>
+<img src="image-20230330233339635.png" alt="image-20230330233339635" style="zoom:50%;" />
+
+<p>在后端我们就需要重点学习以下两部分操作：</p>
+<ul>
+<li>请求数据：JSON字符串转为Java对象；</li>
+<li>响应数据：Java对象转为JSON字符串；</li>
+</ul>
+<h4 id="Fastjson-概述"><a href="#Fastjson-概述" class="headerlink" title="Fastjson 概述"></a>Fastjson 概述</h4><p>阿里巴巴提供的一个Java语言编写的高性能功能完善的JSON库，可以实现 Java对象和 JSON字符串的相互转换。</p>
+<p><strong>基本使用</strong></p>
+<ul>
+<li><p>导入坐标</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.fastjson2<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.23<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div></li>
+<li><p>JSON对象转换成Java对象</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> JSON.parseObject(jsonStr, User.class);</span><br></pre></td></tr></table></figure></div></li>
+<li><p>Java对象转换成JSON对象</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">jsonStr</span> <span class="operator">=</span> JSON.toJSONString(obj);</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>JSON对象和Java对象的相互转换：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将Java对象转换成Json对象</span></span><br><span class="line">   <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">   user.setId(<span class="number">1</span>);</span><br><span class="line">   user.setUsername(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">   user.setPassword(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">   <span class="type">String</span> <span class="variable">jsonString</span> <span class="operator">=</span> JSON.toJSONString(user);</span><br><span class="line">   System.out.println(jsonString);</span><br><span class="line">   <span class="comment">// 将Json对象转换城Java对象</span></span><br><span class="line">   <span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> JSON.parseObject(jsonString,User.class);</span><br><span class="line">   System.out.println(u);</span><br></pre></td></tr></table></figure></div>
+
 ]]></content>
       <categories>
         <category>JavaWeb</category>
@@ -3356,6 +3689,31 @@
       </categories>
   </entry>
   <entry>
+    <title>algorithm04 字符串</title>
+    <url>/2023/06/05/algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<p>字符串比较简单，直接来看题目！</p>
+<span id="more"></span>
+
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><p>字符串很简单，这里我就记录一下几个字符串、数组、char类型相互转化的方法。</p>
+<p>toCharArray()</p>
+<p>String.ValueOf()</p>
+<h2 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h2><h3 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344. 反转字符串"></a><a class="link"   href="https://leetcode.cn/problems/reverse-string/" >344. 反转字符串<i class="fa-solid fa-up-right-from-square"></i></a></h3><p><img src="algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/image-20230605205843387.png" alt="image-20230605205843387"></p>
+<p>双指针，没什么可说的，重拳出击！</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reverseString</span><span class="params">(<span class="type">char</span>[] s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> s.length;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> left=<span class="number">0</span>,right=len-<span class="number">1</span>;left&lt;right;left++,right--)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">temp</span> <span class="operator">=</span> s[left];</span><br><span class="line">            s[left] = s[right];</span><br><span class="line">            s[right] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="541-反转字符串-II"><a href="#541-反转字符串-II" class="headerlink" title="541. 反转字符串 II"></a><a class="link"   href="https://leetcode.cn/problems/reverse-string-ii/" >541. 反转字符串 II<i class="fa-solid fa-up-right-from-square"></i></a></h3><p><img src="algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/image-20230605210330082.png" alt="image-20230605210330082"></p>
+<p>这种题目属于模拟类问题，模拟类问题要进行明确的分情况讨论：</p>
+<p>情况①：字符串剩余字符小于k个 → 全部翻转   </p>
+<p>情况②：字符串剩余字符大于等于k个，且少于2k个 → 翻转前k个   </p>
+<p>情况③：字符串剩余字符大于2k个 → 正常翻转前k个</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reverseStr</span><span class="params">(String s, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> s.length();</span><br><span class="line">        <span class="type">char</span>[] chs = s.toCharArray();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i+=<span class="number">2</span>*k)&#123;</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">            if(i+k &lt;= len)&#123;</span></span><br><span class="line"><span class="comment">                reverse(chs, i, i+k-1);</span></span><br><span class="line"><span class="comment">            &#125;else&#123;</span></span><br><span class="line"><span class="comment">                reverse(chs, i, len-1);</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">             reverse(chs, i, Math.min(i+k-<span class="number">1</span>,len-<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(chs);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reverse</span><span class="params">(<span class="type">char</span>[] chs, <span class="type">int</span> left, <span class="type">int</span> right)</span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">temp</span> <span class="operator">=</span> chs[left];</span><br><span class="line">            chs[left] = chs[right];</span><br><span class="line">            chs[right] = temp;</span><br><span class="line">            left++;</span><br><span class="line">            right--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>利用Git实现多台电脑同步工作</title>
     <url>/2023/05/26/git/</url>
     <content><![CDATA[<p>去年新买了一台mac台式机放在宿舍，就不用每天回到宿舍还要把笔记本插上各种线再启动了。有时候在外面写的代码想要回到宿舍继续用台式机写，所以我需要在两台电脑之间实现无缝协作，即需求：<strong>两台电脑里同一个文件夹的内容可以相互同步</strong>。</p>
@@ -3401,7 +3759,7 @@
 
 <blockquote>
 <p>输出如下：</p>
-<p>origin  <a class="link"   href="mailto:&#103;&#105;&#x74;&#x40;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;" >&#103;&#105;&#x74;&#x40;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (fetch)<br>origin  <a class="link"   href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#109;" >&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (push)</p>
+<p>origin  <a class="link"   href="mailto:&#x67;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#x6d;" >&#x67;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#x6d;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (fetch)<br>origin  <a class="link"   href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#x62;&#46;&#99;&#111;&#109;" >&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#x62;&#46;&#99;&#111;&#109;<i class="fa-solid fa-up-right-from-square"></i></a>:KiCheng/Git.git (push)</p>
 </blockquote>
 <p>删除与远程仓库的关联：</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure></div></li>
@@ -3465,5 +3823,36 @@
       <tags>
         <tag>OpenCV</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>网页调试工具PostMan</title>
+    <url>/2023/06/05/%E7%BD%91%E9%A1%B5%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7PostMan/</url>
+    <content><![CDATA[<p>PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件，常用于进行接口测试。</p>
+<span id="more"></span>
+
+<h2 id="PostMan简介"><a href="#PostMan简介" class="headerlink" title="PostMan简介"></a>PostMan简介</h2><p>代码编写完后，我们要想测试，只需要打开浏览器直接输入地址发送请求即可。发送的是GET请求可以直接使用浏览器，但是如果要发送的是POST请求呢？如果要求发送的是post请求，我们就得准备页面在页面上准备form表单，测试起来比较麻烦。所以我们就需要借助一些第三方工具，如PostMan。</p>
+<h2 id="PostMan安装"><a href="#PostMan安装" class="headerlink" title="PostMan安装"></a>PostMan安装</h2><p><a class="link"   href="https://www.postman.com/downloads/" >官网链接下载<i class="fa-solid fa-up-right-from-square"></i></a></p>
+<p>注册一个账号直接来到这个界面：</p>
+<img src="image-20230606092337492.png" alt="image-20230606092337492" style="zoom:67%;" />
+
+<h2 id="PostMan使用"><a href="#PostMan使用" class="headerlink" title="PostMan使用"></a>PostMan使用</h2><h3 id="创建WorkSpace工作空间"><a href="#创建WorkSpace工作空间" class="headerlink" title="创建WorkSpace工作空间"></a>创建WorkSpace工作空间</h3><img src="image-20230606092805094.png" alt="image-20230606092805094" style="zoom:67%;" />
+
+<img src="image-20230606092858754.png" alt="image-20230606092858754" style="zoom:67%;" />
+
+<img src="image-20230606092948897.png" alt="image-20230606092948897" style="zoom:67%;" />
+
+<img src="image-20230606093406445.png" alt="image-20230606093406445" style="zoom:67%;" />
+
+<h3 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h3><img src="image-20230606093645158.png" alt="image-20230606093645158" style="zoom:67%;" />
+
+<p>也可以请求访问我们在Tomcat返回的页面：</p>
+<p><img src="image-20230606094044962.png" alt="image-20230606094044962"></p>
+<img src="image-20230606094234798.png" alt="image-20230606094234798" style="zoom:77%;" />
+
+<h3 id="保存当前请求"><a href="#保存当前请求" class="headerlink" title="保存当前请求"></a>保存当前请求</h3><img src="image-20230606094500001.png" alt="image-20230606094500001" style="zoom:67%;" />
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
   </entry>
 </search>
