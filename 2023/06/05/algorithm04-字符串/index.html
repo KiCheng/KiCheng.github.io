@@ -274,7 +274,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-solid fa-file-word"></i>&nbsp;<span>308 Words</span>
+            <i class="fa-solid fa-file-word"></i>&nbsp;<span>333 Words</span>
         </span>
     
     
@@ -298,7 +298,7 @@
                 <p>字符串比较简单，直接来看题目！</p>
 <span id="more"></span>
 
-<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><p>字符串很简单，这里我就记录一下几个字符串、数组、char类型相互转化的方法。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>字符串很简单，这里我就记录一下几个字符串、数组、char类型相互转化的方法。</p>
 <p>toCharArray()</p>
 <p>String.ValueOf()</p>
 <h2 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h2><h3 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344. 反转字符串"></a><a class="link"   target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-string/" >344. 反转字符串<i class="fa-solid fa-up-right-from-square"></i></a></h3><p><img src="algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/image-20230605205843387.png" alt="image-20230605205843387"></p>
@@ -311,6 +311,9 @@
 <p>情况②：字符串剩余字符大于等于k个，且少于2k个 → 翻转前k个   </p>
 <p>情况③：字符串剩余字符大于2k个 → 正常翻转前k个</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reverseStr</span><span class="params">(String s, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> s.length();</span><br><span class="line">        <span class="type">char</span>[] chs = s.toCharArray();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i+=<span class="number">2</span>*k)&#123;</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">            if(i+k &lt;= len)&#123;</span></span><br><span class="line"><span class="comment">                reverse(chs, i, i+k-1);</span></span><br><span class="line"><span class="comment">            &#125;else&#123;</span></span><br><span class="line"><span class="comment">                reverse(chs, i, len-1);</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">             reverse(chs, i, Math.min(i+k-<span class="number">1</span>,len-<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(chs);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reverse</span><span class="params">(<span class="type">char</span>[] chs, <span class="type">int</span> left, <span class="type">int</span> right)</span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">temp</span> <span class="operator">=</span> chs[left];</span><br><span class="line">            chs[left] = chs[right];</span><br><span class="line">            chs[right] = temp;</span><br><span class="line">            left++;</span><br><span class="line">            right--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="剑指-Offer-05-替换空格"><a href="#剑指-Offer-05-替换空格" class="headerlink" title="剑指 Offer 05. 替换空格"></a><a class="link"   target="_blank" rel="noopener" href="https://leetcode.cn/problems/ti-huan-kong-ge-lcof/" >剑指 Offer 05. 替换空格<i class="fa-solid fa-up-right-from-square"></i></a></h3><p><img src="algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/image-20230607113006876.png" alt="image-20230607113006876"></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.replace(<span class="string">&quot; &quot;</span>, <span class="string">&quot;%20&quot;</span>);  <span class="comment">// 写一个函数实现该方法</span></span><br></pre></td></tr></table></figure></div>
 
 
             </div>
@@ -339,6 +342,21 @@
             
                 <div class="article-nav">
                     
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2023/06/13/02-RESTful%E5%BC%80%E5%8F%91/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">02-RESTful开发</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
                     
                         <div class="article-next">
                             <a class="next"
@@ -366,7 +384,7 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE"><span class="nav-number"></span> <span class="nav-text">相关题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#344-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.</span> <span class="nav-text">344. 反转字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#541-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2-II"><span class="nav-number">2.</span> <span class="nav-text">541. 反转字符串 II</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">相关题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#344-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.1.</span> <span class="nav-text">344. 反转字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#541-%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2-II"><span class="nav-number">2.2.</span> <span class="nav-text">541. 反转字符串 II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%91%E6%8C%87-Offer-05-%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC"><span class="nav-number">2.3.</span> <span class="nav-text">剑指 Offer 05. 替换空格</span></a></li></ol></li></ol>
     </div>
 </div>
             </div>
