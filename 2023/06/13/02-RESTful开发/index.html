@@ -439,7 +439,7 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置静态资源访问过滤，当前类需要设置为配置类，并被扫描加载</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringMvcSupport</span> <span class="keyword">extends</span> <span class="title class_">WebMvcConfigurationSupport</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span>&#123;</span><br><span class="line">        <span class="comment">//当访问/pages/????时候，从/pages目录下查找内容</span></span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/pages/**&quot;</span>).addResourceLocations(<span class="string">&quot;/pages/&quot;</span>);</span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/css/**&quot;</span>).addResourceLocations(<span class="string">&quot;/css/&quot;</span>);</span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/js/**&quot;</span>).addResourceLocations(<span class="string">&quot;/js/&quot;</span>);</span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/plugins/**&quot;</span>).addResourceLocations(<span class="string">&quot;/plugins/&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>该配置类是在config目录下，SpringMVC扫描的是controller包，所以该配置类还未生效，要想生效需要将SpringMvcConfig配置类进行修改：</p>
-<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ComponentScan(&#123;&quot;com.itheima.controller&quot;,&quot;com.itheima.config&quot;&#125;)</span></span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ComponentScan(&#123;&quot;com.Lijiacheng.controller&quot;,&quot;com.Lijiacheng.config&quot;&#125;)</span></span><br></pre></td></tr></table></figure></div>
 
 <p>步骤3：修改books.html页面</p>
 <div class="highlight-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//添加</span><br><span class="line">  saveBook () &#123;</span><br><span class="line">  	axios.post(&quot;/books&quot;,this.formData).then((res)=&gt;&#123;</span><br><span class="line"> 	&#125;);</span><br><span class="line"> &#125;,</span><br><span class="line">//主页列表查询</span><br><span class="line">  getAll() &#123;</span><br><span class="line">    axios.get(&quot;/books&quot;).then((res)=&gt;&#123;</span><br><span class="line">    this.dataList = res.data;</span><br><span class="line">    &#125;);</span><br><span class="line">   &#125;,</span><br></pre></td></tr></table></figure></div>
@@ -475,6 +475,21 @@
 
             
                 <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2023/06/19/03-SSM%E6%95%B4%E5%90%88/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">03-SSM整合</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
                     
                     
                         <div class="article-next">
