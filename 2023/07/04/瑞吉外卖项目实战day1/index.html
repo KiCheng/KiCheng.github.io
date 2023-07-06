@@ -274,7 +274,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-solid fa-file-word"></i>&nbsp;<span>9.4k Words</span>
+            <i class="fa-solid fa-file-word"></i>&nbsp;<span>9.5k Words</span>
         </span>
     
     
@@ -295,12 +295,12 @@
             
 
             <div class="article-content markdown-body">
-                <p>适合新生小白入门Java后端开发的Springboot + Mybatis Plus 项目。</p>
+                <p>适合新手小白入门Java后端开发的Springboot + Mybatis Plus 项目。</p>
 <span id="more"></span>
 
 <h2 id="项目构建"><a href="#项目构建" class="headerlink" title="项目构建"></a>项目构建</h2><h3 id="配置静态资源映射"><a href="#配置静态资源映射" class="headerlink" title="配置静态资源映射"></a>配置静态资源映射</h3><p>为了访问静态资源，要进行静态资源映射的配置。</p>
 <p>Springboot将静态资源都放在<code>resource/static</code>目录下，会进行自动配置静态资源映射。</p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230704123442685.png" alt="image-20230704123442685"></p>
+<p><img src="image-20230704123442685.png" alt="image-20230704123442685"></p>
 <p>如果静态资源没放在<code>resource/static</code>目录，要书写配置类实现<code>WebMvcConfigurer</code>接口，重写<code>addResourceHandlers</code>方法，进行手动配置。</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebMvcConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;开始进行静态资源映射...&quot;</span>);</span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/backend/**&quot;</span>).addResourceLocations(<span class="string">&quot;classpath:/backend/&quot;</span>);</span><br><span class="line">        registry.addResourceHandler(<span class="string">&quot;/front/**&quot;</span>).addResourceLocations(<span class="string">&quot;classpath:/front/&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
@@ -394,7 +394,7 @@
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">addEmployee</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;员工添加成功！&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (!st) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">goBack</span>()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">ruleForm</span> = &#123;</span><br><span class="line">        <span class="attr">username</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;phone&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="comment">// &#x27;password&#x27;: &#x27;&#x27;,</span></span><br><span class="line">        <span class="comment">// &#x27;rePassword&#x27;: &#x27;&#x27;,/</span></span><br><span class="line">        <span class="string">&#x27;sex&#x27;</span>: <span class="string">&#x27;男&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;idNumber&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>请求参数：包含username、name、phone、sex、idNumber的json格式数据，可以封装成Employee实体类对象</p>
-<p>返回值类型：由于前端需要服务端的响应只有<code>code</code>和<code>msg</code>属性，所以返回值写成Result<String>类型。</p>
+<p>返回值类型：由于前端需要服务端的响应只有<code>code</code>和<code>msg</code>属性，所以返回值写成<code>Result&lt;String&gt;</code>类型。</p>
 <p><strong>核心业务思路</strong></p>
 <p>Controller表现层直接调用Service层的<code>save</code>添加实体轮类Employee对象，在Mapper层对象解析成Employee数据表中的字段进行数据添加。</p>
 <p><strong>添加员工业务完善</strong></p>
@@ -402,7 +402,7 @@
 <ul>
 <li>Employee数据表结构：</li>
 </ul>
-<img src="瑞吉外卖项目实战/image-20230704144542860.png" alt="image-20230704144542860" style="zoom:87%;" />
+<img src="image-20230704144542860.png" alt="image-20230704144542860" style="zoom:87%;" />
 
 <p>前端的表单中提交过来的参数填充的字段有：username、name、phone、sex、id_number，主键id雪花算法自动生成、status具有默认值1，所以后面4个not null字段的值需要我们手动来添加：</p>
 <p>而创建人、创建时间、修改人、修改时间字段属于公共字段，不仅员工表有这些字段，在菜品表、分类表等其他表中，也拥有这些字段。那我们有没有办法让这些字段在一个地方统一管理呢？</p>
@@ -410,7 +410,7 @@
 <ul>
 <li>在Employee数据表中，username字段not unique不能重复：</li>
 </ul>
-<img src="瑞吉外卖项目实战/image-20230704144402844.png" alt="image-20230704144402844" style="zoom:87%;" />
+<img src="image-20230704144402844.png" alt="image-20230704144402844" style="zoom:87%;" />
 
 <p>步骤1：获取请求参数中的username，调用Service方法检查用户名是否重复；</p>
 <p>步骤2：用户名重复则无法添加，<strong>抛出异常</strong>（进行统一异常处理）并响应给前端提示信息；用户名未重复则操作数据库进行添加操作。</p>
@@ -465,9 +465,9 @@
 <p>请求路径：<code>/employee/page</code></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">methods</span>: &#123;</span><br><span class="line">  <span class="keyword">async</span> init () &#123;</span><br><span class="line">    <span class="keyword">const</span> params = &#123;</span><br><span class="line">      <span class="attr">page</span>: <span class="variable language_">this</span>.<span class="property">page</span>,</span><br><span class="line">      <span class="attr">pageSize</span>: <span class="variable language_">this</span>.<span class="property">pageSize</span>,</span><br><span class="line">      <span class="attr">name</span>: <span class="variable language_">this</span>.<span class="property">input</span> ? <span class="variable language_">this</span>.<span class="property">input</span> : <span class="literal">undefined</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">getMemberList</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title class_">String</span>(res.<span class="property">code</span>) === <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">tableData</span> = res.<span class="property">data</span>.<span class="property">records</span> || []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">counts</span> = res.<span class="property">data</span>.<span class="property">total</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(<span class="string">&#x27;请求出错了：&#x27;</span> + err)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure></div>
 
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230704170513895.png" alt="image-20230704170513895"></p>
+<p><img src="image-20230704170513895.png" alt="image-20230704170513895"></p>
 <p>请求参数：包含page、pageSzie和可选参数name，因为是get请求，所以请求参数是在请求头中的普通参数</p>
-<p>返回值类型：由于前端需要服务端的响应除了<code>code</code>属性还有<code>res.data.records</code>和<code>res.data.total</code>属性，很明显方法返回值是Result<Page>类型。</p>
+<p>返回值类型：由于前端需要服务端的响应除了<code>code</code>属性还有<code>res.data.records</code>和<code>res.data.total</code>属性，很明显方法返回值是<code>Result&lt;Page&gt;</code>类型。</p>
 <p><strong>Mybatis-Plus中分页插件配置</strong></p>
 <p>要在Springboot项目中使用分页查询，必须要配置Mybatis-Plus的分页插件：</p>
 <p>在config包下新建MybatisPlusConfig配置类，在方法中首先创建一个MybatisPlus拦截器，在拦截器中再添加分页查询的拦截器，不要忘了将方法注释为<code>@Bean</code>方法。</p>
@@ -483,11 +483,11 @@
 
 <p>请求类型：PUT</p>
 <p>请求路径：<code>/employee</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230704173524643.png" alt="image-20230704173524643"></p>
+<p><img src="image-20230704173524643.png" alt="image-20230704173524643"></p>
 <p>请求参数：包含id和status的json格式数据，可以封装成Employee实体类对象（这里注意一下，status为0则表示客户端的禁用请求，status为1则表示客户端的启用请求）</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">enableOrDisableEmployee</span>(&#123; <span class="string">&#x27;id&#x27;</span>: <span class="variable language_">this</span>.<span class="property">id</span>, <span class="string">&#x27;status&#x27;</span>: !<span class="variable language_">this</span>.<span class="property">status</span> ? <span class="number">1</span> : <span class="number">0</span> &#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;enableOrDisableEmployee&#x27;</span>,res)</span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">String</span>(res.<span class="property">code</span>) === <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;账号状态更改成功！&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">handleQuery</span>()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<p>返回值类型：由于前端需要服务端的响应只有<code>code</code>属性，所以返回值写成Result<String>类型。</p>
+<p>返回值类型：由于前端需要服务端的响应只有<code>code</code>属性，所以返回值写成<code>Result&lt;String&gt;</code>类型。</p>
 <p><strong>核心业务思路</strong></p>
 <p>将请求参数传入Service的updateById方法，就可以更改相应employee数据的status字段值。</p>
 <p><font color="blue">但是通过日志我们发现，数据并没有修改成功，原因是服务端接收到的Long类型的请求参数<code>employee.id</code> 通过前端js已经丢失了精度，导致id不准确，无法从数据库中找到相应id的数据！</font></p>
@@ -517,7 +517,7 @@
 </ul>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// member.js -- 修改页面反查详情接口</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">queryEmployeeById</span> (id) &#123;</span><br><span class="line">  <span class="keyword">return</span> $axios(&#123;</span><br><span class="line">    <span class="attr">url</span>: <span class="string">`/employee/<span class="subst">$&#123;id&#125;</span>`</span>,</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&#x27;get&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230704201830485.png" alt="image-20230704201830485"></p>
+<p><img src="image-20230704201830485.png" alt="image-20230704201830485"></p>
 <p>请求类型：GET</p>
 <p>请求路径：<code>/employee/&#123;id&#125;</code></p>
 <p>请求参数：只有员工id，且是RESTful风格，需要加<code>@PathVariable</code>注解</p>
@@ -531,27 +531,27 @@
 
 <p>请求类型：PUT</p>
 <p>请求路径：<code>/employee</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230704210234755.png" alt="image-20230704210234755"></p>
+<p><img src="image-20230704210234755.png" alt="image-20230704210234755"></p>
 <p>请求参数：json格式的员工信息</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">editEmployee</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;员工信息修改成功！&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">goBack</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
-<p>返回值类型：前端只要服务端的响应<code>code</code>和<code>msg</code>属性，所以方法返回值是Result<String>类型即可。</p>
+<p>返回值类型：前端只要服务端的响应<code>code</code>和<code>msg</code>属性，所以方法返回值是<code>Result&lt;String&gt;</code>类型即可。</p>
 <p><strong>核心业务思路</strong></p>
 <p>通过员工id查询Employee数据表进行数据回显；前端点击修改按钮后，服务端接收修改后的Employee对象请求参数，调用Service层的updateById传回employee对象即可修改数据表内容。</p>
 <h3 id="新增菜品分类"><a href="#新增菜品分类" class="headerlink" title="新增菜品分类"></a>新增菜品分类</h3><p><strong>数据模型</strong></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705093303752.png" alt="image-20230705093303752"></p>
+<p><img src="image-20230705093303752.png" alt="image-20230705093303752"></p>
 <p>菜品分类id字段是主键，name分类名称是unique唯一的，type为1表示菜品分类，type为2表示套餐分类。</p>
 <p><strong>表现层要素</strong></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// category.js -- 新增接口</span></span><br><span class="line"> <span class="keyword">const</span> <span class="title function_">addCategory</span> = (<span class="params">params</span>) =&gt; &#123;</span><br><span class="line">   <span class="keyword">return</span> $axios(&#123;</span><br><span class="line">     <span class="attr">url</span>: <span class="string">&#x27;/category&#x27;</span>,</span><br><span class="line">     <span class="attr">method</span>: <span class="string">&#x27;post&#x27;</span>,</span><br><span class="line">     <span class="attr">data</span>: &#123; ...params &#125;</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>请求类型：POST</p>
 <p>请求路径：<code>/employee</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705094033530.png" alt="image-20230705094033530"></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705094411620.png" alt="image-20230705094411620"></p>
+<p><img src="image-20230705094033530.png" alt="image-20230705094033530"></p>
+<p><img src="image-20230705094411620.png" alt="image-20230705094411620"></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">addCategory</span>(&#123;<span class="string">&#x27;name&#x27;</span>: classData.<span class="property">name</span>,<span class="string">&#x27;type&#x27;</span>:<span class="variable language_">this</span>.<span class="property">type</span>, <span class="attr">sort</span>: classData.<span class="property">sort</span>&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res)</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;分类添加成功！&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (!st) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">dialogVisible</span> = <span class="literal">false</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">name</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">sort</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">handleQuery</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
 <p>请求参数：json格式的请求参数，包含name、type、sort字段，可以封装成Category对象</p>
-<p>返回值类型：前端需要服务端的响应只有<code>code</code>和<code>msg</code>属性，所以方法返回值是Result<String>类型</p>
+<p>返回值类型：前端需要服务端的响应只有<code>code</code>和<code>msg</code>属性，所以方法返回值是<code>Result&lt;String&gt;</code>类型</p>
 <p><strong>核心业务思路</strong></p>
 <p>前面已经做过新增员工的业务逻辑，新增菜品分类的其实都是一样的，<strong>（新增业务的重点）保证每一个not null的字段都有赋值且unique的字段没有重复</strong>，再通过Service层的save方法调用进而mapper操作数据库进行添加数据。</p>
 <h3 id="分类信息分页查询"><a href="#分类信息分页查询" class="headerlink" title="分类信息分页查询"></a>分类信息分页查询</h3><p><strong>表现层要素</strong></p>
@@ -559,11 +559,11 @@
 
 <p>请求类型：GET</p>
 <p>请求路径：<code>/category/page</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705094851492.png" alt="image-20230705094851492"></p>
+<p><img src="image-20230705094851492.png" alt="image-20230705094851492"></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="title function_">getCategoryPage</span>(&#123;<span class="string">&#x27;page&#x27;</span>: <span class="variable language_">this</span>.<span class="property">page</span>, <span class="string">&#x27;pageSize&#x27;</span>: <span class="variable language_">this</span>.<span class="property">pageSize</span>&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">String</span>(res.<span class="property">code</span>) === <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">tableData</span> = res.<span class="property">data</span>.<span class="property">records</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">counts</span> = <span class="title class_">Number</span>(res.<span class="property">data</span>.<span class="property">total</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
 <p>请求参数：分页查询，请求参数是普通请求头里的page、pageSize。</p>
-<p>返回值类型：Result<Page>类型</p>
+<p>返回值类型：<code>Result&lt;Page&gt;</code>类型</p>
 <p><strong>核心业务思路</strong></p>
 <p>对于分页查询来说，我们一定要记得配置MybatisPlus的分页查询插件。除此之外，表现层的业务代码非常简单：分页构造器+条件构造器（排序条件），调用Service层的page函数即可，最终把分页构造器响应给前端用来页面的展示。</p>
 <blockquote>
@@ -573,13 +573,13 @@
 <h3 id="删除菜品分类"><a href="#删除菜品分类" class="headerlink" title="删除菜品分类"></a>删除菜品分类</h3><p><strong>表现层要素</strong></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// category.js -- 删除当前列的接口</span></span><br><span class="line"> <span class="keyword">const</span> <span class="title function_">deleCategory</span> = (<span class="params">ids</span>) =&gt; &#123;</span><br><span class="line">   <span class="keyword">return</span> $axios(&#123;</span><br><span class="line">     <span class="attr">url</span>: <span class="string">&#x27;/category&#x27;</span>,</span><br><span class="line">     <span class="attr">method</span>: <span class="string">&#x27;delete&#x27;</span>,</span><br><span class="line">     <span class="attr">params</span>: &#123; ids &#125;</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
 
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705100107054.png" alt="image-20230705100107054"></p>
+<p><img src="image-20230705100107054.png" alt="image-20230705100107054"></p>
 <p>请求类型：DELETE</p>
 <p>请求路径：<code>/category/&#123;ids&#125;</code></p>
 <p>请求参数：RESTful风格的菜品id参数，如果方法参数名和前端请求参数名不一致，需要在注释后面加<code>@PathVariable(&quot;参数名&quot;)</code>参数名进行映射。</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">deleCategory</span>(id).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;删除成功！&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">handleQuery</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
-<p>返回值类型：Result<String>类型</p>
+<p>返回值类型：<code>Result&lt;String&gt;</code>类型</p>
 <p><strong>核心业务思路</strong></p>
 <p>因为请求参数是Category数据表的主键值id，所以直接调用Service层的<code>removeById</code>删除数据即可。和新增业务必须考虑的not null和unique字段一样，删除业务也有必须考虑的点：<strong>也就是当前要删除的数据，是否跟其他表中的数据相关联。</strong>对于当前来说，当菜品分类或套餐分类关联了其他菜品或套餐时，该分类将不允许被删除，所以我们需要进一步完善我们的删除业务逻辑。<font color="red">（是否可以直接把关联通过外键约束等体现在数据库中，这需要进一步优化数据库表？复习完mysql再回来研究）</font></p>
 <p>MybatisPlus中的Service层提供的删除方法不能满足我们的业务需求，所以我们在Service层手动添加remove方法：我们需要在删除数据之前，根据<code>id</code>值，去<code>Dish</code>表和<code>Setmeal</code>表中（<code>category_id</code>字段）查询是否关联了数据：如果存在关联数据，则不能删除，并抛一个自定义的业务异常。</p>
@@ -594,14 +594,14 @@
 <h3 id="修改菜品分类"><a href="#修改菜品分类" class="headerlink" title="修改菜品分类"></a>修改菜品分类</h3><p><strong>表现层要素</strong></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// category.js -- 修改接口</span></span><br><span class="line"> <span class="keyword">const</span> <span class="title function_">editCategory</span> = (<span class="params">params</span>) =&gt; &#123;</span><br><span class="line">   <span class="keyword">return</span> $axios(&#123;</span><br><span class="line">     <span class="attr">url</span>: <span class="string">&#x27;/category&#x27;</span>,</span><br><span class="line">     <span class="attr">method</span>: <span class="string">&#x27;put&#x27;</span>,</span><br><span class="line">     <span class="attr">data</span>: &#123; ...params &#125;</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
 
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705105056053.png" alt="image-20230705105056053"></p>
+<p><img src="image-20230705105056053.png" alt="image-20230705105056053"></p>
 <p>请求类型：PUT</p>
 <p>请求路径：<code>/category</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705105128881.png" alt="image-20230705105128881"></p>
+<p><img src="image-20230705105128881.png" alt="image-20230705105128881"></p>
 <p>请求参数：json格式的菜品id、name、sort参数，封装成Category对象。</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">editCategory</span>(&#123;<span class="string">&#x27;id&#x27;</span>:<span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">id</span>,<span class="string">&#x27;name&#x27;</span>: <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">name</span>, <span class="attr">sort</span>: <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">sort</span>&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;分类修改成功！&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">classData</span>.<span class="property">dialogVisible</span> = <span class="literal">false</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">handleQuery</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
-<p>返回值类型：Result<String>类型</p>
+<p>返回值类型：<code>Result&lt;String&gt;</code>类型</p>
 <blockquote>
 <p>这里的数据回显完全交由前端来处理，我们简单了解下前端是如何完成数据回显的即可。页面首先通过<code>scope.row</code> 传递当前行的数据对象，通过v-model双向绑定完成数据的回显。</p>
 </blockquote>
@@ -614,16 +614,16 @@
 
 <blockquote>
 <p>这里的MultipartFile类型的参数名不是随意定的，要和前端请求参数中Form-Data的<code>name</code>值一致才可以！</p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705112408492.png" alt="image-20230705112408492"></p>
+<p><img src="image-20230705112408492.png" alt="image-20230705112408492"></p>
 </blockquote>
 <p><strong>文件下载</strong></p>
 <p>文件下载，也称为了download，是指将文件从服务器传输到本地计算机的过程，<strong>本质上就是服务端将文件以流的形式写回浏览器的过程</strong>。通过浏览器进行文件下载，通常有两种表现形式：① 以附件形式下载，弹出保存对话框，将文件保存到指定磁盘目录；② 直接在浏览器中打开。</p>
 <p><strong>文件上传核心业务实现</strong></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705161814263.png" alt="image-20230705161814263"></p>
+<p><img src="image-20230705161814263.png" alt="image-20230705161814263"></p>
 <p>请求类型：POST</p>
 <p>请求路径：<code>/common/upload</code></p>
 <p>请求参数：<code>MultipartFile</code>类型的对象<code> file</code></p>
-<p>方法返回值：Result<String></p>
+<p>方法返回值：<code>Result&lt;String&gt;</code></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 注入配置文件的属性</span></span><br><span class="line"> <span class="meta">@Value(&quot;$&#123;reggie.path&#125;&quot;)</span></span><br><span class="line"> <span class="keyword">private</span> String basePath;</span><br><span class="line"></span><br><span class="line"><span class="meta">@PostMapping(&quot;/upload&quot;)</span></span><br><span class="line"> <span class="keyword">public</span> Result&lt;String&gt; <span class="title function_">upload</span><span class="params">(MultipartFile file)</span> <span class="keyword">throws</span> IOException &#123;		  <span class="comment">// 请求参数名是Form-Data的name值</span></span><br><span class="line">     log.info(file.toString());</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 本地的是一个临时文件，需要转存到指定位置，否则本次请求完成后临时文件会删除</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">     <span class="type">String</span> <span class="variable">originalFilename</span> <span class="operator">=</span> file.getOriginalFilename();   <span class="comment">// xxxxxxx.jpg</span></span><br><span class="line">     <span class="type">String</span> <span class="variable">suffix</span> <span class="operator">=</span> originalFilename.substring(originalFilename.lastIndexOf(<span class="string">&quot;.&quot;</span>));</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 使用UUID重新生成文件名，防止文件名重复造成的文件覆盖</span></span><br><span class="line">     <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> UUID.randomUUID().toString() + suffix;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/* 判断文件目录basePath确实存在，若不存在则先进行创建 */</span></span><br><span class="line">     <span class="comment">// 创建一个目录对象</span></span><br><span class="line">     <span class="type">File</span> <span class="variable">dir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(basePath);</span><br><span class="line">     <span class="keyword">if</span>(!dir.exists())&#123;</span><br><span class="line">         dir.mkdirs();</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     file.transferTo(<span class="keyword">new</span> <span class="title class_">File</span>(basePath + fileName));  <span class="comment">// 转存文件</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> Result.success(fileName);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>因为上传至服务器的是一个临时文件（完成本次请求后会被删除），所以我们需要设定文件转存到指定位置，在yml配置文件中设置保存在服务器中的路径并通过<code>@Value(&quot;$&#123;xxx&#125;&quot;)</code>获得路径：</p>
@@ -633,7 +633,7 @@
 <p>前端页面的ElementUI在上传完图片后发送请求，服务端以流的方式（输出流）将文件写回给浏览器，在浏览器中展示图片：</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">handleAvatarSuccess (response, file, fileList) &#123;</span><br><span class="line">  <span class="comment">// 拼接down接口预览</span></span><br><span class="line">  <span class="keyword">if</span>(response.<span class="property">code</span> === <span class="number">0</span> &amp;&amp; response.<span class="property">msg</span> === <span class="string">&#x27;未登录&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">top</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;../login/login.html&#x27;</span></span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">imageUrl</span> = <span class="string">`/common/download?name=<span class="subst">$&#123;response.data&#125;</span>`</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">ruleForm</span>.<span class="property">image</span> = response.<span class="property">data</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></div>
 
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705162548370.png" alt="image-20230705162548370"></p>
+<p><img src="image-20230705162548370.png" alt="image-20230705162548370"></p>
 <p>请求类型：GET</p>
 <p>请求路径：<code>/common/download</code></p>
 <p>请求参数：String类型的文件名name</p>
@@ -659,18 +659,18 @@
 
 <p>请求类型：GET</p>
 <p>请求路径：<code>/category/list</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705171036768.png" alt="image-20230705171036768"></p>
+<p><img src="image-20230705171036768.png" alt="image-20230705171036768"></p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取菜品分类</span></span><br><span class="line">getDishList () &#123;</span><br><span class="line">  <span class="title function_">getCategoryList</span>(&#123; <span class="string">&#x27;type&#x27;</span>: <span class="number">1</span> &#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">dishList</span> = res.<span class="property">data</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></div>
 
 <p>请求参数：菜品分类Category对象中的分类类型type，可以封装成Category对象</p>
-<p>方法返回值：前端得到服务器响应的结果有<code>data</code>属性，返回值应该是Result<List>类型，将查询到的列表响应给前端</p>
+<p>方法返回值：前端得到服务器响应的结果有<code>data</code>属性，返回值应该是<code>Result&lt;List&gt;</code>类型，将查询到的列表响应给前端</p>
 <ul>
 <li>将新增菜品json数据提交</li>
 </ul>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705163823971.png" alt="image-20230705163823971"></p>
+<p><img src="image-20230705163823971.png" alt="image-20230705163823971"></p>
 <p>请求类型：POST</p>
 <p>请求路径：<code>/dish</code></p>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705163902869.png" alt="image-20230705163902869"></p>
+<p><img src="image-20230705163902869.png" alt="image-20230705163902869"></p>
 <p>请求参数：json格式的dish菜品信息，外加flavors是一个json数组。而flavors不是Dish类中的属性，Dish对象不足以接收本次请求的参数，所以需要导入Dish的增强类DishDto，用于封装页面提交的数据。</p>
 <blockquote>
 <p>DTO，全称为<code>Data Transfer Object</code>，即数据传输对象，一般用于展示层与服务层之间的数据传输。</p>
@@ -678,7 +678,7 @@
 </blockquote>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">actionType</span> == <span class="string">&#x27;add&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">delete</span> params.<span class="property">id</span></span><br><span class="line">  <span class="title function_">addDish</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;菜品添加成功！&#x27;</span>)</span><br><span class="line">      <span class="keyword">if</span> (!st) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">goBack</span>()</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">dishFlavors</span> = []</span><br><span class="line">        <span class="comment">// this.dishFlavorsData = []</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">imageUrl</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">ruleForm</span> = &#123;</span><br><span class="line">          <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;id&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;price&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;code&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;image&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;description&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;dishFlavors&#x27;</span>: [],</span><br><span class="line">          <span class="string">&#x27;status&#x27;</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">categoryId</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure></div>
 
-<p>返回值类型：Result<String>类型</p>
+<p>返回值类型：<code>Result&lt;String&gt;</code>类型</p>
 <p><strong>核心业务思路</strong></p>
 <ul>
 <li>获取菜品分类并展示到下拉框</li>
@@ -692,7 +692,7 @@
 <p>​        <font color="red">因为这里要在多张表中添加或修改数据，所以要加入事务管理：① 在Service层方法或类上加注释<code>@Transactional</code>； ② 在启动类上加注释<code>@EnableTransactionManagement</code>.</font></p>
 <p>​        步骤2：添加菜品的基本信息到dish菜品表<code>this.save(dishDto);</code>；<font color="blue">（这里可以直接传dishDto对象）</font></p>
 <p>​        步骤3：添加菜品口味数据flavors到菜品口味表dish_flavor，要注意dish_id（是一个not null字段）无法通过flavors列表赋值要通过Dto对象手动set。</p>
-<p>​                               <img src="瑞吉外卖项目实战/image-20230705182604710.png" alt="image-20230705182604710" style="zoom:77%;" /></p>
+<p>​                               <img src="image-20230705182604710.png" alt="image-20230705182604710" style="zoom:77%;" /></p>
 <h3 id="菜品信息分页查询"><a href="#菜品信息分页查询" class="headerlink" title="菜品信息分页查询"></a>菜品信息分页查询</h3><p><strong>流程分析</strong></p>
 <p>这里的分页查询其实也是发送了两次请求：</p>
 <ol>
@@ -705,7 +705,7 @@
 <li>图片列：会用到文件的下载功能</li>
 <li>菜品分类列：由于我们的dish菜品表只保存了category_id，所以我们需要在category分类表中查询category_id对应的菜品分类名称，从而回显数据</li>
 </ul>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705184128037.png" alt="image-20230705184128037"></p>
+<p><img src="image-20230705184128037.png" alt="image-20230705184128037"></p>
 <p>因为代码中用到了几个比较关键的知识点，所以这里我直接展示业务代码，也方便到时候复习来看：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/page&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;Page&gt; <span class="title function_">pageSelect</span><span class="params">(<span class="type">int</span> page, <span class="type">int</span> pageSize, String name)</span> &#123;</span><br><span class="line">        Page&lt;Dish&gt; pageInfo = <span class="keyword">new</span> <span class="title class_">Page</span>&lt;&gt;(page, pageSize);</span><br><span class="line">        Page&lt;DishDto&gt; dishDtoPage = <span class="keyword">new</span> <span class="title class_">Page</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        LambdaQueryWrapper&lt;Dish&gt; lambdaQueryWrapper = <span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;();</span><br><span class="line">        lambdaQueryWrapper.like(name != <span class="literal">null</span>, Dish::getName, name);</span><br><span class="line">        lambdaQueryWrapper.orderByDesc(Dish::getUpdateTime);</span><br><span class="line">      </span><br><span class="line">        dishService.page(pageInfo, lambdaQueryWrapper);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 对象拷贝pageInfo除了&quot;records&quot;属性</span></span><br><span class="line">        BeanUtils.copyProperties(pageInfo, dishDtoPage, <span class="string">&quot;records&quot;</span>);</span><br><span class="line"></span><br><span class="line">        List&lt;Dish&gt; records = pageInfo.getRecords();</span><br><span class="line">        List&lt;DishDto&gt; dishDtoList = records.stream().map((item) -&gt; &#123;</span><br><span class="line">            <span class="type">DishDto</span> <span class="variable">dishDto</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DishDto</span>();</span><br><span class="line">            BeanUtils.copyProperties(item, dishDto);</span><br><span class="line"></span><br><span class="line">            <span class="type">Long</span> <span class="variable">categoryId</span> <span class="operator">=</span> item.getCategoryId();</span><br><span class="line">            <span class="type">Category</span> <span class="variable">category</span> <span class="operator">=</span> categoryService.getById(categoryId);</span><br><span class="line">            <span class="type">String</span> <span class="variable">categoryName</span> <span class="operator">=</span> category.getName();</span><br><span class="line">            dishDto.setCategoryName(categoryName);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> dishDto;</span><br><span class="line">        &#125;).collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">        dishDtoPage.setRecords(dishDtoList);</span><br><span class="line">        <span class="keyword">return</span> Result.success(dishDtoPage);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
 
@@ -720,7 +720,7 @@
 <ul>
 <li>回显数据</li>
 </ul>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705214455637.png" alt="image-20230705214455637"></p>
+<p><img src="image-20230705214455637.png" alt="image-20230705214455637"></p>
 <p>请求类型：GET</p>
 <p>请求路径：<code>/dish/&#123;id&#125;</code></p>
 <p>请求参数：RESTful风格的菜品id</p>
@@ -730,15 +730,15 @@
 <ul>
 <li>提交修改数据</li>
 </ul>
-<p><img src="%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/image-20230705215233049.png" alt="image-20230705215233049"></p>
+<p><img src="image-20230705215233049.png" alt="image-20230705215233049"></p>
 <p>请求类型：PUT</p>
 <p>请求路径：<code>/dish</code></p>
-<img src="瑞吉外卖项目实战/image-20230705215325955.png" alt="image-20230705215325955" style="zoom:77%;" />
+<img src="image-20230705215325955.png" alt="image-20230705215325955" style="zoom:77%;" />
 
 <p>请求参数：json格式的DishDto对象</p>
 <div class="highlight-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">editDish</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;菜品修改成功！&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">goBack</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">msg</span> || <span class="string">&#x27;操作失败&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
 
-<p>方法返回值：Result<String></p>
+<p>方法返回值：<code>Result&lt;String&gt;</code></p>
 <p><strong>核心业务思路</strong></p>
 <ul>
 <li>回显数据</li>
@@ -783,6 +783,21 @@
 
             
                 <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2023/07/06/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day2/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">瑞吉外卖项目实战day2</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
                     
                     
                         <div class="article-next">
