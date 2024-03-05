@@ -7350,4 +7350,112 @@
         <category>SpringMVC</category>
       </categories>
   </entry>
+  <entry>
+    <title>Java01_语法基础</title>
+    <url>/2024/03/05/Java01-%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>Java 基础很重要。</p>
+<span id="more"></span>
+
+<h1 id="Java语法基础"><a href="#Java语法基础" class="headerlink" title="Java语法基础"></a>Java语法基础</h1><h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><img src="image-20240223213854406.png" alt="image-20240223213854406" style="zoom:67%;" />
+
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p><strong>变量</strong>可以分为局部变量、成员变量、静态变量：局部变量必须先初始化，成员或静态变量有默认值可以不进行初始化。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LocalVar</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> a;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">double</span> b;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">LocalVar</span> <span class="variable">lv</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LocalVar</span>();</span><br><span class="line">        System.out.println(lv.a);  <span class="comment">// 0</span></span><br><span class="line">        System.out.println(b);  <span class="comment">// 0.0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>基本数据类型有自己的默认值，而<code>Integer</code>，<code>Double</code>对象的默认值是null。</p>
+</blockquote>
+<p><strong>单精度与双精度</strong></p>
+<p>单精度（single-precision）和双精度（double-precision）是指两种不同精度的浮点数表示方法。单精度浮点数通常占用 32 位（4 字节）存储空间，精度大约为 6 到 9 位有效数字。</p>
+<img src="image-20240223192249869.png" alt="image-20240223192249869" style="zoom: 67%;" />
+
+<p>双精度浮点数通常占用 64 位（8 字节）存储空间，精度大约为 15 到 17 位有效数字。</p>
+<img src="image-20240223192333476.png" alt="image-20240223192333476" style="zoom:67%;" />
+
+<p><strong>int和char的转换</strong></p>
+<ul>
+<li>int 转换成 char</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 强制类型转换：将int整数(ASCII码)转换为对应的字符 */</span></span><br><span class="line"><span class="type">int</span> <span class="variable">value_int1</span> <span class="operator">=</span> <span class="number">65</span>;</span><br><span class="line"><span class="type">char</span> <span class="variable">value_ch1</span> <span class="operator">=</span> (<span class="type">char</span>) value_int1;</span><br><span class="line">System.out.println(value_ch1);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 0~9的整数转换为char类型（6 → &#x27;6&#x27;） */</span></span><br><span class="line"><span class="type">int</span> <span class="variable">radix</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">value_int2</span> <span class="operator">=</span> <span class="number">6</span>;</span><br><span class="line"><span class="type">char</span> <span class="variable">value_ch2</span> <span class="operator">=</span> Character.forDigit(value_int2, radix);</span><br><span class="line">System.out.println(value_ch2);</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">value_int3</span> <span class="operator">=</span> <span class="number">6</span>;</span><br><span class="line"><span class="type">char</span> <span class="variable">value_ch3</span> <span class="operator">=</span> Integer.toString(value_int3).charAt(<span class="number">0</span>);</span><br><span class="line">System.out.println(value_ch3);</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> <span class="variable">value_ch4</span> <span class="operator">=</span> <span class="number">6</span> + <span class="string">&#x27;0&#x27;</span>;  <span class="comment">// 最直观</span></span><br><span class="line">System.out.println(value_ch4);</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>char 转换成 int</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 自动类型转换 */</span></span><br><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">System.out.println(a);  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 对于char类型本身就是数字的，如&#x27;1&#x27;→ 1  */</span></span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> Character.digit(<span class="string">&#x27;1&#x27;</span>, <span class="number">10</span>);</span><br><span class="line">System.out.println(b);</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> Character.getNumericValue(<span class="string">&#x27;1&#x27;</span>); </span><br><span class="line">System.out.println(c);</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span> - <span class="string">&#x27;0&#x27;</span>;  <span class="comment">// 最直观</span></span><br><span class="line">System.out.println(d);</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>包装器类型</strong>是 Java 中的一种特殊类型，用于将基本数据类型（如 int、float、char 等）转换为对应的对象类型。</p>
+<p><code>Character.isDigit()</code>检查字符是否为整数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">boolean</span> <span class="variable">a</span> <span class="operator">=</span> Character.isDigit(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">System.out.println(a);</span><br></pre></td></tr></table></figure></div>
+
+<p><code>Integer.parseInt()</code>将字符串转换为整数：</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> Integer.parseInt(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">System.out.println(b);</span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20240223200837612.png" alt="image-20240223200837612" style="zoom:50%;" />
+
+<blockquote>
+<p>自动装箱（Autoboxing）和自动拆箱（Unboxing）机制允许我们在基本数据类型和包装器类型之间自动转换，无需显式地调用构造方法或转换方法：</p>
+<img src="image-20240223212632574.png" alt="image-20240223212632574" style="zoom:80%;" />
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">integerValue</span> <span class="operator">=</span> <span class="number">42</span>; <span class="comment">// 自动装箱，等同于 new Integer(42)</span></span><br><span class="line"><span class="type">int</span> <span class="variable">primitiveValue</span> <span class="operator">=</span> integerValue; <span class="comment">// 自动拆箱，等同于 integerValue.intValue()</span></span><br></pre></td></tr></table></figure></div>
+</blockquote>
+<h3 id="引用数据类型"><a href="#引用数据类型" class="headerlink" title="引用数据类型"></a>引用数据类型</h3><p>引用数据类型的名和值并不是存储在一起的，而是存储了一个地址值，通过地址值引用到内存中实际存在的数据上。</p>
+<p>基本数据类型在作为成员变量和静态变量的时候有默认值，引用数据类型（数组、类、接口）也有默认值是null<font color="blue">（String是最经典的引用数据类型，String字符串是String类）</font>。</p>
+<ul>
+<li><p>基本数据类型：</p>
+<ul>
+<li><p>变量名指向具体的数值。</p>
+</li>
+<li><p>基本数据类型存储在栈上。</p>
+</li>
+</ul>
+</li>
+<li><p>引用数据类型：</p>
+<ul>
+<li><p>变量名指向的是存储对象的内存地址，在栈上。</p>
+</li>
+<li><p>内存地址指向的对象存储在堆上。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>栈和堆</strong></p>
+<p>堆是在程序运行时在内存中申请的空间（可理解为动态的过程，切记不是在编译时），因此 Java 中的对象就放在这里。当需要一个对象时，只需要通过 new 关键字写一行代码即可，当执行这行代码时，会自动在内存的“堆”区分配空间。</p>
+<p>栈能够和处理器（CPU，也就是脑子）直接关联，因此访问速度更快。既然访问速度快，要好好利用啊！Java 就把对象的引用放在栈里<font color="blue">（每一个方法都有一个自己全新的栈空间）</font>，因为 Java 在编译程序时，必须明确的知道存储在栈里的东西的生命周期，否则就没法释放旧的内存来开辟新的内存空间存放引用：</p>
+<img src="image-20240223203436638.png" alt="image-20240223203436638" style="zoom:67%;" />
+
+<blockquote>
+<p>关于堆和栈的区别：<a class="link"   href="https://www.zhihu.com/question/19729973/answer/2238950166" >https://www.zhihu.com/question/19729973/answer/2238950166<i class="fa-solid fa-up-right-from-square"></i></a></p>
+</blockquote>
+<h2 id="数据类型转换"><a href="#数据类型转换" class="headerlink" title="数据类型转换"></a>数据类型转换</h2><h3 id="自动类型转换"><a href="#自动类型转换" class="headerlink" title="自动类型转换"></a>自动类型转换</h3><p>自动类型转换只发生在兼容类型之间。例如，从较小的数据类型（如 int）到较大的数据类型（如 long 或 double）的转换是安全的，因为较大的数据类型可以容纳较小数据类型的所有可能值。</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">表达式中类型的自动提升：</span><br><span class="line">byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double</span><br><span class="line">char -&gt; int -&gt; long -&gt; float -&gt; double</span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20240223210305560.png" alt="image-20240223210305560" style="zoom:80%;" />
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">50</span>;</span><br><span class="line">b = (<span class="type">byte</span>)(b * <span class="number">2</span>);  <span class="comment">// 也等价于 b *= 2;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h3><p>将较大的数据类型转换为较小的数据类型。</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">double -&gt; float -&gt; long -&gt; int -&gt; char -&gt; short -&gt; byte</span><br></pre></td></tr></table></figure></div>
+
+<p>不难理解，这里就不说了。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1500000000</span>, b = <span class="number">1500000000</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> a + b;  <span class="comment">// -1294967296</span></span><br><span class="line"><span class="type">long</span> <span class="variable">sum1</span> <span class="operator">=</span> a + b;  <span class="comment">// -1294967296</span></span><br><span class="line"><span class="type">long</span> <span class="variable">sum2</span> <span class="operator">=</span> (<span class="type">long</span>)a + b;  <span class="comment">// 3000000000</span></span><br><span class="line"><span class="type">long</span> <span class="variable">sum3</span> <span class="operator">=</span> (<span class="type">long</span>)(a + b);  <span class="comment">// -1294967296</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="基本数据类型缓存池"><a href="#基本数据类型缓存池" class="headerlink" title="基本数据类型缓存池"></a>基本数据类型缓存池</h2><p>基本数据类型的包装类除了 Float 和 Double 之外，其他六个包装器类（Byte、Short、Integer、Long、Character、Boolean）都有常量缓存池。</p>
+<ul>
+<li>Byte：-128~127，也就是所有的 byte 值</li>
+<li>Short：-128~127</li>
+<li>Integer：-128~127</li>
+<li>Long：-128~127</li>
+<li>Character：\u0000 - \u007F</li>
+<li>Boolean：true 和 false</li>
+</ul>
+<p>拿 Integer 来举例子，Integer 类内部中内置了 256 个 Integer 类型的缓存数据，当使用的数据范围在 -128~127 之间时，会直接返回常量池中数据的引用，而不是创建对象，超过这个范围时会创建新的对象。</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">18</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">y</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">18</span>);</span><br><span class="line">System.out.println(x == y);  <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Integer x = Integer.valueof(18) 等同于 Integer x = 18; */</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">z</span> <span class="operator">=</span> Integer.valueOf(<span class="number">18</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">k</span> <span class="operator">=</span> Integer.valueOf(<span class="number">18</span>);</span><br><span class="line">System.out.println(z == k);  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Integer x = Integer.valueof(300) 等同于 Integer x = 300; */</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">m</span> <span class="operator">=</span> Integer.valueOf(<span class="number">300</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">p</span> <span class="operator">=</span> Integer.valueOf(<span class="number">300</span>);</span><br><span class="line">System.out.println(m == p);  <span class="comment">// false，因为300不在常量池的范围内</span></span><br></pre></td></tr></table></figure></div>
+
+<img src="image-20240223213127120.png" alt="image-20240223213127120" style="zoom:67%;" />
+
+<p>在静态内部类IntegerCache中的static静态代码块中，low 为 -128，也就是缓存池的最小值；high 默认为 127（*可以在 JVM 启动的时候，通过 <code>-XX:AutoBoxCacheMax=NNN</code> 来设置缓存池的大小，最大到 <code>Integer.MAX_VALUE -129</code>*），也就是缓存池的最大值，共计 256 个。</p>
+]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
+  </entry>
 </search>
