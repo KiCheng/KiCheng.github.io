@@ -274,12 +274,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-solid fa-file-word"></i>&nbsp;<span>8.1k Words</span>
+            <i class="fa-solid fa-file-word"></i>&nbsp;<span>8k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-solid fa-clock"></i>&nbsp;<span>32 Mins</span>
+            <i class="fa-solid fa-clock"></i>&nbsp;<span>31 Mins</span>
         </span>
     
     
@@ -326,12 +326,12 @@
 <p>可以使用 Arrays 类提供的 <code>sort()</code> 方法。</p>
 <ul>
 <li><p>基本数据类型按照升序排列；</p>
-<p><img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224112732234.png" alt="image-20240224112732234"></p>
+<p><img src="image-20240224112732234.png" alt="image-20240224112732234"></p>
 </li>
 <li><p>实现了 Comparable 接口的对象按照 <code>compareTo()</code> 的排序；</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String[] yetAnotherArray = <span class="keyword">new</span> <span class="title class_">String</span>[] &#123;<span class="string">&quot;A&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;Z&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>&#125;;</span><br><span class="line">Arrays.sort(yetAnotherArray, <span class="number">1</span>, <span class="number">3</span>, Comparator.comparing(String::toString).reversed());  <span class="comment">// 指定索引1-3的倒序排序 [A, Z, E, B, C]</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224113246398.png" alt="image-20240224113246398"></p>
+<p><img src="image-20240224113246398.png" alt="image-20240224113246398"></p>
 </li>
 </ul>
 <p><strong>查找</strong></p>
@@ -340,12 +340,12 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> Arrays.binarySearch(arr, <span class="number">3</span>);  <span class="comment">// 二分查找指定元素的索引位置</span></span><br></pre></td></tr></table></figure></div>
 
 <h3 id="数组的复制"><a href="#数组的复制" class="headerlink" title="数组的复制"></a>数组的复制</h3><p>有时候我们需要将一个数组的值复制到另外一个数组当中，在 String 类讲完数组就会讲中会经常遇到数组复制，比如说 <code>substring()</code> 方法，它会返回一个新的字符串，这个字符串的值就是原字符串的一部分。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224153059419.png" alt="image-20240224153059419" style="zoom: 61%;" />
+<img src="image-20240224153059419.png" alt="image-20240224153059419" style="zoom: 61%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224153126325.png" alt="image-20240224153126325" style="zoom: 80%;" />
+<img src="image-20240224153126325.png" alt="image-20240224153126325" style="zoom: 80%;" />
 
 <p><code>Arrays.copyOfRange()</code> 方法就是用来复制数组的，它底层调用的是 <code>System.arraycopy()</code> 方法，这个方法是一个 native 方法，它是用 C/C++ 实现的，效率非常高。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224153254760.png" alt="image-20240224153254760" style="zoom:80%;" />
+<img src="image-20240224153254760.png" alt="image-20240224153254760" style="zoom:80%;" />
 
 <ul>
 <li><p>使用<code>Arrays.copyofRange()</code>进行数组复制：</p>
@@ -353,7 +353,7 @@
 <li><p>使用循环来完成数组的复制：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将两个数组合并为一个新数组</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>[] array1 = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="type">int</span>[] array2 = &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个新数组，长度为两个数组长度之和</span></span><br><span class="line"><span class="type">int</span>[] mergedArray = <span class="keyword">new</span> <span class="title class_">int</span>[array1.length + array2.length];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复制第一个数组到新数组</span></span><br><span class="line"><span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> element: array1)&#123;</span><br><span class="line">    mergedArray[index++] = element;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(Arrays.toString(mergedArray));  <span class="comment">// [1, 2, 3, 0, 0, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 复制第二个数组到新数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> element: array2)&#123;</span><br><span class="line">    mergedArray[index++] = element;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(Arrays.toString(mergedArray));  <span class="comment">// [1, 2, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure></div></li>
 <li><p><code>System.arraycopy</code>方法</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224155526873.png" alt="image-20240224155526873" style="zoom:90%;" />
+<img src="image-20240224155526873.png" alt="image-20240224155526873" style="zoom:90%;" />
 
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] array1 = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="type">int</span>[] array2 = &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 创建一个新数组，长度为两个数组长度之和</span></span><br><span class="line"><span class="type">int</span>[] mergedArray = <span class="keyword">new</span> <span class="title class_">int</span>[array1.length + array2.length];</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 复制第一个数组到新数组</span></span><br><span class="line"><span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">System.arraycopy(array1, <span class="number">0</span>, mergedArray, <span class="number">0</span>, array1.length);</span><br><span class="line">System.out.println(Arrays.toString(mergedArray));  <span class="comment">// [1, 2, 3, 0, 0, 0]</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 复制第二个数组到新数组</span></span><br><span class="line">System.arraycopy(array2, <span class="number">0</span>, mergedArray, array1.length, array2.length);</span><br><span class="line">System.out.println(Arrays.toString(mergedArray));  <span class="comment">// [1, 2, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure></div></li>
 </ul>
@@ -362,16 +362,16 @@
 
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[][] s3 = &#123;&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;, &#123;<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>&#125;&#125;;</span><br><span class="line"><span class="type">int</span>[][] s4 = <span class="keyword">new</span> <span class="title class_">int</span>[s3.length][s3[<span class="number">0</span>].length];</span><br><span class="line">System.arraycopy(s3, <span class="number">0</span>, s4, <span class="number">0</span>, s3.length);</span><br><span class="line">System.out.println(Arrays.deepToString(s3));  <span class="comment">// [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]</span></span><br><span class="line"><span class="comment">// 改变数组值</span></span><br><span class="line">s3[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">333</span>;</span><br><span class="line">System.out.println(Arrays.deepToString(s3));  <span class="comment">// [[1, 2, 333, 4, 5], [6, 7, 8, 9, 10]]</span></span><br><span class="line">System.out.println(Arrays.deepToString(s4));  <span class="comment">// [[1, 2, 333, 4, 5], [6, 7, 8, 9, 10]]</span></span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224161041457.png" alt="image-20240224161041457" style="zoom:67%;" />
+<img src="image-20240224161041457.png" alt="image-20240224161041457" style="zoom:67%;" />
 
 <h3 id="数组的打印"><a href="#数组的打印" class="headerlink" title="数组的打印"></a>数组的打印</h3><p>数组也是一个对象，但 Java 中并未明确的定义这样一个类，因此数组也就没有机会覆盖 <code>Object.toString()</code> 方法。如果尝试直接打印数组的话，输出的结果并不是我们预期的结果。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224161527936.png" alt="image-20240224161527936" style="zoom: 67%;" />
+<img src="image-20240224161527936.png" alt="image-20240224161527936" style="zoom: 67%;" />
 
 <p>数组虽然没有显式定义成一个类，但它的确是一个对象，继承了祖先类 Object 的所有方法。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224161756524.png" alt="image-20240224161756524" style="zoom:80%;" />
+<img src="image-20240224161756524.png" alt="image-20240224161756524" style="zoom:80%;" />
 
 <p>那为什么数组不像String那样定义一个类来表示呢？</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224162211081.png" alt="image-20240224162211081" style="zoom:67%;" />
+<img src="image-20240224162211081.png" alt="image-20240224162211081" style="zoom:67%;" />
 
 <ul>
 <li><p>Arrays 工具类打印 Java 数组</p>
@@ -379,7 +379,7 @@
 <li><p>一维数组：<code>Arrays.toString()</code></p>
 <blockquote>
 <p>阿里巴巴的 Java 开发手册上有这样一条规约：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224162916890.png" alt="image-20240224162916890" style="zoom:67%;" />
+<img src="image-20240224162916890.png" alt="image-20240224162916890" style="zoom:67%;" />
 
 <p>对于这样的类，最好是重写一下它的 <code>toString()</code> 方法，方便查看这个对象到底包含了什么字段，好排查问题。如果不重写的话，打印出来的 Java 对象就像直接打印数组的那样，一串谁也看不懂的字符序列。</p>
 </blockquote>
@@ -393,17 +393,17 @@
 <li><p>```java<br>Arrays.asList(cmowers).stream().forEach(s -&gt; System.out.println(s));</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">+ ```java</span><br><span class="line">  Stream.of(cmowers).forEach(System.out::println);</span><br></pre></td></tr></table></figure></div></li>
 <li><p>```java<br>Arrays.stream(cmowers).forEach(System.out::println);</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 字符串</span><br><span class="line"></span><br><span class="line">### String源码</span><br><span class="line"></span><br><span class="line">“第一，String 类是 final 的，意味着它不能被子类继承。”</span><br><span class="line"></span><br><span class="line">“第二，String 类实现了 Serializable 接口，意味着它可以序列化。”</span><br><span class="line"></span><br><span class="line">“第三，String 类实现了 Comparable 接口，意味着最好不要用 ‘==’ 来比较两个字符串是否相等，而应该用 `compareTo()` 方法去比较。因为 == 是用来比较两个对象的地址，如果只是说比较字符串内容的话，可以使用 String 类的 equals 方法（底层通过两个char数组逐索引比较字符）。”</span><br><span class="line"></span><br><span class="line">“第四，String 和 StringBuffer、StringBuilder 一样，都实现了 CharSequence 接口，所以它们仨属于近亲。由于 String 是不可变的，所以遇到字符串拼接的时候就可以考虑一下 String 的另外两个好兄弟，StringBuffer 和 StringBuilder，它俩是可变的。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224164727281.png&quot; alt=&quot;image-20240224164727281&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">“第五，Java 9 以前，String 是用 char 型数组实现的，之后改成了 byte 型数组实现，并增加了 coder 来表示编码。这样做的好处是在 Latin1 字符为主的程序里，可以**把 String 占用的内存减少一半（由此带来垃圾回收GC的次数也会减少）**。当然，天下没有免费的午餐，这个改进在节省内存的同时引入了编码检测的开销。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224165130459.png&quot; alt=&quot;image-20240224165130459&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">仅仅将 `char[]` 优化为 `byte[]` 是不够的，还要配合 Latin-1 的编码方式，该编码方式是用单个字节来表示字符的，这样就比 UTF-8 编码节省了更多的空间。</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224165352476.png&quot; alt=&quot;image-20240224165352476&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">针对 JDK 9 的 String 源码里，为了区别编码方式，追加了一个 coder 字段来区分，Java 会根据字符串的内容自动设置为相应的编码，要么 Latin-1 要么 UTF16。也就是说，从 `char[]` 到 `byte[]`，**中文是两个字节，纯英文是一个字节，在此之前呢，中文是两个字节，英文也是两个字节**。</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224165422184.png&quot; alt=&quot;image-20240224165422184&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&gt; UTF编码：</span><br><span class="line">&gt;</span><br><span class="line">&gt; 在 UTF-8 中，0-127 号的字符用 1 个字节来表示，使用和 ASCII 相同的编码。只有 128 号及以上的字符才用 2 个、3 个或者 4 个字节来表示。</span><br><span class="line">&gt;</span><br><span class="line">&gt; - 如果只有一个字节，那么最高的比特位为 0；</span><br><span class="line">&gt; - 如果有多个字节，那么第一个字节从最高位开始，连续有几个比特位的值为 1，就使用几个字节编码，剩下的字节均以 10 开头。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 具体的表现形式为：</span><br><span class="line">&gt;</span><br><span class="line">&gt; - 0xxxxxxx：一个字节；</span><br><span class="line">&gt; - 110xxxxx 10xxxxxx：两个字节编码形式（开始两个 1）；</span><br><span class="line">&gt; - 1110xxxx 10xxxxxx 10xxxxxx：三字节编码形式（开始三个 1）；</span><br><span class="line">&gt; - 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx：四字节编码形式（开始四个 1）。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 也就是说，UTF-8 是变长的，那对于 String 这种有随机访问方法的类来说，就很不方便。所谓的随机访问，就是 charAt、subString 这种方法，随便指定一个数字，String 要能给出结果。如果字符串中的每个字符占用的内存是不定长的，那么进行随机访问的时候，就需要从头开始数每个字符的长度，才能找到你想要的字符。</span><br><span class="line">&gt;</span><br><span class="line">&gt; UTF-16 也是变长的呢？一个字符还可能占用 4 个字节呢？的确，UTF-16 使用 2 个或者 4 个字节来存储字符。但是在 Java 中，一个字符（char）就是 2 个字节，占 4 个字节的字符，在 Java 里也是用两个 char 来存储的，而 String 的各种操作，都是以 Java 的字符（char）为单位的，charAt 是取得第几个 char，subString 取的也是第几个到第几个 char 组成的子串，甚至 length 返回的都是 char 的个数。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 所以 UTF-16 在 Java 的世界里，就可以视为一个定长的编码。</span><br><span class="line"></span><br><span class="line">**String类的hashCode方法**</span><br><span class="line"></span><br><span class="line">“第六，每一个字符串都会有一个 hash 值，这个哈希值在很大概率是不会重复的，因此 String 很适合来作为 HashMap（后面会细讲）的键值。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225095746034.png&quot; alt=&quot;image-20240225095746034&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225095559210.png&quot; alt=&quot;image-20240225095559210&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">模拟计算字符串的hashCode值：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class HashCodeExample &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String text = &quot;KiCheng is studying Java.&quot;;</span><br><span class="line">        int hashCode = computeHashCode(text);</span><br><span class="line">        System.out.println(&quot;字符串 \&quot;&quot; + text + &quot;\&quot; 的哈希码是: &quot; + hashCode);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;String 的 hashCode &quot; + text.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int computeHashCode(String text) &#123;</span><br><span class="line">        int h = 0;</span><br><span class="line">        for (int i = 0; i &lt; text.length(); i++) &#123;</span><br><span class="line">            h = 31 * h + text.charAt(i);</span><br><span class="line">        &#125;</span><br><span class="line">        return h;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 字符串</span><br><span class="line"></span><br><span class="line">### String源码</span><br><span class="line"></span><br><span class="line">“第一，String 类是 final 的，意味着它不能被子类继承。”</span><br><span class="line"></span><br><span class="line">“第二，String 类实现了 Serializable 接口，意味着它可以序列化。”</span><br><span class="line"></span><br><span class="line">“第三，String 类实现了 Comparable 接口，意味着最好不要用 ‘==’ 来比较两个字符串是否相等，而应该用 `compareTo()` 方法去比较。因为 == 是用来比较两个对象的地址，如果只是说比较字符串内容的话，可以使用 String 类的 equals 方法（底层通过两个char数组逐索引比较字符）。”</span><br><span class="line"></span><br><span class="line">“第四，String 和 StringBuffer、StringBuilder 一样，都实现了 CharSequence 接口，所以它们仨属于近亲。由于 String 是不可变的，所以遇到字符串拼接的时候就可以考虑一下 String 的另外两个好兄弟，StringBuffer 和 StringBuilder，它俩是可变的。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240224164727281.png&quot; alt=&quot;image-20240224164727281&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">“第五，Java 9 以前，String 是用 char 型数组实现的，之后改成了 byte 型数组实现，并增加了 coder 来表示编码。这样做的好处是在 Latin1 字符为主的程序里，可以**把 String 占用的内存减少一半（由此带来垃圾回收GC的次数也会减少）**。当然，天下没有免费的午餐，这个改进在节省内存的同时引入了编码检测的开销。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240224165130459.png&quot; alt=&quot;image-20240224165130459&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">仅仅将 `char[]` 优化为 `byte[]` 是不够的，还要配合 Latin-1 的编码方式，该编码方式是用单个字节来表示字符的，这样就比 UTF-8 编码节省了更多的空间。</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240224165352476.png&quot; alt=&quot;image-20240224165352476&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">针对 JDK 9 的 String 源码里，为了区别编码方式，追加了一个 coder 字段来区分，Java 会根据字符串的内容自动设置为相应的编码，要么 Latin-1 要么 UTF16。也就是说，从 `char[]` 到 `byte[]`，**中文是两个字节，纯英文是一个字节，在此之前呢，中文是两个字节，英文也是两个字节**。</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240224165422184.png&quot; alt=&quot;image-20240224165422184&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&gt; UTF编码：</span><br><span class="line">&gt;</span><br><span class="line">&gt; 在 UTF-8 中，0-127 号的字符用 1 个字节来表示，使用和 ASCII 相同的编码。只有 128 号及以上的字符才用 2 个、3 个或者 4 个字节来表示。</span><br><span class="line">&gt;</span><br><span class="line">&gt; - 如果只有一个字节，那么最高的比特位为 0；</span><br><span class="line">&gt; - 如果有多个字节，那么第一个字节从最高位开始，连续有几个比特位的值为 1，就使用几个字节编码，剩下的字节均以 10 开头。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 具体的表现形式为：</span><br><span class="line">&gt;</span><br><span class="line">&gt; - 0xxxxxxx：一个字节；</span><br><span class="line">&gt; - 110xxxxx 10xxxxxx：两个字节编码形式（开始两个 1）；</span><br><span class="line">&gt; - 1110xxxx 10xxxxxx 10xxxxxx：三字节编码形式（开始三个 1）；</span><br><span class="line">&gt; - 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx：四字节编码形式（开始四个 1）。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 也就是说，UTF-8 是变长的，那对于 String 这种有随机访问方法的类来说，就很不方便。所谓的随机访问，就是 charAt、subString 这种方法，随便指定一个数字，String 要能给出结果。如果字符串中的每个字符占用的内存是不定长的，那么进行随机访问的时候，就需要从头开始数每个字符的长度，才能找到你想要的字符。</span><br><span class="line">&gt;</span><br><span class="line">&gt; UTF-16 也是变长的呢？一个字符还可能占用 4 个字节呢？的确，UTF-16 使用 2 个或者 4 个字节来存储字符。但是在 Java 中，一个字符（char）就是 2 个字节，占 4 个字节的字符，在 Java 里也是用两个 char 来存储的，而 String 的各种操作，都是以 Java 的字符（char）为单位的，charAt 是取得第几个 char，subString 取的也是第几个到第几个 char 组成的子串，甚至 length 返回的都是 char 的个数。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 所以 UTF-16 在 Java 的世界里，就可以视为一个定长的编码。</span><br><span class="line"></span><br><span class="line">**String类的hashCode方法**</span><br><span class="line"></span><br><span class="line">“第六，每一个字符串都会有一个 hash 值，这个哈希值在很大概率是不会重复的，因此 String 很适合来作为 HashMap（后面会细讲）的键值。”</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240225095746034.png&quot; alt=&quot;image-20240225095746034&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;image-20240225095559210.png&quot; alt=&quot;image-20240225095559210&quot; style=&quot;zoom:80%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">模拟计算字符串的hashCode值：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class HashCodeExample &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String text = &quot;KiCheng is studying Java.&quot;;</span><br><span class="line">        int hashCode = computeHashCode(text);</span><br><span class="line">        System.out.println(&quot;字符串 \&quot;&quot; + text + &quot;\&quot; 的哈希码是: &quot; + hashCode);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;String 的 hashCode &quot; + text.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int computeHashCode(String text) &#123;</span><br><span class="line">        int h = 0;</span><br><span class="line">        for (int i = 0; i &lt; text.length(); i++) &#123;</span><br><span class="line">            h = 31 * h + text.charAt(i);</span><br><span class="line">        &#125;</span><br><span class="line">        return h;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
 </li>
 </ul>
 <p><strong>String类的substring方法</strong></p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240224172813617.png" alt="image-20240224172813617" style="zoom: 67%;" />
+<img src="image-20240224172813617.png" alt="image-20240224172813617" style="zoom: 67%;" />
 
 <p><code>substring()</code>方法一般情况下生成新字符串，但是当beginIndex和endIndex截取完整原字符串时，不会生成新字符串而是将原字符串直接返回。</p>
 <p><strong>String类的indexOf方法</strong></p>
 <p><code>indexOf()</code> 方法用于查找一个子字符串在原字符串中第一次出现的位置，并返回该位置的索引。如果起始索引大于原字符串长度或未查询到则返回 -1。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225101015781.png" alt="image-20240225101015781" style="zoom:80%;" />
+<img src="image-20240225101015781.png" alt="image-20240225101015781" style="zoom:80%;" />
 
 <p><strong>String类的其他方法</strong></p>
 <p>①、比如说 <code>length()</code> 用于返回字符串长度。</p>
@@ -412,19 +412,19 @@
 <p>④、比如说 <code>valueOf()</code> 用于将其他类型的数据转换为字符串。</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> String.valueOf(<span class="number">123</span>);  <span class="comment">// 将整数 123 转换为字符串</span></span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225101245708.png" alt="image-20240225101245708" style="zoom: 80%;" />
+<img src="image-20240225101245708.png" alt="image-20240225101245708" style="zoom: 80%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225101536278.png" alt="image-20240225101536278" style="zoom:67%;" />
+<img src="image-20240225101536278.png" alt="image-20240225101536278" style="zoom:67%;" />
 
 <p>⑥、比如说 <code>getBytes()</code> 用于返回字符串的字节数组，可以指定编码方式，比如说：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Arrays.toString(text.getBytes(StandardCharsets.UTF_8)));</span><br></pre></td></tr></table></figure></div>
 
 <p>⑦、比如说 <code>trim()</code> 用于去除字符串两侧的空白字符：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225102831977.png" alt="image-20240225102831977" style="zoom:67%;" />
+<img src="image-20240225102831977.png" alt="image-20240225102831977" style="zoom:67%;" />
 
 <p><font color="red">不懂为什么trim方法的源码中左右指针比较字符是否是空白字符时用<code>&lt;=</code>比较符而不是<code>==</code>？</font></p>
 <h3 id="String字符串不可变"><a href="#String字符串不可变" class="headerlink" title="String字符串不可变"></a>String字符串不可变</h3><p>通过String的源码可以看出以下两点：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225103353005.png" alt="image-20240225103353005" style="zoom:67%;" />
+<img src="image-20240225103353005.png" alt="image-20240225103353005" style="zoom:67%;" />
 
 <p>那么String字符串为什么要设计为不可变的呢？</p>
 <p><strong>第一</strong>，可以保证 String 对象的安全性，避免被篡改，毕竟像密码这种隐私信息一般就是用字符串存储的。</p>
@@ -440,10 +440,10 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(KiCheng<span class="string">&quot;);</span></span><br></pre></td></tr></table></figure></div>
 
 <p><strong>两个！</strong>使用 new 关键字创建一个字符串对象时，Java 虚拟机会先在字符串常量池中查找有没有‘KiCheng’这个字符串对象，如果有，就不会在字符串常量池中创建‘KiCheng’这个对象了，直接在堆中创建一个‘KiCheng’的字符串对象，然后将堆中这个‘KiCheng’的对象地址返回赋值给变量 s。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225105550720.png" alt="image-20240225105550720" style="zoom:67%;" />
+<img src="image-20240225105550720.png" alt="image-20240225105550720" style="zoom:67%;" />
 
 <p>如果没有，先在字符串常量池中创建一个‘KiCheng’的字符串对象，然后再在堆中创建一个‘KiCheng’的字符串对象，然后将堆中这个‘KiCheng’的字符串对象地址返回赋值给变量 s。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225105531495.png" alt="image-20240225105531495" style="zoom:67%;" />
+<img src="image-20240225105531495.png" alt="image-20240225105531495" style="zoom:67%;" />
 
 <blockquote>
 <p>在Java中，栈上存储的是基本数据类型的变量和对象的引用，而对象本身则存储在堆上。</p>
@@ -454,23 +454,23 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;LJC&quot;</span>;</span><br></pre></td></tr></table></figure></div>
 
 <p>当执行 <code>String s = &quot;LJC&quot;</code> 时，Java 虚拟机会先在字符串常量池中查找有没有“LJC”这个字符串对象，如果有，则不创建任何对象，直接将字符串常量池中这个“LJC”的对象地址返回，赋给变量 s；</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225110721868.png" alt="image-20240225110721868" style="zoom:67%;" />
+<img src="image-20240225110721868.png" alt="image-20240225110721868" style="zoom:67%;" />
 
 <p>如果没有，在字符串常量池中创建“LJC”这个对象，然后将其地址返回，赋给变量 s。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225110707113.png" alt="image-20240225110707113" style="zoom:67%;" />
+<img src="image-20240225110707113.png" alt="image-20240225110707113" style="zoom:67%;" />
 
 <p>有了字符串常量池，就可以通过双引号的方式直接创建字符串对象。new 的方式始终会创建一个对象，不管字符串的内容是否已经存在，而双引号的方式会重复利用字符串常量池中已经存在的对象。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225110921814.png" alt="image-20240225110921814" style="zoom:67%;" />
+<img src="image-20240225110921814.png" alt="image-20240225110921814" style="zoom:67%;" />
 
 <p><strong>字符串常量池在内存中的位置</strong></p>
 <p>Java7之前：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225111239227.png" alt="image-20240225111239227" style="zoom:67%;" />
+<img src="image-20240225111239227.png" alt="image-20240225111239227" style="zoom:67%;" />
 
 <p>Java7：为了解决永久代空间不足的问题，将字符串常量池从永久代中移动到堆中。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225111304165.png" alt="image-20240225111304165" style="zoom:67%;" />
+<img src="image-20240225111304165.png" alt="image-20240225111304165" style="zoom:67%;" />
 
 <p>Java8：元空间使用本机内存，而不是 JVM 堆内存；元空间中的垃圾收集与堆中的垃圾收集是分离的，这可以避免应用程序在运行过程中因为进行类加载和卸载而频繁地触发 Full GC。</p>
-<p><img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225111436989.png" alt="image-20240225111436989"></p>
+<p><img src="image-20240225111436989.png" alt="image-20240225111436989"></p>
 <blockquote>
 <p>永久代是放在运行时数据区中的，所以它的大小受到 Java 虚拟机本身大小的限制；而元空间是直接放在内存中的，所以只受本机可用内存的限制。</p>
 </blockquote>
@@ -488,14 +488,14 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;二哥三妹&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s1.intern();</span><br><span class="line">System.out.println(s1 == s2);  <span class="comment">// false</span></span><br></pre></td></tr></table></figure></div>
 
 <p>也就意味着 s1 和 s2 的引用地址是不同的，一个来自堆，一个来自字符串常量池，所以输出的结果为 false。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225112223899.png" alt="image-20240225112223899" style="zoom: 50%;" />
+<img src="image-20240225112223899.png" alt="image-20240225112223899" style="zoom: 50%;" />
 
 <hr>
 <p>第一行代码，会在字符串常量池中创建两个对象，一个是“二哥”，一个是“三妹”，然后在堆中会创建两个匿名对象“二哥”和“三妹”，最后还有一个“二哥三妹”的对象（稍后会解释），s1 引用的是堆中“二哥三妹”这个对象。第二行代码，对 s1 执行 <code>intern()</code> 方法，该方法会从字符串常量池中查找“二哥三妹”这个对象是否存在，此时不存在的，但堆中已经存在了，（实际上是将堆中的”二哥三妹”对象引用放入了字符串常量池中）所以字符串常量池中保存的是堆中这个“二哥三妹”对象的引用。</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;二哥&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;三妹&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s1.intern();</span><br><span class="line">System.out.println(s1 == s2);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure></div>
 
 <p>也就是说，s2 和 s1 的引用地址是相同的，所以输出的结果为 true。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225112534348.png" alt="image-20240225112534348" style="zoom:50%;" />
+<img src="image-20240225112534348.png" alt="image-20240225112534348" style="zoom:50%;" />
 
 <blockquote>
 <p>“二哥三妹”对象是何时被创建的呢？</p>
@@ -513,7 +513,7 @@
 <p>另外，字符串常量池本质上是一个固定大小的 StringTable，如果放进去的字符串过多，就会造成严重的哈希冲突，从而导致链表变长，链表变长也就意味着字符串常量池的性能会大幅下降，因为要一个一个找是需要花费时间的。</p>
 <h3 id="StringBuilder与StringBuffer"><a href="#StringBuilder与StringBuffer" class="headerlink" title="StringBuilder与StringBuffer"></a>StringBuilder与StringBuffer</h3><p>由于字符串是不可变的，所以当遇到字符串拼接（尤其是使用<code>+</code>号操作符）的时候，就需要考量性能的问题，你不能毫无顾虑地生产太多 String 对象，对珍贵的内存造成不必要的压力。</p>
 <p>StringBuffer 操作字符串的方法加了 <code>synchronized</code> 关键字进行了同步，主要是考虑到多线程环境下的安全问题，所以如果在非多线程环境下，执行效率就会比较低，因为加了没必要的锁。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225153515636.png" alt="image-20240225153515636" style="zoom:67%;" />
+<img src="image-20240225153515636.png" alt="image-20240225153515636" style="zoom:67%;" />
 
 <p>StringBuilder不考虑线程安全了，你就在单线程环境下使用，这样效率会高得多，如果要在多线程环境下修改字符串，你到时候可以使用 <code>ThreadLocal</code> 来避免多线程冲突。在StringBuilder源码中除了类名不同和方法名没有<code>synchronized</code>关键词之外，其余基本完全一样。</p>
 <p>实际开发中，StringBuilder 的使用频率也是远高于 StringBuffer，甚至可以这么说，StringBuilder 完全取代了 StringBuffer。</p>
@@ -525,19 +525,19 @@
 <p><strong>StringBuilder的内部实现</strong></p>
 <p>StringBuilder 的 toString 方法：</p>
 <p><code>toString()</code> 方法会调用 <code>new String(value, 0, count)</code>，使用 value 数组中从 0 开始的前 count 个元素创建一个新的字符串对象，并将其返回。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225160215596.png" alt="image-20240225160215596" style="zoom: 80%;" />
+<img src="image-20240225160215596.png" alt="image-20240225160215596" style="zoom: 80%;" />
 
 <p>在 StringBuilder 对象创建时，会为 value 分配一定的内存空间（初始容量 16），用于存储字符串。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225160323170.png" alt="image-20240225160323170" style="zoom:67%;" />
+<img src="image-20240225160323170.png" alt="image-20240225160323170" style="zoom:67%;" />
 
 <p>随着字符串的拼接，value 数组的长度会不断增加，因此在 StringBuilder 对象的实现中，value 数组的长度是可以动态扩展的，就像ArrayList那样。</p>
 <p>再来看一下 append 方法：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225161238876.png" alt="image-20240225161238876" style="zoom:67%;" />
+<img src="image-20240225161238876.png" alt="image-20240225161238876" style="zoom:67%;" />
 
 <p>以下是 Java17中 StringBuilder通过append方法时进行容量扩充的方法：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225162003944.png" alt="image-20240225162003944" style="zoom:67%;" />
+<img src="image-20240225162003944.png" alt="image-20240225162003944" style="zoom:67%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225162043282.png" alt="image-20240225162043282" style="zoom:67%;" />
+<img src="image-20240225162043282.png" alt="image-20240225162043282" style="zoom:67%;" />
 
 <p><font color="red">扩容方法？？？</font></p>
 <p><strong>StringBuilder的reverse方法</strong></p>
@@ -549,25 +549,25 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">alita</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;小萝莉&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">luolita</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;小萝莉&quot;</span>);</span><br><span class="line">System.out.println(alita.equals(luolita)); <span class="comment">// true</span></span><br><span class="line">System.out.println(alita == luolita); <span class="comment">// false</span></span><br></pre></td></tr></table></figure></div>
 
 <p>Object 类的 <code>.equals()</code> 方法默认采用的是<code>“==”</code>操作符进行比较。假如子类没有重写该方法的话，那么<code>“==”</code>操作符和 <code>.equals()</code> 方法的功效就完全一样——比较两个对象的内存地址是否相等。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225163733395.png" alt="image-20240225163733395" style="zoom:80%;" />
+<img src="image-20240225163733395.png" alt="image-20240225163733395" style="zoom:80%;" />
 
 <p>有不少类重写了 <code>.equals()</code> 方法，因为比较内存地址的要求比较严格，不太符合现实中所有的场景需求。拿 String 类来说，我们在比较字符串的时候，的确只想判断它们俩的内容是相等的就可以了，并不想比较它们俩是不是同一个对象。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225174823847.png" alt="image-20240225174823847" style="zoom:67%;" />
+<img src="image-20240225174823847.png" alt="image-20240225174823847" style="zoom:67%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225164220423.png" alt="image-20240225164220423" style="zoom:67%;" />
+<img src="image-20240225164220423.png" alt="image-20240225164220423" style="zoom:67%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225192955205.png" alt="image-20240225192955205" style="zoom:67%;" />
+<img src="image-20240225192955205.png" alt="image-20240225192955205" style="zoom:67%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225193003768.png" alt="image-20240225193003768" style="zoom:67%;" />
+<img src="image-20240225193003768.png" alt="image-20240225193003768" style="zoom:67%;" />
 
 <p>如果要进行两个字符串对象的内容比较，除了 <code>.equals()</code> 方法，还有其他两个可选的方案。</p>
 <p>1）<code>Objects.equals()</code>（推荐使用）</p>
 <p><code>Objects.equals()</code> 这个静态方法的优势在于不需要在调用之前判空。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225193202594.png" alt="image-20240225193202594" style="zoom:67%;" />
+<img src="image-20240225193202594.png" alt="image-20240225193202594" style="zoom:67%;" />
 
 <p>2）String 类的 <code>.contentEquals()</code></p>
 <p><code>.contentEquals()</code> 的优势在于可以将字符串与任何的字符序列（StringBuffer、StringBuilder、String、CharSequence）进行比较。</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240225193657833.png" alt="image-20240225193657833" style="zoom: 50%;" />
+<img src="image-20240225193657833.png" alt="image-20240225193657833" style="zoom: 50%;" />
 
 <h3 id="拼接字符串"><a href="#拼接字符串" class="headerlink" title="拼接字符串"></a>拼接字符串</h3><p><strong>+号操作符的本质</strong></p>
 <p>+ 号操作符其实被 Java 在编译的时候重新解释了，换一种说法就是，+ 号操作符是一种语法糖，让字符串的拼接变得更简便了：</p>
@@ -586,13 +586,13 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">String06_Append</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 循环体内，拼接字符串最好使用 StringBuilder 的 `append()` 方法，而不是 + 号操作符</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">pre</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        add01();</span><br><span class="line">        <span class="type">long</span> <span class="variable">post</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;add01的执行时间：&quot;</span> + (post - pre) + <span class="string">&quot;ms&quot;</span>);  <span class="comment">// 2324</span></span><br><span class="line"></span><br><span class="line">        pre = System.currentTimeMillis();</span><br><span class="line">        add02();</span><br><span class="line">        post = System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;add02的执行时间：&quot;</span> + (post - pre) + <span class="string">&quot;ms&quot;</span>);  <span class="comment">// 5</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">add01</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++)&#123;</span><br><span class="line">            s += <span class="string">&quot;六六六&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">add02</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++)&#123;</span><br><span class="line">            sb.append(<span class="string">&quot;六六六&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p><strong>append方法的源码解析</strong></p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226104818089.png" alt="image-20240226104818089" style="zoom:67%;" />
+<img src="image-20240226104818089.png" alt="image-20240226104818089" style="zoom:67%;" />
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226104354247.png" alt="image-20240226104354247" style="zoom:67%;" />
+<img src="image-20240226104354247.png" alt="image-20240226104354247" style="zoom:67%;" />
 
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;LJC&quot;</span>;</span><br><span class="line">System.out.println(s1 + s2);  <span class="comment">// nullLJC （“+”号操作符会把 null 当做是“null”字符串来处理）</span></span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226104633087.png" alt="image-20240226104633087" style="zoom:67%;" />
+<img src="image-20240226104633087.png" alt="image-20240226104633087" style="zoom:67%;" />
 
 <p><strong>String.concat拼接字符串</strong></p>
 <p>String 类的 <code>concat()</code> 方法，有点像 StringBuilder 类的 <code>append()</code> 方法。</p>
@@ -600,24 +600,24 @@
 
 <p>和 <code>+</code> 号操作符相比，<code>concat()</code> 方法在遇到字符串为 null 的时候，会抛出 NullPointerException，而“+”号操作符会把 null 当做是“null”字符串来处理。</p>
 <p>如果拼接的字符串是一个空字符串（””），那么 concat 的效率要更高一点,毕竟不需要 <code>new StringBuilder</code> 对象；如果拼接的字符串非常多，<code>concat()</code> 的效率就会下降，因为创建的字符串对象越来越多。：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226111441757.png" alt="image-20240226111441757" style="zoom:67%;" />
+<img src="image-20240226111441757.png" alt="image-20240226111441757" style="zoom:67%;" />
 
 <p><strong>String.join 拼接字符串</strong></p>
 <p>String 类有一个静态方法 <code>join()</code>：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> String.join(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;王二&quot;</span>, <span class="string">&quot;太特么&quot;</span>, <span class="string">&quot;有趣了&quot;</span>);  <span class="comment">// 王二-太特么-有趣了</span></span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226111913851.png" alt="image-20240226111913851" style="zoom:67%;" />
+<img src="image-20240226111913851.png" alt="image-20240226111913851" style="zoom:67%;" />
 
 <p><strong>StringUtils.join 拼接字符串</strong></p>
 <p>使用StringUtils工具类需要手动导入依赖jar包（使用maven可以直接在pom文件中添加依赖项）</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226113630721.png" alt="image-20240226113630721" style="zoom:67%;" />
+<img src="image-20240226113630721.png" alt="image-20240226113630721" style="zoom:67%;" />
 
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">StringUtils.join(<span class="literal">null</span>)            <span class="comment">// = null</span></span><br><span class="line">StringUtils.join([])              <span class="comment">// = &quot;&quot;</span></span><br><span class="line">StringUtils.join([<span class="literal">null</span>])          <span class="comment">// = &quot;&quot;</span></span><br><span class="line">StringUtils.join([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>]) <span class="comment">// = &quot;abc&quot;</span></span><br><span class="line">StringUtils.join([<span class="literal">null</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;a&quot;</span>]) <span class="comment">// = &quot;a&quot;</span></span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226113851160.png" alt="image-20240226113851160" style="zoom: 80%;" />
+<img src="image-20240226113851160.png" alt="image-20240226113851160" style="zoom: 80%;" />
 
 <hr>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226112609133.png" alt="image-20240226112609133" style="zoom:67%;" />
+<img src="image-20240226112609133.png" alt="image-20240226112609133" style="zoom:67%;" />
 
 <h3 id="拆分字符串"><a href="#拆分字符串" class="headerlink" title="拆分字符串"></a>拆分字符串</h3><p>在使用<code>split()</code>拆分之前，要先进行检查，判断一下这串字符是否包含逗号，否则应该抛出异常。</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">cmower</span> <span class="operator">=</span> <span class="string">&quot;沉默王二，一枚有趣的程序员&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (cmower.contains(<span class="string">&quot;，&quot;</span>)) &#123;</span><br><span class="line">            String[] parts = cmower.split(<span class="string">&quot;，&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;第一部分：&quot;</span> + parts[<span class="number">0</span>] +<span class="string">&quot; 第二部分：&quot;</span> + parts[<span class="number">1</span>]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;当前字符串没有包含逗号&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
@@ -641,10 +641,10 @@
 <p>首先，如果你想把分隔符包裹在拆分后的字符串的其中一部分，需要使用正则表达式中的断言模式：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">cmower</span> <span class="operator">=</span> <span class="string">&quot;沉默王二，一枚有趣的程序员&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(cmower.contains(<span class="string">&quot;，&quot;</span>))&#123;</span><br><span class="line">    String[] split1 = cmower.split(<span class="string">&quot;(?=，)&quot;</span>);</span><br><span class="line">    System.out.println(split1[<span class="number">0</span>] + <span class="string">&quot; --- &quot;</span> + split1[<span class="number">1</span>]);  <span class="comment">// 沉默王二 --- ，一枚有趣的程序员</span></span><br><span class="line"></span><br><span class="line">    String[] split2 = cmower.split(<span class="string">&quot;(?&lt;=，)&quot;</span>);</span><br><span class="line">    System.out.println(split2[<span class="number">0</span>] + <span class="string">&quot; --- &quot;</span> + split2[<span class="number">1</span>]);  <span class="comment">// 沉默王二， --- 一枚有趣的程序员</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226131543990.png" alt="image-20240226131543990" style="zoom:67%;" />
+<img src="image-20240226131543990.png" alt="image-20240226131543990" style="zoom:67%;" />
 
 <p>其次，<code>split()</code>可以传递两个参数：</p>
-<img src="C:\Users\13668\AppData\Roaming\Typora\typora-user-images\image-20240226131217658.png" alt="image-20240226131217658" style="zoom:67%;" />
+<img src="image-20240226131217658.png" alt="image-20240226131217658" style="zoom:67%;" />
             </div>
 
             
