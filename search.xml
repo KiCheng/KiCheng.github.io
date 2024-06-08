@@ -8049,15 +8049,10 @@
   <entry>
     <title>springcloud02</title>
     <url>/2023/12/06/springcloud01/</url>
-    <content><![CDATA[<h1 id="分布式01"><a href="#分布式01" class="headerlink" title="分布式01"></a>分布式01</h1><p>springcloud.</p>
+    <content><![CDATA[<p>springcloud入门笔记。</p>
 <span id="more"></span>
 
-<h2 id="1、微服务"><a href="#1、微服务" class="headerlink" title="1、微服务"></a>1、微服务</h2><h4 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h4><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030145916724.png"
-                      alt="image-20231030145916724" style="zoom: 43%;" 
-                >
+<h2 id="1、微服务"><a href="#1、微服务" class="headerlink" title="1、微服务"></a>1、微服务</h2><h4 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h4><img src="image-20231030145916724.png" alt="image-20231030145916724" style="zoom: 43%;" />
 
 <p><strong>优点：</strong></p>
 <ul>
@@ -8069,12 +8064,7 @@
 <li>耦合度高（维护困难、升级困难）</li>
 </ul>
 <h3 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h3><p>根据业务功能对系统做拆分，每个业务功能模块作为独立项目开发，称为一个服务。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030150020111.png"
-                      alt="image-20231030150020111" style="zoom: 50%;" 
-                >
+<img src="image-20231030150020111.png" alt="image-20231030150020111" style="zoom: 50%;" />
 
 <p><strong>优点：</strong></p>
 <ul>
@@ -8093,28 +8083,13 @@
 <li>隔离性强：服务调用做好隔离、容错、降级，避免出现级联问题</li>
 </ul>
 <p>微服务是一种经过良好架构设计的分布式架构方案，在分布式架构的基础上进一步降低了服务之间的耦合性，做到了高内聚、低耦合。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030150216934.png"
-                      alt="image-20231030150216934" style="zoom:67%;" 
-                >
+<img src="image-20231030150216934.png" alt="image-20231030150216934" style="zoom:67%;" />
 
 <h3 id="SpringCloud"><a href="#SpringCloud" class="headerlink" title="SpringCloud"></a>SpringCloud</h3><p>SpringCloud是目前国内使用最广泛的微服务框架，SpringCloud集成了各种微服务功能组件，并基于SpringBoot实现了这些组件的自动装配。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030150415817.png"
-                      alt="image-20231030150415817" style="zoom:50%;" 
-                >
+<img src="image-20231030150415817.png" alt="image-20231030150415817" style="zoom:50%;" />
 
 <p><font color="red"><strong>注意SpringCloud和Springboot的版本之间有一定的兼容关系：</strong></font></p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030150615075.png"
-                      alt="image-20231030150615075" style="zoom:67%;" 
-                >
+<img src="image-20231030150615075.png" alt="image-20231030150615075" style="zoom:67%;" />
 
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-cloud.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- version管理 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">spring-cloud.version</span>&gt;</span>2022.0.3<span class="tag">&lt;/<span class="name">spring-cloud.version</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 
@@ -8123,59 +8098,29 @@
 <li>微服务数据独立，不要访问其它微服务的数据库</li>
 <li>微服务可以将自己的业务暴露为接口，供其它微服务调用</li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030150745297.png"
-                      alt="image-20231030150745297" style="zoom:33%;" 
-                >
+<img src="image-20231030150745297.png" alt="image-20231030150745297" style="zoom:33%;" />
 
 <h3 id="服务拆分案例"><a href="#服务拆分案例" class="headerlink" title="服务拆分案例"></a>服务拆分案例</h3><p>数据库中<code>cloud-user</code>和<code>cloud-order</code>表：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030151209448.png"
-                      alt="image-20231030151209448" style="zoom:67%;" 
-                >
+<img src="image-20231030151209448.png" alt="image-20231030151209448" style="zoom:67%;" />
 
 <p>在<code>OrderController</code>层有根据<code>id</code>查询的接口：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/&#123;orderId&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Order <span class="title function_">queryOrderByUserId</span><span class="params">(<span class="meta">@PathVariable(&quot;orderId&quot;)</span> Long orderId)</span> &#123;</span><br><span class="line">    <span class="comment">// 根据id查询订单并返回</span></span><br><span class="line">    <span class="keyword">return</span> orderService.queryOrderById(orderId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>查询结果：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030152721464.png"
-                      alt="image-20231030152721464"
-                ></p>
+<p><img src="image-20231030152721464.png" alt="image-20231030152721464"></p>
 <p>同样在<code>UserController</code>曾有根据<code>id</code>查询的接口：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> User <span class="title function_">queryById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> userService.queryById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>查询结果：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030153319794.png"
-                      alt="image-20231030153319794"
-                ></p>
+<p><img src="image-20231030153319794.png" alt="image-20231030153319794"></p>
 <h3 id="远程调用案例"><a href="#远程调用案例" class="headerlink" title="远程调用案例"></a>远程调用案例</h3><p>每个业务模块对应着自己业务的数据库，不可跨业务访问。</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/cloud_order?useSSL=false</span>  <span class="comment"># order-service中连接的是本地的cloud_order数据库</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">12345678</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">orderservice</span></span><br></pre></td></tr></table></figure></div>
 
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/cloud_user?useSSL=false</span>  <span class="comment"># user-service中连接的是本地的cloud-user数据库</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">12345678</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030152721464.png"
-                      alt="image-20231030152721464"
-                ></p>
+<p><img src="image-20231030152721464.png" alt="image-20231030152721464"></p>
 <p>在<code>order-service</code>模块中查询订单信息时 <code>user == null</code>，而我们希望在<code>order-service</code>的接口中可以根据<code>id</code>查询订单的同时，根据订单中包含的<code>userId</code>查询出用户信息一起返回。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030154105602.png"
-                      alt="image-20231030154105602" style="zoom: 50%;" 
-                >
+<img src="image-20231030154105602.png" alt="image-20231030154105602" style="zoom: 50%;" />
 
 <p>因此，我们需要在<code>order-service</code>中向<code>user-service</code>发送一个http请求，调用<code>user-service</code>的<code>http://localhost:8081/user/&#123;userId&#125;</code>接口来查询<code>cloud-user</code>数据库的内容。</p>
 <p><strong>远程调用步骤：</strong></p>
@@ -8187,39 +8132,19 @@
 <li><p>将<code>User</code>对象填充到<code>Order</code>对象一同返回</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> OrderDao orderDao;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Order <span class="title function_">queryOrderById</span><span class="params">(Long orderId)</span> &#123;</span><br><span class="line">        <span class="comment">// 1.查询订单</span></span><br><span class="line">        <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> orderDao.findById(orderId);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.远程查询user</span></span><br><span class="line">        <span class="comment">// 2.1 url地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://localhost:8081/user/&quot;</span> + order.getUserId();</span><br><span class="line">        <span class="comment">// 2.2 通过restTemplate发起调用</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> restTemplate.getForObject(url, User.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.存入order</span></span><br><span class="line">        order.setUser(u);</span><br><span class="line">        <span class="comment">// 4.返回</span></span><br><span class="line">        <span class="keyword">return</span> order;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030155118802.png"
-                      alt="image-20231030155118802"
-                ></p>
+<p><img src="image-20231030155118802.png" alt="image-20231030155118802"></p>
 <h3 id="提供者和消费者"><a href="#提供者和消费者" class="headerlink" title="提供者和消费者"></a>提供者和消费者</h3><p><strong>服务提供者</strong>：一次业务中，被其它微服务调用的服务（提供接口给其它微服务）</p>
 <p><strong>服务消费者</strong>：一次业务中，调用其它微服务的服务（调用其它微服务提供的接口）</p>
 <blockquote>
 <p>服务提供者与服务消费者的角色并不是绝对的，而是相对于业务而言。</p>
 </blockquote>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030155844415.png"
-                      alt="image-20231030155844415"
-                ></p>
+<p><img src="image-20231030155844415.png" alt="image-20231030155844415"></p>
 <h2 id="3、Eureka注册中心"><a href="#3、Eureka注册中心" class="headerlink" title="3、Eureka注册中心"></a>3、Eureka注册中心</h2><p>假设服务提供者<code>user-service</code>部署了多个实例供服务消费者调用：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030160201998.png"
-                      alt="image-20231030160201998" style="zoom:33%;" 
-                >
+<img src="image-20231030160201998.png" alt="image-20231030160201998" style="zoom:33%;" />
 
 <p>那么我们会好奇几个问题：<code>order-service</code>是如何得到<code>user-service</code>实例的ip地址和端口的？有多个消费者时如何选择？服务消费者如何知道提供者实例是否仍然健康？</p>
 <h3 id="Eureka的结构和作用"><a href="#Eureka的结构和作用" class="headerlink" title="Eureka的结构和作用"></a>Eureka的结构和作用</h3><p>Eureka是SpringCloud中的一个注册中心，来解决上述问题。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030160626368.png"
-                      alt="image-20231030160626368" style="zoom: 50%;" 
-                >
+<img src="image-20231030160626368.png" alt="image-20231030160626368" style="zoom: 50%;" />
 
 <p><strong>Eureka原理</strong></p>
 <ul>
@@ -8246,12 +8171,7 @@
 <li><p>编写配置文件</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">10086</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">eureka-server</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="comment"># eureka的客户端配置</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://127.0.0.1:10086/eureka</span></span><br></pre></td></tr></table></figure></div></li>
 <li><p>启动服务</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030162051513.png"
-                      alt="image-20231030162051513"
-                ></p>
+<p><img src="image-20231030162051513.png" alt="image-20231030162051513"></p>
 </li>
 </ul>
 <h3 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h3><p>接下来将服务提供者<code>user-service</code>注册到<code>eureka-service</code>中。</p>
@@ -8261,27 +8181,12 @@
 <li><p>在服务提供者<code>user-service</code>中，修改配置文件，添加服务名称、eureka地址：</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">userservice</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://127.0.0.1:10086/eureka</span></span><br></pre></td></tr></table></figure></div></li>
 <li><p>启动多个服务提供者<code>user-service</code>实例</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030162818082.png"
-                      alt="image-20231030162818082"
-                ></p>
+<p><img src="image-20231030162818082.png" alt="image-20231030162818082"></p>
 </li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030163102118.png"
-                      alt="image-20231030163102118" style="zoom:50%;" 
-                >
+<img src="image-20231030163102118.png" alt="image-20231030163102118" style="zoom:50%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030164507443.png"
-                      alt="image-20231030164507443"
-                ></p>
+<p><img src="image-20231030164507443.png" alt="image-20231030164507443"></p>
 <h3 id="服务拉取"><a href="#服务拉取" class="headerlink" title="服务拉取"></a>服务拉取</h3><p>将<code>order-service</code>的逻辑修改，向<code>eureka-server</code>拉取<code>user-service</code>的信息，实现服务拉取（服务发现）。</p>
 <ul>
 <li><p>在服务消费者<code>order-service</code>中引入依赖</p>
@@ -8301,70 +8206,30 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@LoadBalanced</span> <span class="comment">// 标注此注解后，RestTemplate就具有了客户端负载均衡能力</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>修改服务消费者<code>order-service</code>的调用接口中的url路径，用<strong>服务名</strong>代替ip、端口：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030170324318.png"
-                      alt="image-20231030170324318" style="zoom:80%;" 
-                >
+<img src="image-20231030170324318.png" alt="image-20231030170324318" style="zoom:80%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030170046438.png"
-                      alt="image-20231030170046438"
-                ></p>
+<p><img src="image-20231030170046438.png" alt="image-20231030170046438"></p>
 </li>
 </ul>
 <p>向<code>order-service</code>的查询业务重复发送请求（2次）——实现了<strong>负载均衡</strong>。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030170633134.png"
-                      alt="image-20231030170633134"
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231030170657000.png"
-                      alt="image-20231030170657000"
-                ></p>
+<p><img src="image-20231030170633134.png" alt="image-20231030170633134"></p>
+<p><img src="image-20231030170657000.png" alt="image-20231030170657000"></p>
 <blockquote>
 <p><font color="red">注意：Springcloud的新版本已经没有ribbon组件（实现负载均衡）了，需要导入以下两个pom依赖：</font></p>
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.netflix.ribbon<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.18<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.10.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 </blockquote>
 <h2 id="Ribbon负载均衡"><a href="#Ribbon负载均衡" class="headerlink" title="Ribbon负载均衡"></a>Ribbon负载均衡</h2><p>上一章节，我们在<code>RestTemplate</code>这个Bean中添加注释<code>@LoadBalanced</code>即可实现负载均衡。</p>
 <h3 id="负载均衡原理"><a href="#负载均衡原理" class="headerlink" title="负载均衡原理"></a>负载均衡原理</h3><p>SpringCloud底层利用一个名为Ribbon的组件来实现负载均衡：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031083402421.png"
-                      alt="image-20231031083402421" style="zoom: 50%;" 
-                >
+<img src="image-20231031083402421.png" alt="image-20231031083402421" style="zoom: 50%;" />
 
 <h3 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h3><p>我们只输入了service名称，就获取到了服务实例的ip和端口——就是<code>LoadBalancerInterceptor</code>，这个类会在对<code>RestTemplate</code>远程调用的请求进行拦截，然后从Eureka根据服务id获取服务列表，随后利用负载均衡算法得到真实的服务地址信息，替换服务id。</p>
 <p><strong>负载均衡原理：</strong>首先通过<code>LoadBalancerInterceptor</code>拦截了用户的http请求，获取用户请求的URL和服务id，交给<code>LoadBalancerClient</code>；<code>LoadBalancerClient</code>利用内置的负载均衡算法（默认是轮询）选择服务列表中的端口号用于服务。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031084059739.png"
-                      alt="image-20231031084059739"
-                ></p>
+<p><img src="image-20231031084059739.png" alt="image-20231031084059739"></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Ribbon的底层采用了一个拦截器，拦截了RestTemplate发出的请求，对地址做了修改：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031084956806.png"
-                      alt="image-20231031084956806" style="zoom:67%;" 
-                >
+<img src="image-20231031084956806.png" alt="image-20231031084956806" style="zoom:67%;" />
 
 <h3 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h3><p>负载均衡的规则都定义在IRule接口中，而IRule有很多不同的实现类：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031090129412.png"
-                      alt="image-20231031090129412" style="zoom: 50%;" 
-                >
+<img src="image-20231031090129412.png" alt="image-20231031090129412" style="zoom: 50%;" />
 
 <table>
 <thead>
@@ -8421,39 +8286,19 @@
 <p>1、下载安装包</p>
 <p>GitHub主页：<a class="link"   href="https://github.com/alibaba/nacos" >https://github.com/alibaba/nacos<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <p>2、目录说明</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031092058493.png"
-                      alt="image-20231031092058493" style="zoom:50%;" 
-                >
+<img src="image-20231031092058493.png" alt="image-20231031092058493" style="zoom:50%;" />
 
 <p>3、端口配置</p>
 <p>Nacos的默认端口是8848，如果你电脑上的其它进程占用了8848端口，请先尝试关闭该进程。<strong>如果无法关闭占用8848端口的进程</strong>，也可以进入nacos的conf目录，修改配置文件中的端口：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031092212309.png"
-                      alt="image-20231031092212309" style="zoom: 50%;" 
-                >
+<img src="image-20231031092212309.png" alt="image-20231031092212309" style="zoom: 50%;" />
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031092254476.png"
-                      alt="image-20231031092254476" style="zoom:50%;" 
-                >
+<img src="image-20231031092254476.png" alt="image-20231031092254476" style="zoom:50%;" />
 
 <p>4、启动</p>
 <p>进行bin目录，执行：</p>
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">startup.cmd -m standalone</span><br></pre></td></tr></table></figure></div>
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031092335416.png"
-                      alt="image-20231031092335416" style="zoom:50%;" 
-                >
+<img src="image-20231031092335416.png" alt="image-20231031092335416" style="zoom:50%;" />
 
 <p>5、访问</p>
 <p>默认的账号和密码都是nacos。</p>
@@ -8469,54 +8314,24 @@
 <p>在yml文件中配置nacos地址：</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">    <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">nacos:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># nacos服务地址</span></span><br></pre></td></tr></table></figure></div></li>
 <li><p>启动微服务</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031140453859.png"
-                      alt="image-20231031140453859"
-                ></p>
+<p><img src="image-20231031140453859.png" alt="image-20231031140453859"></p>
 </li>
 </ul>
 <h3 id="服务分级存储模型"><a href="#服务分级存储模型" class="headerlink" title="服务分级存储模型"></a>服务分级存储模型</h3><p>举例来说，<code>user-service</code>是服务，一个服务可以包含多个集群（如杭州、上海），每个集群下可以有多个实例，形成分级模型：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031140714932.png"
-                      alt="image-20231031140714932" style="zoom: 50%;" 
-                >
+<img src="image-20231031140714932.png" alt="image-20231031140714932" style="zoom: 50%;" />
 
 <p>微服务互相访问时，应该尽可能访问同集群实例，因为本地访问速度更快。当本集群内不可用时，才访问其它集群：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031140833581.png"
-                      alt="image-20231031140833581" style="zoom: 50%;" 
-                >
+<img src="image-20231031140833581.png" alt="image-20231031140833581" style="zoom: 50%;" />
 
 <h4 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h4><p>修改<code>user-service</code>的application.yml文件，添加集群配置：</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">    <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">nacos:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span>  <span class="comment"># nacos服务地址</span></span><br><span class="line">        <span class="attr">discovery:</span></span><br><span class="line">          <span class="attr">cluster-name:</span> <span class="string">HZ</span> <span class="comment"># 集群名称</span></span><br></pre></td></tr></table></figure></div>
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031141156542.png"
-                      alt="image-20231031141156542" style="zoom:50%;" 
-                >
+<img src="image-20231031141156542.png" alt="image-20231031141156542" style="zoom:50%;" />
 
 <p>再次复制一个<code>user-service</code>启动配置，添加属性：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031141248389.png"
-                      alt="image-20231031141248389" style="zoom:67%;" 
-                >
+<img src="image-20231031141248389.png" alt="image-20231031141248389" style="zoom:67%;" />
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031141418717.png"
-                      alt="image-20231031141418717" style="zoom:33%;" 
-                >
+<img src="image-20231031141418717.png" alt="image-20231031141418717" style="zoom:33%;" />
 
 <h4 id="同集群优先的负载均衡"><a href="#同集群优先的负载均衡" class="headerlink" title="同集群优先的负载均衡"></a>同集群优先的负载均衡</h4><p>默认的<code>ZoneAvoidanceRule</code>并不能实现根据同集群优先来实现负载均衡；因此Nacos中提供了一个<code>NacosRule</code>的实现，可以优先从同集群中挑选实例：</p>
 <p>因为作为服务消费者的<code>order-service</code>要远程调用服务提供者<code>user-service</code>，所以要在<code>order-service</code>中配置Nacos负载均衡的设置：</p>
@@ -8528,62 +8343,32 @@
 </ul>
 <blockquote>
 <p><font color="red"><strong>出现了问题：Nacos注册中心，访问不了order-service服务：</strong></font></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231101084020891.png"
-                      alt="image-20231101084020891"
-                ></p>
+<p><img src="image-20231101084020891.png" alt="image-20231101084020891"></p>
 <p>【解决方案】在新版本的springcloud（我用的是2022.0.0）中已经没有默认的ribbon负载均衡组件了，需要手动导入这个<strong>负载均衡依赖</strong>（不用导入ribbon依赖了）：</p>
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">&gt;<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 </blockquote>
 <h3 id="负载均衡的权重配置"><a href="#负载均衡的权重配置" class="headerlink" title="负载均衡的权重配置"></a>负载均衡的权重配置</h3><p>服务器设备性能有差异，部分实例所在机器性能较好，另一些较差，我们希望性能好的机器承担更多的用户请求。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031203443346.png"
-                      alt="image-20231031203443346" style="zoom:50%;" 
-                >
+<img src="image-20231031203443346.png" alt="image-20231031203443346" style="zoom:50%;" />
 
 <h3 id="环境隔离"><a href="#环境隔离" class="headerlink" title="环境隔离"></a>环境隔离</h3><ul>
 <li>nacos中可以有多个<code>namespace</code>；</li>
 <li><code>namespace</code>下可以有<code>group、service</code>等；</li>
 <li>不同<code>namespace</code>之间相互隔离，例如不同<code>namespace</code>的服务互相不可见；</li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231031203554894.png"
-                      alt="image-20231031203554894" style="zoom: 25%;" 
-                >
+<img src="image-20231031203554894.png" alt="image-20231031203554894" style="zoom: 25%;" />
 
 <ul>
 <li>创建namespace</li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231101084151523.png"
-                      alt="image-20231101084151523" style="zoom:50%;" 
-                >
+<img src="image-20231101084151523.png" alt="image-20231101084151523" style="zoom:50%;" />
 
 <ul>
 <li><p>给微服务配置namespace</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span>  </span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> </span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">cluster-name:</span> <span class="string">HZ</span> </span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">6adbcdc1-bb2e-460c-a447-e100eae322d2</span> <span class="comment"># 命名空间配置</span></span><br></pre></td></tr></table></figure></div>
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231101084555881.png"
-                      alt="image-20231101084555881" style="zoom:67%;" 
-                ></li>
+<img src="image-20231101084555881.png" alt="image-20231101084555881" style="zoom:67%;" /></li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231101084614439.png"
-                      alt="image-20231101084614439" style="zoom:67%;" 
-                >
+<img src="image-20231101084614439.png" alt="image-20231101084614439" style="zoom:67%;" />
 
 <p>这时候访问<code>order-service</code>会导致远程调用<code>user-service</code>时找不到<code>userservice</code>的实例，这是因为它们的namespace不同！</p>
 <h3 id="Nacos和Eureka的比较"><a href="#Nacos和Eureka的比较" class="headerlink" title="Nacos和Eureka的比较"></a>Nacos和Eureka的比较</h3><p>Nacos的服务实例分为两种类型：</p>
@@ -8636,32 +8421,17 @@
   <entry>
     <title>springcloud02</title>
     <url>/2023/12/19/springcloud02/</url>
-    <content><![CDATA[<h1 id="分布式02"><a href="#分布式02" class="headerlink" title="分布式02"></a>分布式02</h1><p>springcloud.</p>
+    <content><![CDATA[<p>springcloud入门笔记。</p>
 <span id="more"></span>
 
 <h2 id="1、Nacos配置管理"><a href="#1、Nacos配置管理" class="headerlink" title="1、Nacos配置管理"></a>1、Nacos配置管理</h2><p>Nacos除了可以做注册中心，还可以进行配置管理。</p>
 <h3 id="统一配置管理"><a href="#统一配置管理" class="headerlink" title="统一配置管理"></a>统一配置管理</h3><p>当微服务部署的实例越来越多时，逐个修改微服务实例的配置太过繁琐，所以我们需要一种统一配置管理的方案，可以集中管理所有实例的配置。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127102521377.png"
-                      alt="image-20231127102521377" style="zoom:50%;" 
-                >
+<img src="image-20231127102521377.png" alt="image-20231127102521377" style="zoom:50%;" />
 
 <p>Nacos一方面可以做配置的集中管理，另一方面可以在配置变更时及时通知微服务进行配置的热更新。</p>
-<h4 id="在nacos中添加配置文件"><a href="#在nacos中添加配置文件" class="headerlink" title="在nacos中添加配置文件"></a>在nacos中添加配置文件</h4><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127103043283.png"
-                      alt="image-20231127103043283"
-                ></p>
+<h4 id="在nacos中添加配置文件"><a href="#在nacos中添加配置文件" class="headerlink" title="在nacos中添加配置文件"></a>在nacos中添加配置文件</h4><p><img src="image-20231127103043283.png" alt="image-20231127103043283"></p>
 <p>在弹出的表单中填写配置信息：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127103445612.png"
-                      alt="image-20231127103445612"
-                ></p>
+<p><img src="image-20231127103445612.png" alt="image-20231127103445612"></p>
 <blockquote>
 <p>项目的核心配置，需要<strong>热更新的配置</strong>才有放到nacos配置中心管理的必要；基本不会变更的基础配置还是要保存在微服务本地。</p>
 </blockquote>
@@ -8670,12 +8440,7 @@
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span>    </span><br><span class="line">    <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">nacos:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># nacos服务地址</span></span><br></pre></td></tr></table></figure></div>
 
 <p>尚未读取application.yml配置，无法知道nacos的地址，因此spring引入了一种新的配置文件：<code>bootstrap.yaml</code>文件，会在application.yml之前被读取：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127104303113.png"
-                      alt="image-20231127104303113"
-                ></p>
+<p><img src="image-20231127104303113.png" alt="image-20231127104303113"></p>
 <ul>
 <li><p>引入nacos-config依赖</p>
 <p>首先在user-service服务中，引入nacos-config的客户端依赖：</p>
@@ -8684,12 +8449,7 @@
 <p>这里会根据<code>spring.cloud.nacos.server-addr</code>获取nacos地址，再根据<code>$&#123;spring.application.name&#125;-$&#123;spring.profiles.active&#125;. $&#123;spring.cloud.nacos.config.file-extension&#125;</code>作为文件id来读取配置。</p>
 <div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">userservice</span>  <span class="comment"># 服务名称</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span> <span class="comment"># 开发环境，这里是dev</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span>  <span class="comment"># Nacos地址</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span>  <span class="comment"># 文件后缀名</span></span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127111629380.png"
-                      alt="image-20231127111629380" style="zoom: 67%;" 
-                >
+<img src="image-20231127111629380.png" alt="image-20231127111629380" style="zoom: 67%;" />
 
 <ul>
 <li><p>读取nacos配置</p>
@@ -8697,12 +8457,7 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;pattern.dateformat&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String dateformat;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 路径： /user/110</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id 用户id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 用户</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">queryById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> userService.queryById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/time&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">now</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LocalDateTime.now().format(DateTimeFormatter.ofPattern(dateformat));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>在页面访问可以看到效果：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127164135719.png"
-                      alt="image-20231127164135719"
-                ></p>
+<p><img src="image-20231127164135719.png" alt="image-20231127164135719"></p>
 </li>
 </ul>
 <h3 id="配置热更新"><a href="#配置热更新" class="headerlink" title="配置热更新"></a>配置热更新</h3><p>配置热更新是指修改nacos的配置后，微服务中无需重启即可让配置生效。</p>
@@ -8718,12 +8473,7 @@
 <p>在Controller层使用<code>PatternProperties</code>类代替<code>@Value</code>：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//    @Value(&quot;$&#123;pattern.dateformat&#125;&quot;)</span></span><br><span class="line"><span class="comment">//    private String dateformat;</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PatternProperties patternProperties;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/time&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">now</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">// 从@Value的变量值改为：patternProperties.getDateformat() </span></span><br><span class="line">        <span class="keyword">return</span> LocalDateTime.now().format(DateTimeFormatter.ofPattern(patternProperties.getDateformat()));  </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<p>​    <img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127170830419.png"
-                      alt="image-20231127170830419"
-                ></p>
+<p>​    <img src="image-20231127170830419.png" alt="image-20231127170830419"></p>
 <h3 id="配置共享"><a href="#配置共享" class="headerlink" title="配置共享"></a>配置共享</h3><p>微服务在启动时，会从nacos中读取多个配置文件如：</p>
 <ul>
 <li><p><code>[spring.application.name]-[spring.profiles.active].yaml</code>，例如：<code>userservice-dev.yaml</code>；</p>
@@ -8734,12 +8484,7 @@
 <p>通过案例来实现配置共享：</p>
 <ul>
 <li><p>添加一个环境共享配置</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127171406884.png"
-                      alt="image-20231127171406884" style="zoom:50%;" 
-                ></li>
+<img src="image-20231127171406884.png" alt="image-20231127171406884" style="zoom:50%;" /></li>
 <li><p>在微服务中读取共享配置</p>
 <ul>
 <li><p>在user-service服务中，在<code>PatternProperties</code>配置类中添加读取新的属性：</p>
@@ -8750,37 +8495,17 @@
 </li>
 </ul>
 <p>UserServiceApplication(8081)使用的profiles是<code>dev</code>（在<code>bootstrap.yaml</code>文件中定义了dev环境），UserServiceApplication(8082)使用的profiles是<code>test</code>：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127172329802.png"
-                      alt="image-20231127172329802" style="zoom:67%;" 
-                >
+<img src="image-20231127172329802.png" alt="image-20231127172329802" style="zoom:67%;" />
 
 <p>所以从8082端口进行访问是无法得到<code>userservice-dev.yaml</code>配置文件中的配置信息的：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127172534020.png"
-                      alt="image-20231127172534020" style="zoom:67%;" 
-                >
+<img src="image-20231127172534020.png" alt="image-20231127172534020" style="zoom:67%;" />
 
 <p>尽管如此，在<code>userservice.yaml</code>中的配置是共享的，无论在dev还是在test环境中都可以读取到：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127173139114.png"
-                      alt="image-20231127173139114" style="zoom:67%;" 
-                >
+<img src="image-20231127173139114.png" alt="image-20231127173139114" style="zoom:67%;" />
 
 <p><strong>配置共享的优先级</strong></p>
 <p>当nacos、服务本地出现相同属性时，优先级：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127174022871.png"
-                      alt="image-20231127174022871" style="zoom:67%;" 
-                >
+<img src="image-20231127174022871.png" alt="image-20231127174022871" style="zoom:67%;" />
 
 <h2 id="2、Feign远程调用"><a href="#2、Feign远程调用" class="headerlink" title="2、Feign远程调用"></a>2、Feign远程调用</h2><p>先前我们在服务消费者（order-service）中利用<code>RestTemplate</code>发起远程调用：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 2.1 url地址</span></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://userservice/user/&quot;</span> + order.getUserId();</span><br><span class="line"><span class="comment">// 2.2 通过restTemplate发起调用</span></span><br><span class="line"><span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> restTemplate.getForObject(url, User.class);</span><br></pre></td></tr></table></figure></div>
@@ -8788,12 +8513,7 @@
 <p>缺点：① 代码可读性差； ② 参数复杂URL难以维护.</p>
 <blockquote>
 <p>比如我在搜索引擎搜索“java”，就有很复杂的URL参数。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128085844270.png"
-                      alt="image-20231128085844270"
-                ></p>
+<p><img src="image-20231128085844270.png" alt="image-20231128085844270"></p>
 </blockquote>
 <p>Feign是一个<strong>声明式的http客户端</strong>，官方地址：<a class="link"   href="https://github.com/OpenFeign/feign%EF%BC%8C%E4%BD%9C%E7%94%A8%E6%98%AF%E5%B8%AE%E5%8A%A9%E6%88%91%E4%BB%AC%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%97%B6%E5%AE%9E%E7%8E%B0HTTP%E8%AF%B7%E6%B1%82%E3%80%82" >https://github.com/OpenFeign/feign，作用是帮助我们远程调用时实现HTTP请求。<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <h3 id="Feign代替RestTemplate"><a href="#Feign代替RestTemplate" class="headerlink" title="Feign代替RestTemplate"></a>Feign代替RestTemplate</h3><ul>
@@ -8871,20 +8591,10 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> feign.Logger;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultFeignConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> Logger.Level <span class="title function_">feignLogLevel</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Logger.Level.BASIC;  <span class="comment">// 日志级别为BASIC</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>如果是<strong>局部生效</strong>，则把它放到对应的<code>@FeignClient</code>这个注解中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128150240572.png"
-                      alt="image-20231128150240572" style="zoom:67%;" 
-                >
+<img src="image-20231128150240572.png" alt="image-20231128150240572" style="zoom:67%;" />
 
 <p>如果是<strong>全局生效</strong>，则把它放到启动类的<code>@EnableFeignClients</code>注解中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128150457749.png"
-                      alt="image-20231128150457749" style="zoom: 67%;" 
-                >
+<img src="image-20231128150457749.png" alt="image-20231128150457749" style="zoom: 67%;" />
 
 <h3 id="Feign使用优化"><a href="#Feign使用优化" class="headerlink" title="Feign使用优化"></a>Feign使用优化</h3><p>Feign底层发起http请求依赖于其他的框架，其底层客户端实现包括：</p>
 <ul>
@@ -8914,12 +8624,7 @@
 
 <h4 id="继承方式（不常用）"><a href="#继承方式（不常用）" class="headerlink" title="继承方式（不常用）"></a>继承方式（不常用）</h4><p>1）定义一个API接口，利用定义方法，并基于SpringMVC注解做声明。</p>
 <p>2）Feign客户端和Controller都集成改接口</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128152458984.png"
-                      alt="image-20231128152458984" style="zoom: 67%;" 
-                >
+<img src="image-20231128152458984.png" alt="image-20231128152458984" style="zoom: 67%;" />
 
 <ul>
 <li>优缺点<ul>
@@ -8929,12 +8634,7 @@
 </li>
 </ul>
 <h4 id="抽取方式"><a href="#抽取方式" class="headerlink" title="抽取方式"></a>抽取方式</h4><p>将Feign的Cilent抽取为独立的模块，并且把接口有关的POJO、默认的Feign配置都放到这个模块中，提供给所有消费者使用。例如，将UserClient、User、Feign的默认配置都抽取到一个<code>feign-api</code>包中，所有微服务引用该依赖包，即可直接使用。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128152852645.png"
-                      alt="image-20231128152852645" style="zoom:50%;" 
-                >
+<img src="image-20231128152852645.png" alt="image-20231128152852645" style="zoom:50%;" />
 
 <h4 id="实现基于抽取的最佳实践"><a href="#实现基于抽取的最佳实践" class="headerlink" title="实现基于抽取的最佳实践"></a>实现基于抽取的最佳实践</h4><ul>
 <li>抽取</li>
@@ -8943,12 +8643,7 @@
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 
 <p>在order-service中编写的UserClient、User、DefaultFeignConfiguration都移到feign-api项目中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128153729213.png"
-                      alt="image-20231128153729213" style="zoom:67%;" 
-                >
+<img src="image-20231128153729213.png" alt="image-20231128153729213" style="zoom:67%;" />
 
 <ul>
 <li>在order-service中使用feign-api</li>
@@ -8961,46 +8656,21 @@
 <li>启动测试</li>
 </ul>
 <p>服务出现报错：意思是bean没有注册到Spring容器当中。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128154751428.png"
-                      alt="image-20231128154751428"
-                ></p>
+<p><img src="image-20231128154751428.png" alt="image-20231128154751428"></p>
 <p>这是因为<code>UserClient</code>现在在com.lijiacheng.feign.clients包下，而order-service的<code>@EnableFeignClients</code>注解是在com.lijiacheng.order包下，不在同一个包无法扫描到<code>UserClient</code>。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155324183.png"
-                      alt="image-20231128155324183"
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155433928.png"
-                      alt="image-20231128155433928"
-                ></p>
+<p><img src="image-20231128155324183.png" alt="image-20231128155324183"></p>
+<p><img src="image-20231128155433928.png" alt="image-20231128155433928"></p>
 <p><strong>解决包扫描的问题：</strong></p>
 <ul>
 <li><p>方式一：指定Feign应该扫描的包</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(basePackages = &quot;com.lijiacheng.feign.client&quot;)</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155717559.png"
-                      alt="image-20231128155717559"
-                ></p>
+<p><img src="image-20231128155717559.png" alt="image-20231128155717559"></p>
 </li>
 <li><p>方式二：指定需要加载的cilents端口<strong>（精准）</strong></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(clients = &#123;UserClient.class&#125;)</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155925781.png"
-                      alt="image-20231128155925781"
-                ></p>
+<p><img src="image-20231128155925781.png" alt="image-20231128155925781"></p>
 </li>
 </ul>
 <h2 id="3、Gateway服务网关"><a href="#3、Gateway服务网关" class="headerlink" title="3、Gateway服务网关"></a>3、Gateway服务网关</h2><h3 id="网关是什么"><a href="#网关是什么" class="headerlink" title="网关是什么"></a>网关是什么</h3><p>Gateway网关是所有微服务的统一入口。</p>
@@ -9010,23 +8680,13 @@
 <li><strong>路由和负载均衡</strong>：一切请求都必须先经过gateway，但网关不处理业务，而是根据某种规则，把请求转发到某个微服务，这个过程叫做路由（路由的目标服务有多个时，还需要做负载均衡）。</li>
 <li><strong>限流</strong>：当请求流量过高时，在网关中按照下流的微服务能够接受的速度来放行请求，避免服务压力过大。</li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129195513315.png"
-                      alt="image-20231129195513315" style="zoom: 50%;" 
-                >
+<img src="image-20231129195513315.png" alt="image-20231129195513315" style="zoom: 50%;" />
 
 <blockquote>
 <p>SpringCloud中网关的实现有gateway和Zuul两种，Zuul是基于Servlet的实现，gateway是基于Spring5提供的WebFlux，具备更好的性能。</p>
 </blockquote>
 <h3 id="gateway快速入门"><a href="#gateway快速入门" class="headerlink" title="gateway快速入门"></a>gateway快速入门</h3><p>测试一下gateway最主要的路由功能。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129203831263.png"
-                      alt="image-20231129203831263" style="zoom: 50%;" 
-                >
+<img src="image-20231129203831263.png" alt="image-20231129203831263" style="zoom: 50%;" />
 
 <ul>
 <li><p>创建gateway服务，引入依赖</p>
@@ -9042,12 +8702,7 @@
 <ul>
 <li><p>重启测试</p>
 <p>访问<a class="link"   href="http://localhost:10010/user/1%E6%97%B6%EF%BC%8C%E7%AC%A6%E5%90%88%60/user/**%60%E8%A7%84%E5%88%99%EF%BC%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E5%88%B0uri%EF%BC%9Ahttp://userservice/user/1%EF%BC%9A" >http://localhost:10010/user/1时，符合`/user/**`规则，请求转发到uri：http://userservice/user/1：<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129203544994.png"
-                      alt="image-20231129203544994"
-                ></p>
+<p><img src="image-20231129203544994.png" alt="image-20231129203544994"></p>
 </li>
 </ul>
 <h3 id="断言工厂"><a href="#断言工厂" class="headerlink" title="断言工厂"></a>断言工厂</h3><p><code>Predicate Factory</code>读取并处理，转变为路由判断的条件，例如Path=/user/**是按照路径匹配，这个规则是由PathRoutePredicateFactory类来处理的，像这样的断言工厂在SpringCloudGateway还有十几个，我们只需要掌握Path这种路由断言就可以：</p>
@@ -9116,12 +8771,7 @@
 </tr>
 </tbody></table>
 <h3 id="过滤器工厂"><a href="#过滤器工厂" class="headerlink" title="过滤器工厂"></a>过滤器工厂</h3><p>GatewayFilter是网关中提供的一种过滤器，可以对进入网关的请求和微服务返回的响应做处理：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129204438690.png"
-                      alt="image-20231129204438690" style="zoom:50%;" 
-                >
+<img src="image-20231129204438690.png" alt="image-20231129204438690" style="zoom:50%;" />
 
 <h4 id="路由过滤器的种类"><a href="#路由过滤器的种类" class="headerlink" title="路由过滤器的种类"></a>路由过滤器的种类</h4><p>Spring提供了31种不同的路由过滤器工厂，例如：</p>
 <table>
@@ -9163,19 +8813,9 @@
 <blockquote>
 <p><code>@RequestHeader</code>表示获取请求头信息，<code>value</code>是获取相应键的请求头信息，<code>required</code>是false允许无此请求头信息，在控制台打印出来。</p>
 </blockquote>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130100027536.png"
-                      alt="image-20231130100027536" style="zoom:67%;" 
-                >
+<img src="image-20231130100027536.png" alt="image-20231130100027536" style="zoom:67%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130095800873.png"
-                      alt="image-20231130095800873"
-                ></p>
+<p><img src="image-20231130095800873.png" alt="image-20231130095800873"></p>
 <h4 id="默认过滤器"><a href="#默认过滤器" class="headerlink" title="默认过滤器"></a>默认过滤器</h4><p>如果要对<strong>所有的路由都生效</strong>，则可以将过滤器工厂写到default下：</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">gateway:</span></span><br><span class="line">  <span class="attr">routes:</span>  <span class="comment"># 网关路由配置</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">user-service</span>  </span><br><span class="line">      <span class="attr">uri:</span> <span class="string">lb://userservice</span>  </span><br><span class="line">          <span class="attr">predicates:</span>  </span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/user/**</span>  </span><br><span class="line">  <span class="attr">default-filters:</span> <span class="comment"># 默认过滤项</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">AddRequestHeader=Truth,</span> <span class="string">ljc</span> <span class="string">is</span> <span class="string">a</span> <span class="string">good</span> <span class="string">coder!</span> </span><br></pre></td></tr></table></figure></div>
 
@@ -9188,34 +8828,14 @@
 </ul>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Order(-1)</span>  <span class="comment">// 定义过滤器的优先级</span></span><br><span class="line"><span class="meta">@Component</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthorizeFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span> &#123;  <span class="comment">// 定义方式是实现GlobalFilter接口</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> exchange  请求上下文，里面可以获取Request、Response等信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> chain  用来把请求委托给下一个过滤器</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>  &#123;<span class="doctag">@code</span> Mono&lt;Void&gt;&#125; 返回标示当前过滤器业务结束</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">        <span class="comment">// 1、获取请求参数</span></span><br><span class="line">        <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">        MultiValueMap&lt;String, String&gt; requestQueryParams = request.getQueryParams();</span><br><span class="line">        <span class="comment">// 2、获取authorization请求参数</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">author</span> <span class="operator">=</span> requestQueryParams.getFirst(<span class="string">&quot;authorization&quot;</span>);</span><br><span class="line">        <span class="comment">// 3、校验</span></span><br><span class="line">        <span class="keyword">if</span>(author.equals(<span class="string">&quot;admin&quot;</span>))&#123;</span><br><span class="line">            <span class="comment">// 放行</span></span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 4、拦截</span></span><br><span class="line">        <span class="comment">// 禁止访问，设置状态码</span></span><br><span class="line">        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);  <span class="comment">// 401</span></span><br><span class="line">        <span class="keyword">return</span> exchange.getResponse().setComplete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101732232.png"
-                      alt="image-20231130101732232" style="zoom: 67%;" 
-                >
+<img src="image-20231130101732232.png" alt="image-20231130101732232" style="zoom: 67%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101748204.png"
-                      alt="image-20231130101748204"
-                ></p>
+<p><img src="image-20231130101748204.png" alt="image-20231130101748204"></p>
 <p>在加入正确的请求参数后，过滤器放行，user-service微服务访问生效：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101904495.png"
-                      alt="image-20231130101904495" style="zoom:67%;" 
-                >
+<img src="image-20231130101904495.png" alt="image-20231130101904495" style="zoom:67%;" />
 
 <h3 id="过滤器执行顺序"><a href="#过滤器执行顺序" class="headerlink" title="过滤器执行顺序"></a>过滤器执行顺序</h3><p>请求进入网关会碰到三类过滤器：当前路由的过滤器、DefaultFilter、GlobalFilter。请求路由后，会将当前路由过滤器和DefaultFilter、GlobalFilter，合并到一个过滤器链（集合）中，排序后依次执行每个过滤器：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130102155750.png"
-                      alt="image-20231130102155750" style="zoom: 50%;" 
-                >
+<img src="image-20231130102155750.png" alt="image-20231130102155750" style="zoom: 50%;" />
 
 <p>排序的规则：</p>
 <ul>
@@ -9236,11 +8856,6 @@
       <categories>
         <category>SpingCloud</category>
       </categories>
-  </entry>
-  <entry>
-    <title>springcloud03</title>
-    <url>/2024/01/06/springcloud03/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>瑞吉外卖项目实战day1</title>

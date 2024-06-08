@@ -301,32 +301,17 @@
             
 
             <div class="article-content markdown-body">
-                <h1 id="分布式02"><a href="#分布式02" class="headerlink" title="分布式02"></a>分布式02</h1><p>springcloud.</p>
+                <p>springcloud入门笔记。</p>
 <span id="more"></span>
 
 <h2 id="1、Nacos配置管理"><a href="#1、Nacos配置管理" class="headerlink" title="1、Nacos配置管理"></a>1、Nacos配置管理</h2><p>Nacos除了可以做注册中心，还可以进行配置管理。</p>
 <h3 id="统一配置管理"><a href="#统一配置管理" class="headerlink" title="统一配置管理"></a>统一配置管理</h3><p>当微服务部署的实例越来越多时，逐个修改微服务实例的配置太过繁琐，所以我们需要一种统一配置管理的方案，可以集中管理所有实例的配置。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127102521377.png"
-                      alt="image-20231127102521377" style="zoom:50%;" 
-                >
+<img src="image-20231127102521377.png" alt="image-20231127102521377" style="zoom:50%;" />
 
 <p>Nacos一方面可以做配置的集中管理，另一方面可以在配置变更时及时通知微服务进行配置的热更新。</p>
-<h4 id="在nacos中添加配置文件"><a href="#在nacos中添加配置文件" class="headerlink" title="在nacos中添加配置文件"></a>在nacos中添加配置文件</h4><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127103043283.png"
-                      alt="image-20231127103043283"
-                ></p>
+<h4 id="在nacos中添加配置文件"><a href="#在nacos中添加配置文件" class="headerlink" title="在nacos中添加配置文件"></a>在nacos中添加配置文件</h4><p><img src="image-20231127103043283.png" alt="image-20231127103043283"></p>
 <p>在弹出的表单中填写配置信息：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127103445612.png"
-                      alt="image-20231127103445612"
-                ></p>
+<p><img src="image-20231127103445612.png" alt="image-20231127103445612"></p>
 <blockquote>
 <p>项目的核心配置，需要<strong>热更新的配置</strong>才有放到nacos配置中心管理的必要；基本不会变更的基础配置还是要保存在微服务本地。</p>
 </blockquote>
@@ -335,12 +320,7 @@
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span>    </span><br><span class="line">    <span class="attr">cloud:</span></span><br><span class="line">      <span class="attr">nacos:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># nacos服务地址</span></span><br></pre></td></tr></table></figure></div>
 
 <p>尚未读取application.yml配置，无法知道nacos的地址，因此spring引入了一种新的配置文件：<code>bootstrap.yaml</code>文件，会在application.yml之前被读取：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127104303113.png"
-                      alt="image-20231127104303113"
-                ></p>
+<p><img src="image-20231127104303113.png" alt="image-20231127104303113"></p>
 <ul>
 <li><p>引入nacos-config依赖</p>
 <p>首先在user-service服务中，引入nacos-config的客户端依赖：</p>
@@ -349,12 +329,7 @@
 <p>这里会根据<code>spring.cloud.nacos.server-addr</code>获取nacos地址，再根据<code>$&#123;spring.application.name&#125;-$&#123;spring.profiles.active&#125;. $&#123;spring.cloud.nacos.config.file-extension&#125;</code>作为文件id来读取配置。</p>
 <div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">userservice</span>  <span class="comment"># 服务名称</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span> <span class="comment"># 开发环境，这里是dev</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span>  <span class="comment"># Nacos地址</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span>  <span class="comment"># 文件后缀名</span></span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127111629380.png"
-                      alt="image-20231127111629380" style="zoom: 67%;" 
-                >
+<img src="image-20231127111629380.png" alt="image-20231127111629380" style="zoom: 67%;" />
 
 <ul>
 <li><p>读取nacos配置</p>
@@ -362,12 +337,7 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;pattern.dateformat&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String dateformat;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 路径： /user/110</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id 用户id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 用户</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">queryById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> userService.queryById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/time&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">now</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LocalDateTime.now().format(DateTimeFormatter.ofPattern(dateformat));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>在页面访问可以看到效果：</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127164135719.png"
-                      alt="image-20231127164135719"
-                ></p>
+<p><img src="image-20231127164135719.png" alt="image-20231127164135719"></p>
 </li>
 </ul>
 <h3 id="配置热更新"><a href="#配置热更新" class="headerlink" title="配置热更新"></a>配置热更新</h3><p>配置热更新是指修改nacos的配置后，微服务中无需重启即可让配置生效。</p>
@@ -383,12 +353,7 @@
 <p>在Controller层使用<code>PatternProperties</code>类代替<code>@Value</code>：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//    @Value(&quot;$&#123;pattern.dateformat&#125;&quot;)</span></span><br><span class="line"><span class="comment">//    private String dateformat;</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PatternProperties patternProperties;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/time&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">now</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">// 从@Value的变量值改为：patternProperties.getDateformat() </span></span><br><span class="line">        <span class="keyword">return</span> LocalDateTime.now().format(DateTimeFormatter.ofPattern(patternProperties.getDateformat()));  </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<p>​    <img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127170830419.png"
-                      alt="image-20231127170830419"
-                ></p>
+<p>​    <img src="image-20231127170830419.png" alt="image-20231127170830419"></p>
 <h3 id="配置共享"><a href="#配置共享" class="headerlink" title="配置共享"></a>配置共享</h3><p>微服务在启动时，会从nacos中读取多个配置文件如：</p>
 <ul>
 <li><p><code>[spring.application.name]-[spring.profiles.active].yaml</code>，例如：<code>userservice-dev.yaml</code>；</p>
@@ -399,12 +364,7 @@
 <p>通过案例来实现配置共享：</p>
 <ul>
 <li><p>添加一个环境共享配置</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127171406884.png"
-                      alt="image-20231127171406884" style="zoom:50%;" 
-                ></li>
+<img src="image-20231127171406884.png" alt="image-20231127171406884" style="zoom:50%;" /></li>
 <li><p>在微服务中读取共享配置</p>
 <ul>
 <li><p>在user-service服务中，在<code>PatternProperties</code>配置类中添加读取新的属性：</p>
@@ -415,37 +375,17 @@
 </li>
 </ul>
 <p>UserServiceApplication(8081)使用的profiles是<code>dev</code>（在<code>bootstrap.yaml</code>文件中定义了dev环境），UserServiceApplication(8082)使用的profiles是<code>test</code>：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127172329802.png"
-                      alt="image-20231127172329802" style="zoom:67%;" 
-                >
+<img src="image-20231127172329802.png" alt="image-20231127172329802" style="zoom:67%;" />
 
 <p>所以从8082端口进行访问是无法得到<code>userservice-dev.yaml</code>配置文件中的配置信息的：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127172534020.png"
-                      alt="image-20231127172534020" style="zoom:67%;" 
-                >
+<img src="image-20231127172534020.png" alt="image-20231127172534020" style="zoom:67%;" />
 
 <p>尽管如此，在<code>userservice.yaml</code>中的配置是共享的，无论在dev还是在test环境中都可以读取到：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127173139114.png"
-                      alt="image-20231127173139114" style="zoom:67%;" 
-                >
+<img src="image-20231127173139114.png" alt="image-20231127173139114" style="zoom:67%;" />
 
 <p><strong>配置共享的优先级</strong></p>
 <p>当nacos、服务本地出现相同属性时，优先级：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231127174022871.png"
-                      alt="image-20231127174022871" style="zoom:67%;" 
-                >
+<img src="image-20231127174022871.png" alt="image-20231127174022871" style="zoom:67%;" />
 
 <h2 id="2、Feign远程调用"><a href="#2、Feign远程调用" class="headerlink" title="2、Feign远程调用"></a>2、Feign远程调用</h2><p>先前我们在服务消费者（order-service）中利用<code>RestTemplate</code>发起远程调用：</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2.1 url地址</span></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://userservice/user/&quot;</span> + order.getUserId();</span><br><span class="line"><span class="comment">// 2.2 通过restTemplate发起调用</span></span><br><span class="line"><span class="type">User</span> <span class="variable">u</span> <span class="operator">=</span> restTemplate.getForObject(url, User.class);</span><br></pre></td></tr></table></figure></div>
@@ -453,12 +393,7 @@
 <p>缺点：① 代码可读性差； ② 参数复杂URL难以维护.</p>
 <blockquote>
 <p>比如我在搜索引擎搜索“java”，就有很复杂的URL参数。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128085844270.png"
-                      alt="image-20231128085844270"
-                ></p>
+<p><img src="image-20231128085844270.png" alt="image-20231128085844270"></p>
 </blockquote>
 <p>Feign是一个<strong>声明式的http客户端</strong>，官方地址：<a class="link"   target="_blank" rel="noopener" href="https://github.com/OpenFeign/feign%EF%BC%8C%E4%BD%9C%E7%94%A8%E6%98%AF%E5%B8%AE%E5%8A%A9%E6%88%91%E4%BB%AC%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%97%B6%E5%AE%9E%E7%8E%B0HTTP%E8%AF%B7%E6%B1%82%E3%80%82" >https://github.com/OpenFeign/feign，作用是帮助我们远程调用时实现HTTP请求。<i class="fa-solid fa-up-right-from-square"></i></a></p>
 <h3 id="Feign代替RestTemplate"><a href="#Feign代替RestTemplate" class="headerlink" title="Feign代替RestTemplate"></a>Feign代替RestTemplate</h3><ul>
@@ -536,20 +471,10 @@
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> feign.Logger;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultFeignConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> Logger.Level <span class="title function_">feignLogLevel</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Logger.Level.BASIC;  <span class="comment">// 日志级别为BASIC</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>如果是<strong>局部生效</strong>，则把它放到对应的<code>@FeignClient</code>这个注解中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128150240572.png"
-                      alt="image-20231128150240572" style="zoom:67%;" 
-                >
+<img src="image-20231128150240572.png" alt="image-20231128150240572" style="zoom:67%;" />
 
 <p>如果是<strong>全局生效</strong>，则把它放到启动类的<code>@EnableFeignClients</code>注解中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128150457749.png"
-                      alt="image-20231128150457749" style="zoom: 67%;" 
-                >
+<img src="image-20231128150457749.png" alt="image-20231128150457749" style="zoom: 67%;" />
 
 <h3 id="Feign使用优化"><a href="#Feign使用优化" class="headerlink" title="Feign使用优化"></a>Feign使用优化</h3><p>Feign底层发起http请求依赖于其他的框架，其底层客户端实现包括：</p>
 <ul>
@@ -579,12 +504,7 @@
 
 <h4 id="继承方式（不常用）"><a href="#继承方式（不常用）" class="headerlink" title="继承方式（不常用）"></a>继承方式（不常用）</h4><p>1）定义一个API接口，利用定义方法，并基于SpringMVC注解做声明。</p>
 <p>2）Feign客户端和Controller都集成改接口</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128152458984.png"
-                      alt="image-20231128152458984" style="zoom: 67%;" 
-                >
+<img src="image-20231128152458984.png" alt="image-20231128152458984" style="zoom: 67%;" />
 
 <ul>
 <li>优缺点<ul>
@@ -594,12 +514,7 @@
 </li>
 </ul>
 <h4 id="抽取方式"><a href="#抽取方式" class="headerlink" title="抽取方式"></a>抽取方式</h4><p>将Feign的Cilent抽取为独立的模块，并且把接口有关的POJO、默认的Feign配置都放到这个模块中，提供给所有消费者使用。例如，将UserClient、User、Feign的默认配置都抽取到一个<code>feign-api</code>包中，所有微服务引用该依赖包，即可直接使用。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128152852645.png"
-                      alt="image-20231128152852645" style="zoom:50%;" 
-                >
+<img src="image-20231128152852645.png" alt="image-20231128152852645" style="zoom:50%;" />
 
 <h4 id="实现基于抽取的最佳实践"><a href="#实现基于抽取的最佳实践" class="headerlink" title="实现基于抽取的最佳实践"></a>实现基于抽取的最佳实践</h4><ul>
 <li>抽取</li>
@@ -608,12 +523,7 @@
 <div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
 
 <p>在order-service中编写的UserClient、User、DefaultFeignConfiguration都移到feign-api项目中：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128153729213.png"
-                      alt="image-20231128153729213" style="zoom:67%;" 
-                >
+<img src="image-20231128153729213.png" alt="image-20231128153729213" style="zoom:67%;" />
 
 <ul>
 <li>在order-service中使用feign-api</li>
@@ -626,46 +536,21 @@
 <li>启动测试</li>
 </ul>
 <p>服务出现报错：意思是bean没有注册到Spring容器当中。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128154751428.png"
-                      alt="image-20231128154751428"
-                ></p>
+<p><img src="image-20231128154751428.png" alt="image-20231128154751428"></p>
 <p>这是因为<code>UserClient</code>现在在com.lijiacheng.feign.clients包下，而order-service的<code>@EnableFeignClients</code>注解是在com.lijiacheng.order包下，不在同一个包无法扫描到<code>UserClient</code>。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155324183.png"
-                      alt="image-20231128155324183"
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155433928.png"
-                      alt="image-20231128155433928"
-                ></p>
+<p><img src="image-20231128155324183.png" alt="image-20231128155324183"></p>
+<p><img src="image-20231128155433928.png" alt="image-20231128155433928"></p>
 <p><strong>解决包扫描的问题：</strong></p>
 <ul>
 <li><p>方式一：指定Feign应该扫描的包</p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(basePackages = &quot;com.lijiacheng.feign.client&quot;)</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155717559.png"
-                      alt="image-20231128155717559"
-                ></p>
+<p><img src="image-20231128155717559.png" alt="image-20231128155717559"></p>
 </li>
 <li><p>方式二：指定需要加载的cilents端口<strong>（精准）</strong></p>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(clients = &#123;UserClient.class&#125;)</span></span><br></pre></td></tr></table></figure></div>
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231128155925781.png"
-                      alt="image-20231128155925781"
-                ></p>
+<p><img src="image-20231128155925781.png" alt="image-20231128155925781"></p>
 </li>
 </ul>
 <h2 id="3、Gateway服务网关"><a href="#3、Gateway服务网关" class="headerlink" title="3、Gateway服务网关"></a>3、Gateway服务网关</h2><h3 id="网关是什么"><a href="#网关是什么" class="headerlink" title="网关是什么"></a>网关是什么</h3><p>Gateway网关是所有微服务的统一入口。</p>
@@ -675,23 +560,13 @@
 <li><strong>路由和负载均衡</strong>：一切请求都必须先经过gateway，但网关不处理业务，而是根据某种规则，把请求转发到某个微服务，这个过程叫做路由（路由的目标服务有多个时，还需要做负载均衡）。</li>
 <li><strong>限流</strong>：当请求流量过高时，在网关中按照下流的微服务能够接受的速度来放行请求，避免服务压力过大。</li>
 </ul>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129195513315.png"
-                      alt="image-20231129195513315" style="zoom: 50%;" 
-                >
+<img src="image-20231129195513315.png" alt="image-20231129195513315" style="zoom: 50%;" />
 
 <blockquote>
 <p>SpringCloud中网关的实现有gateway和Zuul两种，Zuul是基于Servlet的实现，gateway是基于Spring5提供的WebFlux，具备更好的性能。</p>
 </blockquote>
 <h3 id="gateway快速入门"><a href="#gateway快速入门" class="headerlink" title="gateway快速入门"></a>gateway快速入门</h3><p>测试一下gateway最主要的路由功能。</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129203831263.png"
-                      alt="image-20231129203831263" style="zoom: 50%;" 
-                >
+<img src="image-20231129203831263.png" alt="image-20231129203831263" style="zoom: 50%;" />
 
 <ul>
 <li><p>创建gateway服务，引入依赖</p>
@@ -707,12 +582,7 @@
 <ul>
 <li><p>重启测试</p>
 <p>访问<a class="link"   target="_blank" rel="noopener" href="http://localhost:10010/user/1%E6%97%B6%EF%BC%8C%E7%AC%A6%E5%90%88%60/user/**%60%E8%A7%84%E5%88%99%EF%BC%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E5%88%B0uri%EF%BC%9Ahttp://userservice/user/1%EF%BC%9A" >http://localhost:10010/user/1时，符合`/user/**`规则，请求转发到uri：http://userservice/user/1：<i class="fa-solid fa-up-right-from-square"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129203544994.png"
-                      alt="image-20231129203544994"
-                ></p>
+<p><img src="image-20231129203544994.png" alt="image-20231129203544994"></p>
 </li>
 </ul>
 <h3 id="断言工厂"><a href="#断言工厂" class="headerlink" title="断言工厂"></a>断言工厂</h3><p><code>Predicate Factory</code>读取并处理，转变为路由判断的条件，例如Path=/user/**是按照路径匹配，这个规则是由PathRoutePredicateFactory类来处理的，像这样的断言工厂在SpringCloudGateway还有十几个，我们只需要掌握Path这种路由断言就可以：</p>
@@ -781,12 +651,7 @@
 </tr>
 </tbody></table>
 <h3 id="过滤器工厂"><a href="#过滤器工厂" class="headerlink" title="过滤器工厂"></a>过滤器工厂</h3><p>GatewayFilter是网关中提供的一种过滤器，可以对进入网关的请求和微服务返回的响应做处理：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231129204438690.png"
-                      alt="image-20231129204438690" style="zoom:50%;" 
-                >
+<img src="image-20231129204438690.png" alt="image-20231129204438690" style="zoom:50%;" />
 
 <h4 id="路由过滤器的种类"><a href="#路由过滤器的种类" class="headerlink" title="路由过滤器的种类"></a>路由过滤器的种类</h4><p>Spring提供了31种不同的路由过滤器工厂，例如：</p>
 <table>
@@ -828,19 +693,9 @@
 <blockquote>
 <p><code>@RequestHeader</code>表示获取请求头信息，<code>value</code>是获取相应键的请求头信息，<code>required</code>是false允许无此请求头信息，在控制台打印出来。</p>
 </blockquote>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130100027536.png"
-                      alt="image-20231130100027536" style="zoom:67%;" 
-                >
+<img src="image-20231130100027536.png" alt="image-20231130100027536" style="zoom:67%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130095800873.png"
-                      alt="image-20231130095800873"
-                ></p>
+<p><img src="image-20231130095800873.png" alt="image-20231130095800873"></p>
 <h4 id="默认过滤器"><a href="#默认过滤器" class="headerlink" title="默认过滤器"></a>默认过滤器</h4><p>如果要对<strong>所有的路由都生效</strong>，则可以将过滤器工厂写到default下：</p>
 <div class="highlight-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">gateway:</span></span><br><span class="line">  <span class="attr">routes:</span>  <span class="comment"># 网关路由配置</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">user-service</span>  </span><br><span class="line">      <span class="attr">uri:</span> <span class="string">lb://userservice</span>  </span><br><span class="line">          <span class="attr">predicates:</span>  </span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/user/**</span>  </span><br><span class="line">  <span class="attr">default-filters:</span> <span class="comment"># 默认过滤项</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">AddRequestHeader=Truth,</span> <span class="string">ljc</span> <span class="string">is</span> <span class="string">a</span> <span class="string">good</span> <span class="string">coder!</span> </span><br></pre></td></tr></table></figure></div>
 
@@ -853,34 +708,14 @@
 </ul>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Order(-1)</span>  <span class="comment">// 定义过滤器的优先级</span></span><br><span class="line"><span class="meta">@Component</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthorizeFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span> &#123;  <span class="comment">// 定义方式是实现GlobalFilter接口</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> exchange  请求上下文，里面可以获取Request、Response等信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> chain  用来把请求委托给下一个过滤器</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>  &#123;<span class="doctag">@code</span> Mono&lt;Void&gt;&#125; 返回标示当前过滤器业务结束</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">        <span class="comment">// 1、获取请求参数</span></span><br><span class="line">        <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">        MultiValueMap&lt;String, String&gt; requestQueryParams = request.getQueryParams();</span><br><span class="line">        <span class="comment">// 2、获取authorization请求参数</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">author</span> <span class="operator">=</span> requestQueryParams.getFirst(<span class="string">&quot;authorization&quot;</span>);</span><br><span class="line">        <span class="comment">// 3、校验</span></span><br><span class="line">        <span class="keyword">if</span>(author.equals(<span class="string">&quot;admin&quot;</span>))&#123;</span><br><span class="line">            <span class="comment">// 放行</span></span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 4、拦截</span></span><br><span class="line">        <span class="comment">// 禁止访问，设置状态码</span></span><br><span class="line">        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);  <span class="comment">// 401</span></span><br><span class="line">        <span class="keyword">return</span> exchange.getResponse().setComplete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101732232.png"
-                      alt="image-20231130101732232" style="zoom: 67%;" 
-                >
+<img src="image-20231130101732232.png" alt="image-20231130101732232" style="zoom: 67%;" />
 
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101748204.png"
-                      alt="image-20231130101748204"
-                ></p>
+<p><img src="image-20231130101748204.png" alt="image-20231130101748204"></p>
 <p>在加入正确的请求参数后，过滤器放行，user-service微服务访问生效：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130101904495.png"
-                      alt="image-20231130101904495" style="zoom:67%;" 
-                >
+<img src="image-20231130101904495.png" alt="image-20231130101904495" style="zoom:67%;" />
 
 <h3 id="过滤器执行顺序"><a href="#过滤器执行顺序" class="headerlink" title="过滤器执行顺序"></a>过滤器执行顺序</h3><p>请求进入网关会碰到三类过滤器：当前路由的过滤器、DefaultFilter、GlobalFilter。请求路由后，会将当前路由过滤器和DefaultFilter、GlobalFilter，合并到一个过滤器链（集合）中，排序后依次执行每个过滤器：</p>
-<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="image-20231130102155750.png"
-                      alt="image-20231130102155750" style="zoom: 50%;" 
-                >
+<img src="image-20231130102155750.png" alt="image-20231130102155750" style="zoom: 50%;" />
 
 <p>排序的规则：</p>
 <ul>
@@ -924,21 +759,6 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2024/01/06/springcloud03/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">springcloud03</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
@@ -966,7 +786,7 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F02"><span class="nav-number">1.</span> <span class="nav-text">分布式02</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">1、Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8nacos%E4%B8%AD%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">在nacos中添加配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%AD%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">从微服务中拉取配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">配置热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%88%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">方式一（不推荐）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">方式二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-number">1.1.3.</span> <span class="nav-text">配置共享</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">2、Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-number">1.2.1.</span> <span class="nav-text">Feign代替RestTemplate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">自定义配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">配置文件方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java%E4%BB%A3%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">java代码方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E4%BD%BF%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-number">1.2.3.</span> <span class="nav-text">Feign使用优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.2.4.</span> <span class="nav-text">Feign的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%EF%BC%88%E4%B8%8D%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">继承方式（不常用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E5%8F%96%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">抽取方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8E%E6%8A%BD%E5%8F%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">实现基于抽取的最佳实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81Gateway%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3"><span class="nav-number">1.3.</span> <span class="nav-text">3、Gateway服务网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E5%85%B3%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.3.1.</span> <span class="nav-text">网关是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gateway%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">gateway快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%AD%E8%A8%80%E5%B7%A5%E5%8E%82"><span class="nav-number">1.3.3.</span> <span class="nav-text">断言工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E5%B7%A5%E5%8E%82"><span class="nav-number">1.3.4.</span> <span class="nav-text">过滤器工厂</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">路由过滤器的种类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%B4%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">请求头过滤器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">默认过滤器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">1.3.5.</span> <span class="nav-text">全局过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.3.6.</span> <span class="nav-text">过滤器执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.7.</span> <span class="nav-text">跨域问题</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">1、Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8nacos%E4%B8%AD%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">在nacos中添加配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%AD%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">从微服务中拉取配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">1.2.</span> <span class="nav-text">配置热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%88%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">方式一（不推荐）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="nav-number">1.2.2.</span> <span class="nav-text">方式二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-number">1.3.</span> <span class="nav-text">配置共享</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2、Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-number">2.1.</span> <span class="nav-text">Feign代替RestTemplate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">自定义配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置文件方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java%E4%BB%A3%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">java代码方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E4%BD%BF%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-number">2.3.</span> <span class="nav-text">Feign使用优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.4.</span> <span class="nav-text">Feign的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%EF%BC%88%E4%B8%8D%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="nav-number">2.4.1.</span> <span class="nav-text">继承方式（不常用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E5%8F%96%E6%96%B9%E5%BC%8F"><span class="nav-number">2.4.2.</span> <span class="nav-text">抽取方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8E%E6%8A%BD%E5%8F%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.4.3.</span> <span class="nav-text">实现基于抽取的最佳实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81Gateway%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3"><span class="nav-number">3.</span> <span class="nav-text">3、Gateway服务网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E5%85%B3%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">3.1.</span> <span class="nav-text">网关是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gateway%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="nav-number">3.2.</span> <span class="nav-text">gateway快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%AD%E8%A8%80%E5%B7%A5%E5%8E%82"><span class="nav-number">3.3.</span> <span class="nav-text">断言工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E5%B7%A5%E5%8E%82"><span class="nav-number">3.4.</span> <span class="nav-text">过滤器工厂</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-number">3.4.1.</span> <span class="nav-text">路由过滤器的种类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%B4%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">3.4.2.</span> <span class="nav-text">请求头过滤器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">3.4.3.</span> <span class="nav-text">默认过滤器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">3.5.</span> <span class="nav-text">全局过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">3.6.</span> <span class="nav-text">过滤器执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98"><span class="nav-number">3.7.</span> <span class="nav-text">跨域问题</span></a></li></ol></li></ol>
     </div>
 </div>
             </div>
