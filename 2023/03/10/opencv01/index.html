@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="The Redefine Team">
+    
+    <title>
+        
+            OpenCV特征检测 |
+        
+        Theme Redefine
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/redefine-logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"kicheng.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/redefine-avatar.svg","favicon":"/images/redefine-logo.svg","article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://evan.beee.top/img/wallhaven-wqery6-light.webp","dark":"https://evan.beee.top/img/wallhaven-wqery6-dark.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"description":"Theme Redefine"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":true},"code_block":{"copy":true,"style":"mac"},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.4.6","friend_links":{"columns":2}};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Theme Redefine
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <!-- Menu -->
+                            <a class="" 
+                                href="/" >
+                                
+                                    
+                                        <i class="fa-regular fa-house"></i>
+                                    
+                                    HOME
+                                
+                            </a>
+                            <!-- Submenu -->
+                            
+                        </li>
+                    
+                        <li class="menu-item">
+                            <!-- Menu -->
+                            <a class="" 
+                                href="/archives" >
+                                
+                                    
+                                        <i class="fa-regular fa-archive"></i>
+                                    
+                                    ARCHIVES
+                                
+                            </a>
+                            <!-- Submenu -->
+                            
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" 
+                       href="/" >
+                         
+                            
+                                <i class="fa-regular fa-house"></i>
+                            
+                            HOME
+                        
+                    </a>
+                </li>
+                <!-- Submenu -->
+                
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" 
+                       href="/archives" >
+                         
+                            
+                                <i class="fa-regular fa-archive"></i>
+                            
+                            ARCHIVES
+                        
+                    </a>
+                </li>
+                <!-- Submenu -->
+                
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+            <div class="article-title">
+                <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">OpenCV特征检测</h1></span>
+            </div>
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/redefine-avatar.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">The Redefine Team</span>
+                            
+                                <span class="author-label">lol</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="pc">2023-03-10 15:54:34</span>
+        <span class="mobile">2023-03-10 15:54</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/OpenCV/">OpenCV</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/OpenCV/">OpenCV</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-file-word"></i>&nbsp;<span>1.2k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <p>​        前段时间在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
+<span id="more"></span>
+
+<h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​        边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
+<p>​        最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<p>​        Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验代码，参数可以自行调整。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/people.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Canny&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Canny&quot;</span>, dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        网上随便找了一张图，实验结果是这样的。值得注意的是：Canny算法的output是二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="result1.png"
+                      alt="result1" style="zoom:67%;" 
+                >
+
+<h2 id="直线检测Line-detection"><a href="#直线检测Line-detection" class="headerlink" title="直线检测Line detection"></a>直线检测Line detection</h2><p>​        霍夫变换直线检测是最基本的算法，也是今天学习和使用到的。他有<code>HoughLines</code>和<code>HoughLinesP</code>两种，后者是前者的优化，但并不意味着<code>HoughLines</code>完全被取代，他们适用于不同的场景，大家可以根据实际需要自行选择。</p>
+<p>​        需要我们注意的是霍夫直线检测是从二值图像中检测直线(线段)，所以在调用<code>HoughLines</code>或<code>HoughLinesP</code>算法前，要先将图像转换成二值图像，通常在之前先使用<code>Canny</code>将其简化成只有边缘特征的二值图像。</p>
+<p>​        这里我使用了OpenCV官方文档提供的示例代码进行测试。</p>
+<div class="highlight-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HoughLinesP算法参数：</span><br><span class="line"><span class="code">	InputArray 	image,  //  8位的单通道二值图像。对于其他类型，在进行霍夫变换之前，需要将其修改为这个指定的格式</span></span><br><span class="line"><span class="code">	OutputArray lines,  // 输出的直线集合</span></span><br><span class="line"><span class="code">	double 	rho,  // 以像素为单位的距离 r 的精度。一般情况下，使用的精度是 1</span></span><br><span class="line"><span class="code">	double 	theta,  // 角度 θ 的精度。一般情况下，使用的精度是 pi/180，表示要搜索可能的角度</span></span><br><span class="line"><span class="code">	int 	threshold,  // 阈值。该值越小，判定出的直线越多；值越大，判定出的直线就越少</span></span><br><span class="line"><span class="code">	double 	minLineLength = 0,  // 控制「接受直线的最小长度」的值，默认值为 0</span></span><br><span class="line"><span class="code">	double 	maxLineGap = 0  // 控制接受共线线段之间的最小间隔，默认值为 0</span></span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验代码，参数可以自行调整。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst, color_dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/building.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">cvtColor</span>(dst, color_dst, COLOR_GRAY2BGR);</span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">   COLOR_GRAY2BGR参数表示将灰度图像转换为3通道的BGR彩色图像。</span></span><br><span class="line"><span class="comment">   经过该转换后，color_dst中每个像素的R、G、B三个分量的值都相同，即为该像素的灰度值。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   	vector&lt;Vec4i&gt; lines;</span><br><span class="line">   	<span class="built_in">HoughLinesP</span>(dst, lines, <span class="number">1</span>, CV_PI / <span class="number">180</span>, <span class="number">200</span>, <span class="number">30</span>, <span class="number">10</span>);</span><br><span class="line">   	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; lines.<span class="built_in">size</span>(); i++)</span><br><span class="line">   	&#123;</span><br><span class="line">       	<span class="built_in">line</span>(color_dst, <span class="built_in">Point</span>(lines[i][<span class="number">0</span>], lines[i][<span class="number">1</span>]),</span><br><span class="line">           	<span class="built_in">Point</span>(lines[i][<span class="number">2</span>], lines[i][<span class="number">3</span>]), <span class="built_in">Scalar</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>, <span class="number">8</span>);</span><br><span class="line">   	&#125;</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, color_dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​        实验结果如下。</p>
+<p>​        这是一个OpenCV官方文档提供的示例图片:</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="result2_1.png"
+                      alt="result2_1" style="zoom: 25%;" 
+                >
+
+<p>​        这是上述程序在概率霍夫变换后的输出：</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="result2_2.png"
+                      alt="result2_2" style="zoom:25%;" 
+                >
+
+<p>​        这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：OpenCV特征检测</li>
+        <li>Post author：The Redefine Team</li>
+        <li>Create time：2023-03-10 15:54:34</li>
+        <li>
+            Post link：https://redefine.evanluo.top/2023/03/10/opencv01/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/OpenCV/">#OpenCV</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2023/03/12/Android-jni/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">Android平台JNI开发保姆级教程</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/02/03/algorithm03/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">algorithm03 链表</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCV-Canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E3%80%81HoughLinesP%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8B"><span class="nav-text">[OpenCV]Canny边缘检测、HoughLinesP直线检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8BEdge-detection"><span class="nav-text">边缘检测Edge detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8BLine-detection"><span class="nav-text">直线检测Line detection</span></a></li></ol></li></ol>
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+
+
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;<i class="fa-solid fa-heart icon-animate"></i>&nbsp;<a href="/">The Redefine Team. All Rights Reserved.</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalviews&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.4.6</a>
+        </div>
+        
+        
+        <script async data-pjax defer>
+            function odometer_init(){
+                    let el = document.getElementsByClassName('odometer');
+                    for (i = 0; i < el.length; i++) {
+                        od = new Odometer({
+                            el: el[i],
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    }
+            }
+            odometer_init();
+        </script>
+        <div id="start_time_div" style="display:none">
+            2022/8/17 11:45:14
+        </div>
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fa-solid fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fa-solid fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fa-solid fa-left-right"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fa-solid fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fa-solid fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fa-solid fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fa-solid fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/runtime.js"></script>
+
+    
+<script src="/js/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/css/odometer-theme-minimal.css">
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/toc-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
