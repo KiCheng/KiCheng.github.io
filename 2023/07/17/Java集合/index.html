@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="KiCheng">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="KiCheng">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="记录成长">
+    <meta name="description" content="复习一下Java的集合：分为单列集合和双列集合，单列集合有List和Set两类，双列集合是Map集合。List接口的实现类有ArrayList, LinkedList；Set和Map可以配合着学，主要有HashSet–HashMap, LinkedHashSet–LinkedHashMap, TreeSet–TreeMap三组。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合">
+<meta property="og:url" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="复习一下Java的集合：分为单列集合和双列集合，单列集合有List和Set两类，双列集合是Map集合。List接口的实现类有ArrayList, LinkedList；Set和Map可以配合着学，主要有HashSet–HashMap, LinkedHashSet–LinkedHashMap, TreeSet–TreeMap三组。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718120825421.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718120851741.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718121036160.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718122238215.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718122400682.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718122435550.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718122710834.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718122825047.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718123113316.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718123129380.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718123341697.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718123356578.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230717220114816.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230717221646999.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230717221809732.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230717225009568.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230717225542069.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718101153256.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718101929828.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718105406211.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718111534965.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718112151598.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718112943729.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718113224411.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718114026273.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718114458631.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718115713991.png">
+<meta property="article:published_time" content="2023-07-17T13:55:33.000Z">
+<meta property="article:modified_time" content="2023-07-18T09:10:11.000Z">
+<meta property="article:author" content="KiCheng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/image-20230718120825421.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>Java集合 · KiCheng&#39;s Tracks</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>KiCheng's Tracks.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">KiCheng&#39;s Tracks.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">Java集合</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                Java集合
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">3.3k</span>Reading time: <span class="post-count reading-time">13 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/07/17</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <p>复习一下Java的集合：分为单列集合和双列集合，单列集合有List和Set两类，双列集合是Map集合。<code>List</code>接口的实现类有ArrayList, LinkedList；Set和Map可以配合着学，主要有HashSet–HashMap, LinkedHashSet–LinkedHashMap, TreeSet–TreeMap三组。</p>
+<span id="more"></span>
+
+<img src="image-20230718120825421.png" alt="image-20230718120825421" style="zoom:67%;" />
+
+<h2 id="Collection集合"><a href="#Collection集合" class="headerlink" title="Collection集合"></a>Collection集合</h2><img src="image-20230718120851741.png" alt="image-20230718120851741" style="zoom:67%;" />
+
+<p>总结一下Collection单列集合的常用功能有哪些，<code>ArrayList</code>、<code>LinkedList</code>、<code>HashSet</code>、<code>LinkedHashSet</code>、<code>TreeSet</code>集合都可以调用下面的方法：</p>
+<img src="image-20230718121036160.png" alt="image-20230718121036160" style="zoom:77%;" />
+
+<p><strong>Collection集合的遍历方式：</strong></p>
+<ul>
+<li><p>迭代器遍历集合</p>
+<ul>
+<li>当调用<code>iterator()</code>方法获取迭代器时，当前指向第一个元素；</li>
+<li><code>hasNext()</code>方法则判断这个位置是否有元素，如果有则返回<code>true</code>，进入循环；</li>
+<li>调用<code>next()</code>方法获取元素，并将当月元素指向下一个位置；</li>
+<li>等下次循环时，则获取下一个元素，依此类推。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">context</span> <span class="operator">=</span> it.next();</span><br><span class="line">    System.out.println(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>增强for遍历集合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String context: list)&#123;</span><br><span class="line">    System.out.println(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>forEach</code>遍历集合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">list.forEach(<span class="keyword">new</span> <span class="title class_">Consumer</span>&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">/*  ======Lambda表达式简化=======  */</span></span><br><span class="line">list.forEach(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>当往集合中存对象时，实际上存储的是对象的地址值：</strong></p>
+<p><img src="image-20230718122238215.png" alt="image-20230718122238215"></p>
+<h2 id="List集合"><a href="#List集合" class="headerlink" title="List集合"></a>List集合</h2><img src="image-20230718122400682.png" alt="image-20230718122400682" style="zoom:77%;" />
+
+<p><strong>List集合的常用方法：</strong></p>
+<img src="image-20230718122435550.png" alt="image-20230718122435550" style="zoom:67%;" />
+
+<p>因为List集合有索引，所以可以通过普通for循环的方式遍历List集合。</p>
+<h3 id="Arraylist集合"><a href="#Arraylist集合" class="headerlink" title="Arraylist集合"></a>Arraylist集合</h3><p><code>ArrayList</code>集合底层是基于数组结构实现的，也就是说当你往集合容器中存储元素时，底层本质上是往数组中存储元素。 特点如下：</p>
+<img src="image-20230718122710834.png" alt="image-20230718122710834" style="zoom:77%;" />
+
+<p>我们知道数组的长度是固定的，但是集合的长度是可变的，这是怎么做到的呢？</p>
+<img src="image-20230718122825047.png" alt="image-20230718122825047" style="zoom:77%;" />
+
+<p>数组扩容，并不是在原数组上扩容（原数组是不可以扩容的），底层是创建一个新数组，然后把原数组中的元素全部复制到新数组中去。</p>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>LinkedList底层是<strong>双向链表</strong>结构。</p>
+<p><img src="image-20230718123113316.png" alt="image-20230718123113316"></p>
+<p>所以相对于<code>ArrayList</code>新增了一些可以针对头尾进行操作的方法，如下图示所示：</p>
+<img src="image-20230718123129380.png" alt="image-20230718123129380" style="zoom:77%;" />
+
+<p><strong>由于双向链表的结构，可以用它来设计栈、队列：</strong></p>
+<img src="image-20230718123341697.png" alt="image-20230718123341697" style="zoom:50%;" />
+
+<img src="image-20230718123356578.png" alt="image-20230718123356578" style="zoom:50%;" />
+
+<h2 id="Set集合"><a href="#Set集合" class="headerlink" title="Set集合"></a>Set集合</h2><img src="image-20230717220114816.png" alt="image-20230717220114816" style="zoom:77%;" />
+
+<h3 id="HashSet集合"><a href="#HashSet集合" class="headerlink" title="HashSet集合"></a>HashSet集合</h3><img src="image-20230717221646999.png" alt="image-20230717221646999" style="zoom: 72%;" />
+
+<img src="image-20230717221809732.png" alt="image-20230717221809732" style="zoom:72%;" />
+
+<p><strong>HashSet去重原理</strong></p>
+<p>前面我们学习了HashSet存储元素的原理，依赖于两个方法：一个是<code>hashCode</code>方法用来确定在底层数组中存储的位置，另一个是用<code>equals</code>方法判断新添加的元素是否和集合中已有的元素相同。</p>
+<p>要想保证在HashSet集合中没有重复元素，我们需要重写对象类的<code>hashCode</code>和<code>equals</code>方法。比如以下面的<code>User</code>类为例，假设把<code>User</code>类的对象作为HashSet集合的元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HashSet&lt;User&gt; hs = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line"><span class="type">User</span> <span class="variable">u1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;ljc&quot;</span>, <span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="type">User</span> <span class="variable">u2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;ljc&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line">hs.add(u1);</span><br><span class="line">hs.add(u2);</span><br><span class="line">System.out.println(hs);  <span class="comment">// [User&#123;username = ljc, password = 123&#125;, User&#123;username = ljc, password = 123&#125;]</span></span><br></pre></td></tr></table></figure>
+
+<p>我们发现结果和我们想象的不一样，HashSet不是可以去重吗？实际上，通常两个不同对象的HashCode值是不同的，导致元素挂在了不同的数组位置上。要解决这个问题要重写对象类的<code>hashCode</code>和<code>equals</code>方法——直接generate自动生成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> == o) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="literal">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) o;</span><br><span class="line">    <span class="keyword">return</span> Objects.equals(username, user.username) &amp;&amp; Objects.equals(password, user.password);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Objects.hash(username, password);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="LinkedHashSet集合"><a href="#LinkedHashSet集合" class="headerlink" title="LinkedHashSet集合"></a>LinkedHashSet集合</h3><p><code>LinkedHashSet</code>类是<code>HashSet</code>的子类。<code>LinkedHashSet</code>它底层采用的是也是哈希表结构，只不过额外新增了一个<strong>双向链表</strong>来维护元素的存取顺序。</p>
+<p>特点：相比<code>HashSet</code>，它记录了元素存入的顺序。</p>
+<img src="image-20230717225009568.png" alt="image-20230717225009568" style="zoom:67%;" />
+
+<h3 id="TreeSet集合"><a href="#TreeSet集合" class="headerlink" title="TreeSet集合"></a>TreeSet集合</h3><p>TreeSet集合的特点是可以对元素进行排序（底层是<strong>红黑树</strong>实现的），但是<strong>必须指定元素的排序规则</strong>。如果往集合中存储String类型的元素，或者Integer类型的元素，它们本身就具备排序规则，所以直接就可以排序。如果往TreeSet集合中存储自定义类型的元素，比如说<code>User</code>类型，则需要我们自己指定排序规则，否则会出现异常，原因是TreeSet不知道按照什么条件对自定义对象来排序：</p>
+<p><img src="image-20230717225542069.png" alt="image-20230717225542069"></p>
+<p>我们想要告诉TreeSet集合按照指定的规则排序，有两种办法：</p>
+<p>第一种：在创建TreeSet集合时，通过构造方法传递<code>Compartor</code>比较器对象；</p>
+<p>第二种：让元素的类实现<code>Comparable</code>接口，重写<code>compareTo</code>方法；</p>
+<ul>
+<li><p>第一种：创建集合时传递比较器对象</p>
+<p><code>o1-o2</code>是升序排序，<code>o2-o1</code>是降序排序。</p>
+<blockquote>
+<p>Double类型用<code>Double.compare(d1, d2)</code>比较，String类型用<code>s1.compareTo(s2)</code>方法比较。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TreeSet&lt;User&gt; ts = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;User&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(User o1, User o2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> o1.getUsername().compareTo(o2.getUsername());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+<li><p>第二种：实体类实现<code>Comparable</code>接口，重写<code>compareTo</code>方法</p>
+<p><code>this</code>：表示将要添加进去的Student对象；<code>o</code>: 表示集合中已有的Student对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;User&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"> 		<span class="comment">/* ...... */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(User o)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.username.compareTo(o.username);  <span class="comment">// 升序</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>自然排序<code>Comparable</code>是类在创建的时候就规定了类的比较的特性，而比较器<code>Comparator</code>是在具体的应用过程中我们根据需求创建一个工具类来完成比较，相比之下比较器的使用更加灵活（有的时候需要对同一对象进行多种不同方式的排序；或者按照特定的需求比较字符串但无法重写<code>String</code>类中的<code>compareTo</code>方法），不会改变这个类本身，降低了耦合度。</p>
+<h3 id="Collection集合总结"><a href="#Collection集合总结" class="headerlink" title="Collection集合总结"></a>Collection集合总结</h3><img src="image-20230718101153256.png" alt="image-20230718101153256" style="zoom:67%;" />
+
+<h3 id="并发修改异常"><a href="#并发修改异常" class="headerlink" title="并发修改异常"></a>并发修改异常</h3><p><font color="red">在使用迭代器遍历集合时，可能存在并发修改异常：</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  list.add(<span class="string">&quot;王麻子&quot;</span>);</span><br><span class="line">  list.add(<span class="string">&quot;小李子&quot;</span>);</span><br><span class="line">  list.add(<span class="string">&quot;李爱花&quot;</span>);</span><br><span class="line">  list.add(<span class="string">&quot;张全蛋&quot;</span>);</span><br><span class="line">  list.add(<span class="string">&quot;晓李&quot;</span>);</span><br><span class="line">  list.add(<span class="string">&quot;李玉刚&quot;</span>);</span><br><span class="line">  System.out.println(list); <span class="comment">// [王麻子, 小李子, 李爱花, 张全蛋, 晓李, 李玉刚]</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//需求：找出集合中带&quot;李&quot;字的姓名，并从集合中删除</span></span><br><span class="line">  Iterator&lt;String&gt; iterator = list.iterator();</span><br><span class="line">  <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">      <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> iterator.next();</span><br><span class="line">      <span class="keyword">if</span>(name.contains(<span class="string">&quot;李&quot;</span>))&#123;</span><br><span class="line">          list.remove(name);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  System.out.println(list);</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20230718101929828.png" alt="image-20230718101929828"></p>
+<p>这是因为迭代器遍历机制，规定<strong>迭代器遍历集合的同时，不允许集合自己去增删元素</strong>。</p>
+<p>增强for循环遍历方式，是在内部调用迭代器进行遍历，所以也会出现并发修改异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String name: list)&#123;</span><br><span class="line">    <span class="keyword">if</span>(name.contains(<span class="string">&quot;李&quot;</span>))&#123;</span><br><span class="line">        list.remove(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(list);</span><br></pre></td></tr></table></figure>
+
+<p>简单for循环遍历方式，不会出发迭代器的并发修改异常，但会造成结果出错：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;list.size();i++)&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> list.get(i);</span><br><span class="line">    <span class="keyword">if</span>(name.contains(<span class="string">&quot;李&quot;</span>))&#123;</span><br><span class="line">        list.remove(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(list);  <span class="comment">// [王麻子, 李爱花, 张全蛋, 李玉刚]</span></span><br></pre></td></tr></table></figure>
+
+<p><code>[王麻子, 小李子, 李爱花, 张全蛋, 晓李, 李玉刚]</code>，以上述list集合为例，当<code>i=1</code>时<code>remove</code>了“小李子”元素，这时候<code>i=1</code>的元素变成了“李爱花”，而循环执行了<code>i++</code>，该元素就被跳过去了。解决方案是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;list.size();i++)&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> list.get(i);</span><br><span class="line">        <span class="keyword">if</span>(name.contains(<span class="string">&quot;李&quot;</span>))&#123;</span><br><span class="line">            list.remove(name);</span><br><span class="line">            i--;  <span class="comment">// 因为普通for循环没有异常出现，所以在逻辑上将每次remove元素后的索引i--即可</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而迭代器遍历解决并发修改异常的方法是，使用迭代器的修改元素方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> it.next();</span><br><span class="line">    <span class="keyword">if</span>(name.contains(<span class="string">&quot;李&quot;</span>))&#123;</span><br><span class="line">        it.remove();  <span class="comment">// 当前迭代器指向谁，就删除谁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(list);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h2><p><strong>可变参数</strong></p>
+<ul>
+<li><p>可变参数是一种特殊的形式参数，定义在方法、构造器的形参列表处，它可以让方法接收多个同类型的实际参数。</p>
+</li>
+<li><p>可变参数在方法内部，<strong>本质上是一个数组</strong>。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    test();</span><br><span class="line">    test(<span class="number">1</span>);</span><br><span class="line">    test(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">    test(arr);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(<span class="type">int</span>...nums)</span>&#123;</span><br><span class="line">    System.out.println(Arrays.toString(nums));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个形参列表中，只能有一个可变参数；否则会报错。</li>
+<li>形参列表中如果多个参数，可变参数需要写在最后；否则会报错。</li>
+</ul>
+<p><strong>Collections工具类</strong></p>
+<p><img src="image-20230718105406211.png" alt="image-20230718105406211"></p>
+<p>往集合中存储的元素要么是Stirng类型，要么是Integer类型，他们本来就有一种自然顺序所以可以直接排序。但是如果我们往List集合中存储实体类对象，这个时候想要对List集合进行排序自定义比较规则的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(list, <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;User&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(User o1, User o2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> o1.getPassword().compareTo(o2.getPassword());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Map集合"><a href="#Map集合" class="headerlink" title="Map集合"></a>Map集合</h2><p>双列集合，就是说集合中的元素是一对一对的。Map集合中的每一个元素是以<code>key=value</code>的形式存在的，一个<code>key=value</code>就称之为一个键值对，而且在 Java 中有一个类叫<code>Entry</code>类，Entry的对象用来表示键值对对象。</p>
+<p>Map集合有如下的特点：<strong>键不能重复，值可以重复，每一个键只能找到自己对应的值。</strong></p>
+<img src="image-20230718111534965.png" alt="image-20230718111534965" style="zoom:77%;" />
+
+<h3 id="Map集合常用方法"><a href="#Map集合常用方法" class="headerlink" title="Map集合常用方法"></a>Map集合常用方法</h3><img src="image-20230718112151598.png" alt="image-20230718112151598" style="zoom:87%;" />
+
+<h3 id="Map集合遍历方法"><a href="#Map集合遍历方法" class="headerlink" title="Map集合遍历方法"></a>Map集合遍历方法</h3><ul>
+<li><p>方式一</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Double&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;蜘蛛精&quot;</span>, <span class="number">162.5</span>);</span><br><span class="line">map.put(<span class="string">&quot;蜘蛛精&quot;</span>, <span class="number">169.8</span>);</span><br><span class="line">map.put(<span class="string">&quot;紫霞&quot;</span>, <span class="number">165.8</span>);</span><br><span class="line">map.put(<span class="string">&quot;至尊宝&quot;</span>, <span class="number">169.5</span>);</span><br><span class="line">map.put(<span class="string">&quot;牛魔王&quot;</span>, <span class="number">183.6</span>);</span><br><span class="line">  </span><br><span class="line">Set&lt;String&gt; keys = map.keySet();</span><br><span class="line"><span class="keyword">for</span>(String key: keys)&#123;</span><br><span class="line">    <span class="type">Double</span> <span class="variable">value</span> <span class="operator">=</span> map.get(key);</span><br><span class="line">    System.out.println(key + <span class="string">&quot;---&gt;&quot;</span> + value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>方式二</p>
+<p>Map集合是用来存储键值对的，而每一个键值对实际上是一个<code>Entry</code>对象。可以直接获取每一个<code>Entry</code>对象，把<code>Entry</code>存储扫Set集合中去，再通过<code>Entry</code>对象获取键和值。</p>
+<p><img src="image-20230718112943729.png" alt="image-20230718112943729"></p>
+<p>Map集合提供<code>entrySet</code>方法，把Map集合转换成键值对类型的Set集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Map.Entry&lt;String, Double&gt;&gt; entries = map.entrySet();</span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Double&gt; entry: entries)&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">    <span class="type">Double</span> <span class="variable">value</span> <span class="operator">=</span> entry.getValue();</span><br><span class="line">    System.out.println(key + <span class="string">&quot;---&gt;&quot;</span> + value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>方式三</p>
+<p><img src="image-20230718113224411.png" alt="image-20230718113224411"></p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">map.forEach(<span class="keyword">new</span> <span class="title class_">BiConsumer</span>&lt;String, Double&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(String k, Double v)</span> &#123;</span><br><span class="line">        System.out.println(k + <span class="string">&quot;---&gt;&quot;</span> + v);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p><code>HashMap</code>集合的特点是由键决定的： <strong>它的键是无序、不能重复，而且没有索引的</strong>。在各种Map集合中也是用得最多的一种集合。</p>
+<p><code>HashMap</code>底层原理和<code>HashSet</code>是一样的。因为我们往<code>HashSet</code>集合中添加元素时，实际上是把元素作为<code>key</code>添加到了<code>HashMap</code>集合中。</p>
+<p><img src="image-20230718114026273.png" alt="image-20230718114026273"></p>
+<p><code>HashMap</code>和<code>HashSet</code>是一样的，底层是哈希表结构，哈希表是一种增删改查性能相对都较好的数据结构。</p>
+<img src="image-20230718114458631.png" alt="image-20230718114458631" style="zoom:77%;" />
+
+<ul>
+<li><p>往HashMap集合中键值对数据时，底层步骤如下：</p>
+<ul>
+<li>第1步：当你第一次往<code>HashMap</code>集合中存储键值对时，底层会创建一个<strong>长度为16的数组</strong>；</li>
+<li>第2步：把键然后将键和值封装成一个对象，叫做<code>Entry</code>对象；</li>
+<li>第3步：再根据<code>Entry</code>对象的键计算<code>hashCode</code>值（和值无关）；</li>
+<li>第4步：利用<code>hashCode</code>值和数组的长度做一个类似求余数的算法，会得到一个索引位置；</li>
+<li>第5步：判断这个索引的位置是否为<code>null</code>：如果为<code>null</code>，就直接将这个<code>Entry</code>对象存储到这个索引位置；如果不为<code>null</code>，则还需要进行第6步的判断；</li>
+<li>第6步：继续调用equals方法判断两个对象键是否相同：如果<code>equals</code>返回<code>false</code>，则以链表的形式往下挂；如果<code>equals</code>方法<code>true</code>，则认为键重复，此时新的键值对会替换就的键值对。</li>
+</ul>
+</li>
+<li><p>HashMap底层需要注意这几点：</p>
+<ul>
+<li>底层数组默认长度为16，如果数组中有超过12个位置已经存储了元素，则会对数组进行扩容<strong>2倍</strong>。数组扩容的加载因子是 0.75 ，意思是：<code>16*0.75=12</code>； </li>
+<li>数组的同一个索引位置有多个元素、并且在8个元素以内（包括8），则以链表的形式存储（JDK8以后版本链表采用尾插法）。</li>
+<li>数组的同一个索引位置有多个元素、并且超过了8个，则以红黑树形式存储。       </li>
+</ul>
+</li>
+<li><p>决定键是否重复与两个方法有关，一个是<code>hashCode</code>方法、一个是<code>equals</code>方法。有两个键计算得到的<code>hashCode</code>值相同，并且两个键使用<code>equals</code>比较为<code>true</code>，就认为键重复。所以，往Map集合中存储自定义对象作为键，为了保证键的唯一性，我们应该重写这两个方法。</p>
+</li>
+</ul>
+<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><p><code>LinkedHashMap</code>集合的特点也是由键决定的：<strong>有序的、不重复、无索引</strong>。<font color="blue">这里的“有序”是只存入的顺序。</font><code>LinkedHashMap</code>的底层原理，和<code>LinkedHashSet</code>底层原理是一样的，底层多个一个双向链表来维护键的存储顺序。</p>
+<img src="image-20230718115713991.png" alt="image-20230718115713991" style="zoom:77%;" />
+
+<h3 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h3><p><code>TreeMap</code>集合的特点也是由键决定的，默认按照键的升序排列，键不重复，也是无索引的。<code>TreeMap</code>集合的底层原理和<code>TreeSet</code>也是一样的，底层都是<strong>红黑树</strong>实现的，所以可以对键进行排序。</p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://kicheng.github.io">KiCheng</a>
+            <p>Link：<a href="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/">https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/</a>
+            <p>Publish date：<a href="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/">July 17th 2023, 9:55:33 pm</a>
+            <p>Update date：<a href="https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/">July 18th 2023, 5:10:11 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2023/07/18/algorithm05-%E4%BA%8C%E5%8F%89%E6%A0%91/" title="algorithm05-二叉树">
+                    <div class="nextTitle">algorithm05-二叉树</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/07/14/Java%E7%9A%84%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/" title="Java的深浅拷贝">
+                    <div class="prevTitle">Java的深浅拷贝</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:lijiacheng053@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/KiCheng" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                    
+                    <img class="profile-qr" src="/assets/qq.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//www.zhihu.com/people/jia-cheng-si-man" class="iconfont-archer zhihu" target="_blank" title=zhihu></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/443768502?spm_id_from=333.1007.0.0" class="iconfont-archer bilibili" target="_blank" title=bilibili></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Collection%E9%9B%86%E5%90%88"><span class="toc-number">1.</span> <span class="toc-text">Collection集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List%E9%9B%86%E5%90%88"><span class="toc-number">2.</span> <span class="toc-text">List集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Arraylist%E9%9B%86%E5%90%88"><span class="toc-number">2.1.</span> <span class="toc-text">Arraylist集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-number">2.2.</span> <span class="toc-text">LinkedList</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set%E9%9B%86%E5%90%88"><span class="toc-number">3.</span> <span class="toc-text">Set集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HashSet%E9%9B%86%E5%90%88"><span class="toc-number">3.1.</span> <span class="toc-text">HashSet集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashSet%E9%9B%86%E5%90%88"><span class="toc-number">3.2.</span> <span class="toc-text">LinkedHashSet集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TreeSet%E9%9B%86%E5%90%88"><span class="toc-number">3.3.</span> <span class="toc-text">TreeSet集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collection%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93"><span class="toc-number">3.4.</span> <span class="toc-text">Collection集合总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E4%BF%AE%E6%94%B9%E5%BC%82%E5%B8%B8"><span class="toc-number">3.5.</span> <span class="toc-text">并发修改异常</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collections%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">Collections工具类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Map%E9%9B%86%E5%90%88"><span class="toc-number">5.</span> <span class="toc-text">Map集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Map%E9%9B%86%E5%90%88%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text">Map集合常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map%E9%9B%86%E5%90%88%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95"><span class="toc-number">5.2.</span> <span class="toc-text">Map集合遍历方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashMap"><span class="toc-number">5.3.</span> <span class="toc-text">HashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashMap"><span class="toc-number">5.4.</span> <span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TreeMap"><span class="toc-number">5.5.</span> <span class="toc-text">TreeMap</span></a></li></ol></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 42
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/19</span>
+            <a class="archive-post-title" href="/2023/12/19/springcloud02/">springcloud02</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2023/12/06/springcloud01/">springcloud02</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2023/08/11/algorithm08-dp%E4%B9%8B%E5%AD%90%E5%BA%8F%E5%88%97/">algorithm08-dp之子序列</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/2023/08/05/algorithm07-dp%E4%B9%8B%E8%82%A1%E7%A5%A8%E7%B3%BB%E5%88%97/">algorithm07-dp之股票系列</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span>
+            <a class="archive-post-title" href="/2023/07/21/algorithm06-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">algorithm06-回溯算法</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2023/07/18/algorithm05-%E4%BA%8C%E5%8F%89%E6%A0%91/">algorithm05-二叉树</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span>
+            <a class="archive-post-title" href="/2023/07/17/Java%E9%9B%86%E5%90%88/">Java集合</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/2023/07/14/Java%E7%9A%84%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/">Java的深浅拷贝</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/2023/07/08/Linux%E5%85%A5%E9%97%A8/">Linux入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/07</span>
+            <a class="archive-post-title" href="/2023/07/07/01-MySQL%E5%9F%BA%E7%A1%80/">01-MySQL基础</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/07</span>
+            <a class="archive-post-title" href="/2023/07/07/MybatisPlus/">MybatisPlus</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2023/07/06/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day2/">瑞吉外卖项目实战day2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/04</span>
+            <a class="archive-post-title" href="/2023/07/04/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day1/">瑞吉外卖项目实战day1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/30</span>
+            <a class="archive-post-title" href="/2023/06/30/IDEA%E4%B8%AD%E9%9B%86%E6%88%90git/">IDEA中集成git</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/22</span>
+            <a class="archive-post-title" href="/2023/06/22/Maven%E8%BF%9B%E9%98%B6/">Maven进阶</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span>
+            <a class="archive-post-title" href="/2023/06/19/03-SSM%E6%95%B4%E5%90%88/">03-SSM整合</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/13</span>
+            <a class="archive-post-title" href="/2023/06/13/02-RESTful%E5%BC%80%E5%8F%91/">02-RESTful开发</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/">algorithm04 字符串</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/01-SpringMVC%E5%85%A5%E9%97%A8/">01-SpringMVC入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/ChatGPT%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85/">ChatGPT本地安装</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2023/06/04/05-Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/">05-Spring事务管理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2023/06/04/%E7%BD%91%E9%A1%B5%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7PostMan/">网页调试工具PostMan</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/02</span>
+            <a class="archive-post-title" href="/2023/06/02/04-AOP/">04-AOP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/01</span>
+            <a class="archive-post-title" href="/2023/06/01/03-Spring%E6%95%B4%E5%90%88%E4%B8%89%E6%96%B9%E6%A1%86%E6%9E%B6/">03-Spring整合三方框架</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2023/05/26/git/">利用Git实现多台电脑同步工作</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span>
+            <a class="archive-post-title" href="/2023/04/05/01-IOC_DI/">01-IOC/DI</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span>
+            <a class="archive-post-title" href="/2023/04/05/02-Spring%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91/">02-Spring注解开发</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/04-Request-Response/">04-Request_Response</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/05-JSP/">05-JSP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/07-Filter-Listener-Ajax/">07-Filter_Listener_Ajax</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/">06-会话技术</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">02_Mybatis练习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Mybatis/">02_Mybatis</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/03-HTTP-Tomcat/">03_HTTP&Tomcat</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/03-Servlet/">03_Servlet</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/01-JDBC/">01_JDBC</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Maven/">02_Maven</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span>
+            <a class="archive-post-title" href="/2023/03/12/Android-jni/">Android平台JNI开发保姆级教程</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span>
+            <a class="archive-post-title" href="/2023/03/10/opencv01/">OpenCV特征检测</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2023/02/03/algorithm03/">algorithm03 链表</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/2022/12/21/algorithm02/">algorithm02 哈希表</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span>
+            <a class="archive-post-title" href="/2022/12/18/algorithm01/">Algorithm01 数组</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="Android">
+                <span class="iconfont-archer">&#xe606;</span>
+                Android
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="JNI开发">
+                <span class="iconfont-archer">&#xe606;</span>
+                JNI开发
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="FFmpeg">
+                <span class="iconfont-archer">&#xe606;</span>
+                FFmpeg
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="OpenCV">
+                <span class="iconfont-archer">&#xe606;</span>
+                OpenCV
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Spring">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Spring
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="JavaWeb">
+            <span class="iconfont-archer">&#xe60a;</span>
+            JavaWeb
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="SpringMVC">
+            <span class="iconfont-archer">&#xe60a;</span>
+            SpringMVC
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Mysql">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Mysql
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Android">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Android
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Others">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Others
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Git">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Git
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Java基础">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Java基础
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Linux">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Linux
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Maven">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Maven
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Springboot">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Springboot
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="算法">
+            <span class="iconfont-archer">&#xe60a;</span>
+            算法
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="OpenCV">
+            <span class="iconfont-archer">&#xe60a;</span>
+            OpenCV
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="SpingCloud">
+            <span class="iconfont-archer">&#xe60a;</span>
+            SpingCloud
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://kicheng.github.io",
+        root: siteMetaRoot,
+        author: "KiCheng"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
