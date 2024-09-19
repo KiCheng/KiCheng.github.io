@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="KiCheng">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="KiCheng">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="记录成长">
+    <meta name="description" content="前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT6-5830-Lab1">
+<meta property="og:url" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-18.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-15.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-19.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-17.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-4.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-1.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-10.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-11.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-14.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-9.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-13.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-12.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-8.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-16.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-7.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-6.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-3.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-5.png">
+<meta property="og:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-2.png">
+<meta property="article:published_time" content="2024-08-06T12:07:44.000Z">
+<meta property="article:modified_time" content="2024-09-19T07:12:54.580Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="database">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/image-18.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>MIT6-5830-Lab1 · KiCheng&#39;s Tracks</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>KiCheng's Tracks.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">KiCheng&#39;s Tracks.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">MIT6-5830-Lab1</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                MIT6-5830-Lab1
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="database">database</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="mysql">mysql</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">4k</span>Reading time: <span class="post-count reading-time">18 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2024/08/06</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <p>前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。</p>
+<span id="more"></span>
+
+<h2 id="任务目录"><a href="#任务目录" class="headerlink" title="任务目录"></a>任务目录</h2><ul>
+<li><p><input checked="" disabled="" type="checkbox">  exercise1：实现元组以及元组属性字段</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise2：实现数据库目录，包含数据库现有的表信息</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise3：实现BufferPool，将内存读取过的数据页缓存下来</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise4：实现页面id、数据记录id以及Page类</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise5：实现磁盘文件的接口HeapFile，通过HeapFile可以从磁盘读写数据</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise6：实现全表扫描</p>
+</li>
+</ul>
+<h2 id="Exercise1"><a href="#Exercise1" class="headerlink" title="Exercise1"></a>Exercise1</h2><blockquote>
+<p>实现Tuple、TupleDesc两个类</p>
+</blockquote>
+<p>在数据库中，行被称为元组(tuple)或记录(record)，列称为字段(field)。tuple元组在数据库中是一组Field对象的集合。</p>
+<p><img src="image-18.png"></p>
+<h3 id="TupleDesc类"><a href="#TupleDesc类" class="headerlink" title="TupleDesc类"></a>TupleDesc类</h3><p><img src="image-15.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>private CopyOnWriteArrayList&lt;TDItem&gt; tdItems</code></li>
+</ul>
+<blockquote>
+<p>TupleDesc中提供了一个TDItem内部辅助类，类中定义了<code>Type fieldType</code>和<code>String fieldName</code>两个成员变量（Type是枚举类型，当前只实现了INT_TYPE和STRING_TYPE）。</p>
+</blockquote>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>初始化方法：<code>public TupleDesc(Type[] typeAr, String[] fieldAr)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">TupleDesc</span><span class="params">(Type[] typeAr, String[] fieldAr)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    tdItems = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (typeAr.length != fieldAr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; typeAr.length; i++) &#123;</span><br><span class="line">        tdItems.add(<span class="keyword">new</span> <span class="title class_">TDItem</span>(typeAr[i], fieldAr[i]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回所有属性的迭代器：<code>public Iterator&lt;TDItem&gt; iterator()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;TDItem&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (tdItems == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tdItems.iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回TupleDesc属性的数量：<code>public int numFields()</code></p>
+</li>
+<li><p>返回第i个属性的属性名：<code>public String getFieldName(int i)</code></p>
+</li>
+<li><p>返回第i个属性的属性类型：<code>public Type getFieldType(int i)</code></p>
+</li>
+<li><p>根据属性名返回属性在tditem中的序号：<code>public int indexForFieldName(String name)</code></p>
+</li>
+<li><p>返回此TupleDesc对应的元组所占字节大小：<code>public int getSize()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">dataSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numFields(); i++) &#123;</span><br><span class="line">        <span class="comment">// Type中存在getLen()方法，可获取INT_TYPE和STRING_TYPE字节数</span></span><br><span class="line">        dataSize += tdItems.get(i).fieldType.getLen();  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dataSize;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>合并两个TupleDesc：<code>public static TupleDesc merge(TupleDesc td1, TupleDesc td2)</code></p>
+</li>
+<li><p>判断两个TupleDesc是否相等：<code>public boolean equals(Object o)</code></p>
+<p>相等条件：两个TupleDesc的属性数量相等，且tditem1[i]和tditem2[i]属性类型相同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="comment">// instanceof 测试左边的对象是否是右边“特定类or其子类”的实例</span></span><br><span class="line">    <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> TupleDesc)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">TupleDesc</span> <span class="variable">other</span> <span class="operator">=</span> (TupleDesc) o;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.numFields() != other.numFields() || <span class="built_in">this</span>.tdItems.size() != other.tdItems.size()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="built_in">this</span>.numFields(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.getFieldType(i).equals(other.getFieldType(i))) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li>instanceof</li>
+</ol>
+<p>语法：<code>boolean result = object instanceof Class（该类、父类、接口）;</code></p>
+<p>用法：① 判断object对象是否是class类实例； ② 判断object对象是否是class类的子类的实例； ② 判断object对象是否是接口实现类的实例。</p>
+<p><img src="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试1===============&quot;</span>);</span><br><span class="line"><span class="comment">// 判断object对象是否为 class类本身的实例</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Computer);  <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 判断object对象是否为 class类的子类的实例</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Machine);  <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 判断object对象是否为 接口的实现类的实例</span></span><br><span class="line">System.out.println(mouse <span class="keyword">instanceof</span> usb);  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试2===============&quot;</span>);</span><br><span class="line"><span class="comment">// 所有对象都为Object类</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Object);  <span class="comment">// true</span></span><br><span class="line">System.out.println(mouse <span class="keyword">instanceof</span> Object);  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试3===============&quot;</span>);</span><br><span class="line"><span class="comment">// null不是任何类的实例</span></span><br><span class="line">System.out.println(<span class="literal">null</span> <span class="keyword">instanceof</span> Object);  <span class="comment">// false</span></span><br><span class="line">System.out.println(<span class="literal">null</span> <span class="keyword">instanceof</span> Computer);  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>isInstance</li>
+</ul>
+<p>语法：<code>boolean result = Class.class.isInstance(object);</code></p>
+<p>用法：同上（判断object对象能否被转化为这个Class类）</p>
+</blockquote>
+</li>
+<li><p>返回该TupleDesc的哈希值：<code>public int hashCode()</code></p>
+</li>
+<li><p>展示TupleDesc的所有属性类型+属性名：<code>public String toString()</code></p>
+</li>
+</ul>
+<h3 id="Tuple类"><a href="#Tuple类" class="headerlink" title="Tuple类"></a>Tuple类</h3><p><img src="image-19.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p><code>private TupleDesc td;</code></p>
+</li>
+<li><p>元组的id：<code>private RecordId rid;</code></p>
+</li>
+<li><p>存储Tuple中所有字段：<code>CopyOnWriteArrayList&lt;Field&gt; fields;</code></p>
+<blockquote>
+<p>Field接口，包含compare()、getType()、equals()、toString()方法，IntField 和 StringField 类实现了该接口。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public Tuple(TupleDesc td)</code></p>
+</li>
+<li><p>获得元组对应的字段属性：<code>public TupleDesc getTupleDesc()</code></p>
+</li>
+<li><p>获得元组id：<code>public RecordId getRecordId()</code></p>
+</li>
+<li><p>设置元组id：<code>public void setRecordId(RecordId rid)</code></p>
+</li>
+<li><p>为Tuple的第i个字段赋值：<code>public void setField(int i, Field f)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setField</span><span class="params">(<span class="type">int</span> i, Field f)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (i &gt;= fields.size()) &#123;</span><br><span class="line">        fields.add(f);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fields.set(i, f);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>获得第i个字段：<code>public Field getField(int i)</code></p>
+</li>
+<li><p>展示该Tuple的所有字段值：<code>public String toString()</code></p>
+</li>
+<li><p>返回元组字段的迭代器：<code>public Iterator&lt;Field&gt; fields()</code></p>
+</li>
+<li><p>重置TupldeDesc：<code>public void resetTupleDesc(TupleDesc td)</code></p>
+</li>
+</ul>
+<p><img src="image-17.png"></p>
+<h2 id="Exercise2"><a href="#Exercise2" class="headerlink" title="Exercise2"></a>Exercise2</h2><blockquote>
+<p>实现Catalog类</p>
+</blockquote>
+<p><img src="image-4.png"></p>
+<h3 id="Catalog类"><a href="#Catalog类" class="headerlink" title="Catalog类"></a>Catalog类</h3><p>Catalog管理着数据库中的所有表：</p>
+<p><img src="image-1.png"></p>
+<blockquote>
+<p>dbFile是什么 —— 每一个DbFile对应数据库中的一张表。</p>
+<p><img src="image-10.png"></p>
+<p><img src="image-11.png"></p>
+</blockquote>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p>表id与表的映射：<code>ConcurrentHashMap&lt;Integer, Table&gt; tableIdMap;</code></p>
+<blockquote>
+<p>Table类包含参数tableName、pkeyField（表中的主键）、dbFile（存储表内容）</p>
+</blockquote>
+</li>
+<li><p>表名与表id的映射（方便通过tableName获取table）：<code>ConcurrentHashMap&lt;String, Integer&gt; tableNameMap;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public Catalog()</code></p>
+</li>
+<li><p>向Catalog中添加表：<code>public void addTable(DbFile file, String name, String pkeyField)</code></p>
+</li>
+<li><p>根据表明获取表id：<code>public int getTableId(String name)</code></p>
+</li>
+<li><p>&#x20;通过表id获取表TupleDesc：<code>public TupleDesc getTupleDesc(int tableId)</code></p>
+</li>
+<li><p>通过表id获取表的内容dbFile：<code>public DbFile getDatabaseFile(int tableId)</code></p>
+</li>
+<li><p>通过表id获取表的主键：<code>public String getPrimaryKey(int tableId)</code></p>
+</li>
+<li><p>返回tableId的迭代器：<code>public Iterator&lt;Integer&gt; tableIdIterator()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;Integer&gt; <span class="title function_">tableIdIterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> tableIdMap.keySet().iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>通过表id获取表名：<code>public String getTableName(int id)</code></p>
+</li>
+<li><p>清空Catalog：<code>public void clear()</code></p>
+</li>
+</ul>
+<p><img src="image-14.png"></p>
+<h2 id="Exercise3"><a href="#Exercise3" class="headerlink" title="Exercise3"></a>Exercise3</h2><blockquote>
+<p>实现BufferPool的构造器和getPage()方法</p>
+</blockquote>
+<h3 id="BufferPool类"><a href="#BufferPool类" class="headerlink" title="BufferPool类"></a>BufferPool类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>默认page大小：<code>private static final int </code><em><code>DEFAULT_PAGE_SIZE </code></em><code>= 4096;</code> <code>private static int </code><em><code>pageSize </code></em><code>= </code><em><code>DEFAULT_PAGE_SIZE</code></em><code>;</code></p>
+</li>
+<li><p>BufferPool能获取的page数量：<code>private final int numPages;</code></p>
+</li>
+<li><p>pageId到page的映射：<code>private final Map&lt;PageId, Page&gt; bufferPools = new ConcurrentHashMap&lt;&gt;();</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public BufferPool(int numPages)</code></p>
+</li>
+<li><p>从BufferPool中根据pageId获取对应的page，如果BufferPool中不存在就去磁盘搜索并保存到BufferPool：<code>public Page getPage(TransactionId tid, PageId pid, Permissions perm)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Page <span class="title function_">getPage</span><span class="params">(TransactionId tid, PageId pid, Permissions perm)</span></span><br><span class="line">        <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span>(!bufferPools.containsKey(pid)) &#123;</span><br><span class="line">        <span class="type">DbFile</span> <span class="variable">file</span> <span class="operator">=</span> Database.getCatalog().getDatabaseFile(pid.getTableId());</span><br><span class="line">        <span class="type">Page</span> <span class="variable">page</span> <span class="operator">=</span> file.readPage(pid);</span><br><span class="line">        bufferPools.put(pid, page);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bufferPools.get(pid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取page的方法有且只有<code>BufferPool.getPage()</code>。</p>
+<p>通过一个具体的索引页id就可以找到一张特定的数据表，所以我们可以认为：“<strong>在一个数据页上只能存储同一张表的数据”</strong>。</p>
+<p><img src="image-9.png" alt="copilot解答"></p>
+<ol>
+<li>数据组织和查询效率</li>
+</ol>
+<ul>
+<li><p><strong>连续存储</strong>：将同一张表的数据存储在连续的页面中，有助于提高查询效率。读取一个表的数据时，可以通过顺序扫描这些页面，减少磁盘寻道时间。</p>
+</li>
+<li><p><strong>索引效率</strong>：索引通常是基于表的。当页面只存储一张表的数据时，索引查找可以更快地定位数据。</p>
+</li>
+</ul>
+<ul>
+<li>数据一致性和隔离</li>
+</ul>
+<ul>
+<li><p><strong>事务管理</strong>：事务的隔离级别要求对表的操作是可预测和隔离的。将不同表的数据混合在同一个页面中，可能会导致复杂的锁管理和数据一致性问题。</p>
+</li>
+<li><p><strong>日志记录和恢复</strong>：数据库的日志记录机制（如WAL日志）通常基于表进行管理。将不同表的数据混合在一个页面中，恢复过程会变得更加复杂。</p>
+</li>
+</ul>
+<ul>
+<li>空间管理和回收</li>
+</ul>
+<ul>
+<li><p><strong>空间利用</strong>：将同一张表的数据放在同一页面中，可以更有效地利用空间。当需要扩展表时，只需分配新的页面，不需要考虑不同表的数据混合导致的空间浪费问题。</p>
+</li>
+<li><p><strong>垃圾回收</strong>：当删除数据时，页面中的空闲空间可以更容易地被同一表的新数据使用。如果不同表的数据混合在一起，空间回收和再利用会更加困难。</p>
+</li>
+</ul>
+<ul>
+<li>设计和实现的简化</li>
+</ul>
+<ul>
+<li><p><strong>代码复杂度</strong>：将每个页面绑定到一个特定的表，可以简化数据库管理系统的实现。比如，代码中的 <code>Database.getCatalog().getDatabaseFile(pid.getTableId())</code> 就是通过表ID来获取相关的数据库文件（包含多个页面）的。</p>
+</li>
+<li><p><strong>模块化设计</strong>：这种设计方式使得数据库系统的模块化和维护变得更简单。每个模块（如页面管理、缓冲区管理、事务管理）可以专注于处理单一表的数据。</p>
+<p>&#x20;                                                                                                                                —— chatGPT解答</p>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="Exercise4"><a href="#Exercise4" class="headerlink" title="Exercise4"></a>Exercise4</h2><blockquote>
+<p>实现HeapPageId类、RecordId类、HeapPage类</p>
+</blockquote>
+<p><img src="image-13.png"></p>
+<h3 id="HeapPageId类"><a href="#HeapPageId类" class="headerlink" title="HeapPageId类"></a>HeapPageId类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>page所在的数据表id：<code>private int tableId;</code></p>
+</li>
+<li><p>page的序号：<code>private int pgNo;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapPageId(int tableId, int pgNo)</code></p>
+</li>
+<li><p>返回该page所在的数据表id：<code>public int getTableId() </code></p>
+</li>
+<li><p>返回该page的序号：<code>public int getPageNumber()</code></p>
+</li>
+<li><p>返回该pageId的哈希值：<code>public int hashCode()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">        <span class="keyword">return</span> getPageNumber() * <span class="number">1000</span> + getTableId();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>判断两个PageId对应的page是否相等：<code>public boolean equals(Object o)</code></p>
+<p>相等条件：两个PageId的pageNo和tableId相等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (o <span class="keyword">instanceof</span> HeapPageId) &#123;</span><br><span class="line">        <span class="type">HeapPageId</span> <span class="variable">other</span> <span class="operator">=</span> (HeapPageId) o;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.getPageNumber() == other.getPageNumber() &amp;&amp; <span class="built_in">this</span>.getTableId() == other.getTableId();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="RecordId类"><a href="#RecordId类" class="headerlink" title="RecordId类"></a>RecordId类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>元组id所在页的pageId：<code>private PageId pid;</code></p>
+</li>
+<li><p>元组的序号：<code>private int tupleNo;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public RecordId(PageId pid, int tupleno)</code></p>
+</li>
+<li><p>返回元组的序号：<code>public int getTupleNumber()</code></p>
+</li>
+<li><p>返回元组所在页的pageId：<code>public PageId getPageId()</code></p>
+</li>
+<li><p>判断两个tuple是否相同：<code>public boolean equals(Object o)</code></p>
+</li>
+<li><p>返回 tuple的哈希值：<code>public int hashCode()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.pid.getPageNumber() * <span class="number">100</span> + <span class="built_in">this</span>.pid.getTableId() * <span class="number">10</span> + <span class="built_in">this</span>.tupleNo; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="HeapPage类"><a href="#HeapPage类" class="headerlink" title="HeapPage类"></a>HeapPage类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>pageId：<code>private final HeapPageId pid;</code></p>
+</li>
+<li><p>page所对应表格的tupleDesc：<code>private final TupleDesc td;</code></p>
+</li>
+<li><p>page中槽slot的bitmap，判断该页的slot是否被占用：<code>final byte[] header;</code></p>
+</li>
+<li><p>page中的元组：<code>final Tuple[] tuples;</code></p>
+</li>
+<li><p>page中slot的数量：<code>private final int numSlots;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapPage(HeapPageId id, byte[] data)</code></p>
+</li>
+<li><p>返回每个page中包含的tuple数量：<code>private int getNumTuples()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getNumTuples</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">page_bits</span> <span class="operator">=</span> BufferPool.getPageSize() * <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tuple_bits</span> <span class="operator">=</span> (td.getSize() * <span class="number">8</span> + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> page_bits / tuple_bits;  <span class="comment">// 进行下取整</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>数据库中每个page的tuple需要 tuple size*8 bit 的内容大小和 1bit 的header大小。&#x20;</p>
+<ul>
+<li><p>返回page中的header大小：<code>private int getHeaderSize()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getHeaderSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>) Math.ceil((<span class="type">double</span>) getNumTuples() / <span class="number">8</span>);  <span class="comment">// 进行上取整</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回pageId：<code>public HeapPageId getId()</code></p>
+</li>
+<li><p>判断第i个slot槽是否为空：<code>public boolean isSlotUsed(int i)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSlotUsed</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="comment">// 计算在header中的位置(哪一个字节)</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">iTh</span> <span class="operator">=</span> i / <span class="number">8</span>;</span><br><span class="line">    <span class="comment">// 计算具体在bitmap中的位置(哪一个比特位，或者理解为header字节位中的比特偏移量)</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">bitTh</span> <span class="operator">=</span> i % <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">onBit</span> <span class="operator">=</span> (header[iTh] &gt;&gt; bitTh) &amp; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> onBit == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>header的存储方式是byte数组，每个byte包含8个bit，例如某header的状态如下：{<code>11111111</code>, <code>11111111</code>, <code>00000011</code>}（byte的右侧为低位），此时先通过<code>iTh=i/8</code>变量确定槽i在哪一个byte中，再通过<code>bitTh=i%8</code>确定槽i在byte字节中具体是哪一个bit，最后通过 &amp; 异或确定该bit是0或1。</p>
+<ul>
+<li>返回page中空slot的数量：<code>public int getNumUnusedSlots()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getNumUnusedSlots</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">cnt</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numSlots; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isSlotUsed(i)) &#123;</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>返回page中所有tuple的迭代器（不包括空slot）：<code>public Iterator&lt;Tuple&gt; iterator()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;Tuple&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    List&lt;Tuple&gt; tupleList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numSlots; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isSlotUsed(i)) &#123;</span><br><span class="line">            tupleList.add(tuples[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tupleList.iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>HeapPage中的tuple是通过数组存储的，为了访问迭代器方法需要将tuple数组转换成tuple集合。</p>
+<h2 id="Exercise5"><a href="#Exercise5" class="headerlink" title="Exercise5"></a>Exercise5</h2><blockquote>
+<p>实现HeapFile类</p>
+</blockquote>
+<p><img src="image-12.png"></p>
+<h3 id="HeapFile类"><a href="#HeapFile类" class="headerlink" title="HeapFile类"></a>HeapFile类</h3><p>一个HeapFile就是一张数据表。</p>
+<p><img src="image-8.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p>表中的内容：<code>private final File f;</code></p>
+</li>
+<li><p>表的属性行：<code>private final TupleDesc td;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapFile(File f, TupleDesc td)</code></p>
+</li>
+<li><p>返回表的内容：<code>public File getFile()</code></p>
+</li>
+<li><p>返回标识表文件的唯一id (heapfile绝对路径的哈希值)：<code>public int getId()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> f.getAbsolutePath().hashCode();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回表的属性行：<code>public TupleDesc getTupleDesc()</code></p>
+</li>
+<li><p>返回表的page数目：<code>public int numPages()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">numPages</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">file_length</span> <span class="operator">=</span> getFile().length();  <span class="comment">// 文件长度</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">pageSize</span> <span class="operator">=</span> BufferPool.getPageSize();  <span class="comment">// 每个页面的大小</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>) (file_length / pageSize);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>从表文件中读取page：<code>public Page readPage(PageId pid)</code></p>
+<blockquote>
+<p><code>readPage()</code>方法仅会被BufferPool中的<code>getPage()</code>方法调用，再其他地方获取page时也都要调用BufferPool的<code>getPage()</code>方法，这也是BufferPool的意义。</p>
+</blockquote>
+<p>利用 RandomAccessFile 来读写 HeapFile 中的Page：</p>
+<p><code>RandomAccessFile</code> 是 Java 中用于对文件进行读写操作的类，其支持随机访问文件内容的特性。这里的随机 <code>seek()</code> 方法指的是可以通过指定文件中的任意位置（偏移量）来读取或写入数据，而不是像顺序读写那样只能按照文件中数据的顺序逐个访问。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Page <span class="title function_">readPage</span><span class="params">(PageId pid)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">tableId</span> <span class="operator">=</span> pid.getTableId();</span><br><span class="line">    <span class="type">int</span> <span class="variable">pgNo</span> <span class="operator">=</span> pid.getPageNumber();</span><br><span class="line">    <span class="type">int</span> <span class="variable">offset</span> <span class="operator">=</span> pgNo * BufferPool.getPageSize();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// randomaccessfile try-catch-finally</span></span><br><span class="line">    <span class="type">RandomAccessFile</span> <span class="variable">randomAccessFile</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        randomAccessFile = <span class="keyword">new</span> <span class="title class_">RandomAccessFile</span>(f, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">        <span class="comment">// 保证pid页面的结束位置不大于文件randomFile的长度</span></span><br><span class="line">        <span class="keyword">if</span> ((<span class="type">long</span>) pgNo * BufferPool.getPageSize() &gt; randomAccessFile.length()) &#123;</span><br><span class="line">            randomAccessFile.close();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d is invalid&quot;</span>, tableId, pgNo));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">byte</span>[] bytes = <span class="keyword">new</span> <span class="title class_">byte</span>[BufferPool.getPageSize()];</span><br><span class="line">        <span class="comment">// 移动偏移量到页面的开头</span></span><br><span class="line">        randomAccessFile.seek(offset);</span><br><span class="line">        <span class="comment">// 不要在调用时将整个表加载到内存中，这将导致非常大的表出现内存不足错误</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">read</span> <span class="operator">=</span> randomAccessFile.read(bytes, <span class="number">0</span>, BufferPool.getPageSize());</span><br><span class="line">        <span class="keyword">if</span> (read != BufferPool.getPageSize()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d read %d bytes not equal to BufferPool.getPageSize()&quot;</span>,</span><br><span class="line">                    tableId, pgNo, read));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">HeapPageId</span> <span class="variable">heapPageId</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HeapPageId</span>(pid.getTableId(), pid.getPageNumber());</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HeapPage</span>(heapPageId, bytes);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (randomAccessFile != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                randomAccessFile.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d is invalid&quot;</span>, tableId, pgNo));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回表文件中所有heapPage中元组的迭代器：<code>public DbFileIterator iterator(TransactionId tid)</code></p>
+<p><img src="image-16.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> DbFileIterator <span class="title function_">iterator</span><span class="params">(TransactionId tid)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HeapFileIterator</span>(tid, <span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 迭代器内部类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">HeapFileIterator</span> <span class="keyword">implements</span> <span class="title class_">DbFileIterator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TransactionId tid;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> HeapFile heapFile;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 元组迭代器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Iterator&lt;Tuple&gt; tupleIterator;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当前页面索引</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> index;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HeapFileIterator</span><span class="params">(TransactionId tid, HeapFile heapFile)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.tid = tid;</span><br><span class="line">        <span class="built_in">this</span>.heapFile = heapFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        index = <span class="number">0</span>;</span><br><span class="line">        tupleIterator = getTupleIterator(index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Iterator&lt;Tuple&gt; <span class="title function_">getTupleIterator</span><span class="params">(<span class="type">int</span> pageNumber)</span> <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">        <span class="keyword">if</span> (pageNumber &gt;= <span class="number">0</span> &amp;&amp; pageNumber &lt; heapFile.numPages()) &#123;</span><br><span class="line">            <span class="type">HeapPageId</span> <span class="variable">heapPageId</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HeapPageId</span>(heapFile.getId(), pageNumber);</span><br><span class="line">            <span class="type">HeapPage</span> <span class="variable">heapPage</span> <span class="operator">=</span> (HeapPage) Database.getBufferPool().getPage(tid, heapPageId, Permissions.READ_ONLY);</span><br><span class="line">            <span class="keyword">return</span> heapPage.iterator();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">DbException</span>(String.format(<span class="string">&quot;heapFile %d does not exist in page %d&quot;</span>, heapFile.getId(), pageNumber));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        <span class="keyword">if</span> (tupleIterator == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(!tupleIterator.hasNext()) &#123;</span><br><span class="line">            <span class="comment">// 如果当前页面没有元组，则切换到下一个页面</span></span><br><span class="line">            index++;</span><br><span class="line">            <span class="keyword">if</span>(index &lt; heapFile.numPages()) &#123;</span><br><span class="line">                tupleIterator = getTupleIterator(index);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果当前页面还有元组，则返回true</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Tuple <span class="title function_">next</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException, NoSuchElementException &#123;</span><br><span class="line">        <span class="keyword">if</span> (tupleIterator == <span class="literal">null</span> || !tupleIterator.hasNext()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> tupleIterator.next();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        close();</span><br><span class="line">        open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">        tupleIterator = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="image-7.png"></p>
+<h2 id="Exercise6"><a href="#Exercise6" class="headerlink" title="Exercise6"></a>Exercise6</h2><blockquote>
+<p>实现SeqScan类：该类应该能通过构造方法传入的tableId参数扫描数据表中的所有元组，并使用<code>dbFile.iterator()</code>访问元组</p>
+</blockquote>
+<h3 id="SeqScan类"><a href="#SeqScan类" class="headerlink" title="SeqScan类"></a>SeqScan类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>事务id：<code>private TransactionId tid;</code></p>
+</li>
+<li><p>需要扫描的数据表id：<code>private int tableid;</code></p>
+</li>
+<li><p>表的别名（返回TupleDesc时，要在fieldName前加上tableAlias字段）：<code>private String tableAlias;</code></p>
+</li>
+<li><p>扫描数据表要访问的dbFile迭代器：<code>private DbFileIterator dbFileIterator;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public SeqScan(TransactionId tid, int tableid, String tableAlias)</code></p>
+</li>
+<li><p>获取表名：<code>public String getTableName()</code></p>
+</li>
+<li><p>获取表的alias别名：<code>public String getAlias()</code></p>
+</li>
+<li><p>查找新的表（重新对tableId赋值）：<code>public void reset(int tableid, String tableAlias)</code></p>
+</li>
+<li><p>返回数据表的tupleDesc，需要在fieldName之前添加alias别名：<code>public TupleDesc getTupleDesc()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> TupleDesc <span class="title function_">getTupleDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">TupleDesc</span> <span class="variable">td_old</span> <span class="operator">=</span> Database.getCatalog().getTupleDesc(tableid);</span><br><span class="line">    String[] names = <span class="keyword">new</span> <span class="title class_">String</span>[td_old.numFields()];</span><br><span class="line">    Type[] types = <span class="keyword">new</span> <span class="title class_">Type</span>[td_old.numFields()];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; td_old.numFields(); i++) &#123;</span><br><span class="line">        names[i] = tableAlias + <span class="string">&quot;.&quot;</span> + td_old.getFieldName(i);</span><br><span class="line">        types[i] = td_old.getFieldType(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TupleDesc</span>(types, names);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>遍历表用到的方法</p>
+<ul>
+<li><p>打开迭代器：<code>public void open()</code></p>
+</li>
+<li><p>如果有更多元组可用，则为True，如果没有元组或未打开迭代器则为False：<code>public boolean hasNext()</code></p>
+</li>
+<li><p>根据迭代器获取下一个元组：<code>public Tuple next()</code></p>
+</li>
+<li><p>关闭迭代器（置空）：<code>public void close()</code></p>
+</li>
+<li><p>将迭代器重置为起始位置（关闭、开启）：<code>public void rewind()</code></p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    dbFileIterator = Database.getCatalog().getDatabaseFile(tableid).iterator(tid);</span><br><span class="line">    dbFileIterator.open();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (dbFileIterator == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;The dbFileIterator is null&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> dbFileIterator.hasNext();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Tuple <span class="title function_">next</span><span class="params">()</span> <span class="keyword">throws</span> NoSuchElementException,</span><br><span class="line">        TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (dbFileIterator == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;The dbFileIterator is null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Tuple</span> <span class="variable">t</span> <span class="operator">=</span> dbFileIterator.next();</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;No more tuples&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    dbFileIterator = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span> <span class="keyword">throws</span> DbException, NoSuchElementException,</span><br><span class="line">        TransactionAbortedException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    close();</span><br><span class="line">    open();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="image-6.png"></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><blockquote>
+<p>Test：<code>select * from some_data_file</code></p>
+</blockquote>
+<p>在项目根目录下创建some_data_file.txt文件：</p>
+<p><img src="image-3.png"></p>
+<p>用 ant 编译出dist目录下simpleDB的jar包：</p>
+<p><img src="image-5.png"></p>
+<p>运行测试，展示结果：</p>
+<p><img src="image-2.png"></p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://kicheng.github.io">KiCheng</a>
+            <p>Link：<a href="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/">https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/</a>
+            <p>Publish date：<a href="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/">August 6th 2024, 8:07:44 pm</a>
+            <p>Update date：<a href="https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/">September 19th 2024, 3:12:54 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/12/19/springcloud02/" title="springcloud02">
+                    <div class="prevTitle">springcloud02</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:lijiacheng053@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/KiCheng" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                    
+                    <img class="profile-qr" src="/assets/qq.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//www.zhihu.com/people/jia-cheng-si-man" class="iconfont-archer zhihu" target="_blank" title=zhihu></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/443768502?spm_id_from=333.1007.0.0" class="iconfont-archer bilibili" target="_blank" title=bilibili></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">任务目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise1"><span class="toc-number">2.</span> <span class="toc-text">Exercise1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TupleDesc%E7%B1%BB"><span class="toc-number">2.1.</span> <span class="toc-text">TupleDesc类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tuple%E7%B1%BB"><span class="toc-number">2.2.</span> <span class="toc-text">Tuple类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise2"><span class="toc-number">3.</span> <span class="toc-text">Exercise2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Catalog%E7%B1%BB"><span class="toc-number">3.1.</span> <span class="toc-text">Catalog类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise3"><span class="toc-number">4.</span> <span class="toc-text">Exercise3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BufferPool%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">BufferPool类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise4"><span class="toc-number">5.</span> <span class="toc-text">Exercise4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapPageId%E7%B1%BB"><span class="toc-number">5.1.</span> <span class="toc-text">HeapPageId类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RecordId%E7%B1%BB"><span class="toc-number">5.2.</span> <span class="toc-text">RecordId类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapPage%E7%B1%BB"><span class="toc-number">5.3.</span> <span class="toc-text">HeapPage类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise5"><span class="toc-number">6.</span> <span class="toc-text">Exercise5</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapFile%E7%B1%BB"><span class="toc-number">6.1.</span> <span class="toc-text">HeapFile类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise6"><span class="toc-number">7.</span> <span class="toc-text">Exercise6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SeqScan%E7%B1%BB"><span class="toc-number">7.1.</span> <span class="toc-text">SeqScan类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">7.2.</span> <span class="toc-text">测试</span></a></li></ol></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 43
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/06</span>
+            <a class="archive-post-title" href="/2024/08/06/MIT6-5830-Lab1/">MIT6-5830-Lab1</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/19</span>
+            <a class="archive-post-title" href="/2023/12/19/springcloud02/">springcloud02</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2023/12/06/springcloud01/">springcloud02</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2023/08/11/algorithm08-dp%E4%B9%8B%E5%AD%90%E5%BA%8F%E5%88%97/">algorithm08-dp之子序列</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/2023/08/05/algorithm07-dp%E4%B9%8B%E8%82%A1%E7%A5%A8%E7%B3%BB%E5%88%97/">algorithm07-dp之股票系列</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span>
+            <a class="archive-post-title" href="/2023/07/21/algorithm06-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">algorithm06-回溯算法</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2023/07/18/algorithm05-%E4%BA%8C%E5%8F%89%E6%A0%91/">algorithm05-二叉树</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span>
+            <a class="archive-post-title" href="/2023/07/17/Java%E9%9B%86%E5%90%88/">Java集合</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/2023/07/14/Java%E7%9A%84%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/">Java的深浅拷贝</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/2023/07/08/Linux%E5%85%A5%E9%97%A8/">Linux入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/07</span>
+            <a class="archive-post-title" href="/2023/07/07/01-MySQL%E5%9F%BA%E7%A1%80/">01-MySQL基础</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/07</span>
+            <a class="archive-post-title" href="/2023/07/07/MybatisPlus/">MybatisPlus</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2023/07/06/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day2/">瑞吉外卖项目实战day2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/04</span>
+            <a class="archive-post-title" href="/2023/07/04/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day1/">瑞吉外卖项目实战day1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/30</span>
+            <a class="archive-post-title" href="/2023/06/30/IDEA%E4%B8%AD%E9%9B%86%E6%88%90git/">IDEA中集成git</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/22</span>
+            <a class="archive-post-title" href="/2023/06/22/Maven%E8%BF%9B%E9%98%B6/">Maven进阶</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span>
+            <a class="archive-post-title" href="/2023/06/19/03-SSM%E6%95%B4%E5%90%88/">03-SSM整合</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/13</span>
+            <a class="archive-post-title" href="/2023/06/13/02-RESTful%E5%BC%80%E5%8F%91/">02-RESTful开发</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/">algorithm04 字符串</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/01-SpringMVC%E5%85%A5%E9%97%A8/">01-SpringMVC入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/05</span>
+            <a class="archive-post-title" href="/2023/06/05/ChatGPT%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85/">ChatGPT本地安装</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2023/06/04/05-Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/">05-Spring事务管理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2023/06/04/%E7%BD%91%E9%A1%B5%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7PostMan/">网页调试工具PostMan</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/02</span>
+            <a class="archive-post-title" href="/2023/06/02/04-AOP/">04-AOP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/01</span>
+            <a class="archive-post-title" href="/2023/06/01/03-Spring%E6%95%B4%E5%90%88%E4%B8%89%E6%96%B9%E6%A1%86%E6%9E%B6/">03-Spring整合三方框架</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2023/05/26/git/">利用Git实现多台电脑同步工作</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span>
+            <a class="archive-post-title" href="/2023/04/05/02-Spring%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91/">02-Spring注解开发</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span>
+            <a class="archive-post-title" href="/2023/04/05/01-IOC_DI/">01-IOC/DI</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/04-Request-Response/">04-Request_Response</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/05-JSP/">05-JSP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/">06-会话技术</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span>
+            <a class="archive-post-title" href="/2023/04/01/07-Filter-Listener-Ajax/">07-Filter_Listener_Ajax</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Mybatis/">02_Mybatis</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">02_Mybatis练习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/03-HTTP-Tomcat/">03_HTTP&Tomcat</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/03-Servlet/">03_Servlet</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/01-JDBC/">01_JDBC</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/02-Maven/">02_Maven</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span>
+            <a class="archive-post-title" href="/2023/03/12/Android-jni/">Android平台JNI开发保姆级教程</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span>
+            <a class="archive-post-title" href="/2023/03/10/opencv01/">OpenCV特征检测</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2023/02/03/algorithm03/">algorithm03 链表</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/2022/12/21/algorithm02/">algorithm02 哈希表</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span>
+            <a class="archive-post-title" href="/2022/12/18/algorithm01/">Algorithm01 数组</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="Android">
+                <span class="iconfont-archer">&#xe606;</span>
+                Android
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="JNI开发">
+                <span class="iconfont-archer">&#xe606;</span>
+                JNI开发
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="FFmpeg">
+                <span class="iconfont-archer">&#xe606;</span>
+                FFmpeg
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="database">
+                <span class="iconfont-archer">&#xe606;</span>
+                database
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="mysql">
+                <span class="iconfont-archer">&#xe606;</span>
+                mysql
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="OpenCV">
+                <span class="iconfont-archer">&#xe606;</span>
+                OpenCV
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="JavaWeb">
+            <span class="iconfont-archer">&#xe60a;</span>
+            JavaWeb
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Mysql">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Mysql
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="SpringMVC">
+            <span class="iconfont-archer">&#xe60a;</span>
+            SpringMVC
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Spring">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Spring
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Android">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Android
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Git">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Git
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Java基础">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Java基础
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Linux">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Linux
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="MySQL">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MySQL
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Maven">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Maven
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Springboot">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Springboot
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="算法">
+            <span class="iconfont-archer">&#xe60a;</span>
+            算法
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Others">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Others
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="OpenCV">
+            <span class="iconfont-archer">&#xe60a;</span>
+            OpenCV
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="SpingCloud">
+            <span class="iconfont-archer">&#xe60a;</span>
+            SpingCloud
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://kicheng.github.io",
+        root: siteMetaRoot,
+        author: "KiCheng"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
