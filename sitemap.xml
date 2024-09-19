@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://kicheng.github.io/2024/08/15/MIT6-5830-Lab2/</loc>
+    
+    <lastmod>2024-09-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://kicheng.github.io/2024/08/06/MIT6-5830-Lab1/</loc>
     
     <lastmod>2024-09-19</lastmod>
@@ -485,7 +494,7 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Mysql/</loc>
+    <loc>https://kicheng.github.io/categories/Spring/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -499,14 +508,14 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Spring/</loc>
+    <loc>https://kicheng.github.io/categories/Mysql/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Android/</loc>
+    <loc>https://kicheng.github.io/categories/Others/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -527,6 +536,13 @@
   </url>
   
   <url>
+    <loc>https://kicheng.github.io/categories/Android/</loc>
+    <lastmod>2024-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://kicheng.github.io/categories/Linux/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -541,13 +557,6 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Maven/</loc>
-    <lastmod>2024-09-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://kicheng.github.io/categories/Springboot/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -555,14 +564,14 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://kicheng.github.io/categories/Maven/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Others/</loc>
+    <loc>https://kicheng.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2024-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
