@@ -1,3 +1,4 @@
+https://kicheng.github.io/2024/09/18/MIT6.5830-Lab6/
 https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/
 https://kicheng.github.io/2024/08/15/MIT6.5830-Lab2/
 https://kicheng.github.io/2024/08/27/MIT6.5830-Lab4/
@@ -56,18 +57,18 @@ https://kicheng.github.io/tags/FFmpeg/
 https://kicheng.github.io/tags/database/
 https://kicheng.github.io/tags/mysql/
 https://kicheng.github.io/tags/OpenCV/
+https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/JavaWeb/
 https://kicheng.github.io/categories/SpringMVC/
 https://kicheng.github.io/categories/Mysql/
-https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/Android/
 https://kicheng.github.io/categories/Git/
 https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/
-https://kicheng.github.io/categories/Linux/
 https://kicheng.github.io/categories/MySQL/
 https://kicheng.github.io/categories/Others/
+https://kicheng.github.io/categories/Linux/
 https://kicheng.github.io/categories/Maven/
-https://kicheng.github.io/categories/Springboot/
 https://kicheng.github.io/categories/%E7%AE%97%E6%B3%95/
+https://kicheng.github.io/categories/Springboot/
 https://kicheng.github.io/categories/OpenCV/
 https://kicheng.github.io/categories/SpingCloud/
