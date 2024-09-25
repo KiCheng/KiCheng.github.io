@@ -1,3 +1,4 @@
+https://kicheng.github.io/2024/09/24/Condition%20%E5%92%8C%20LockSupport/
 https://kicheng.github.io/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/
 https://kicheng.github.io/2024/09/23/volatile%E4%B8%8Esynchronized/
 https://kicheng.github.io/2024/09/20/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/
@@ -58,11 +59,11 @@ https://kicheng.github.io/tags/Android/
 https://kicheng.github.io/tags/JNI%E5%BC%80%E5%8F%91/
 https://kicheng.github.io/tags/FFmpeg/
 https://kicheng.github.io/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/
+https://kicheng.github.io/tags/Java/
 https://kicheng.github.io/tags/java/
 https://kicheng.github.io/tags/database/
 https://kicheng.github.io/tags/mysql/
 https://kicheng.github.io/tags/OpenCV/
-https://kicheng.github.io/tags/Java/
 https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/JavaWeb/
 https://kicheng.github.io/categories/Mysql/
@@ -74,8 +75,8 @@ https://kicheng.github.io/categories/Git/
 https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/
 https://kicheng.github.io/categories/Linux/
 https://kicheng.github.io/categories/MySQL/
+https://kicheng.github.io/categories/Maven/
 https://kicheng.github.io/categories/Springboot/
 https://kicheng.github.io/categories/%E7%AE%97%E6%B3%95/
-https://kicheng.github.io/categories/Maven/
 https://kicheng.github.io/categories/OpenCV/
 https://kicheng.github.io/categories/SpingCloud/
