@@ -22,7 +22,7 @@
     <meta name="description" content="记录成长">
 <meta property="og:type" content="website">
 <meta property="og:title" content="KiCheng&#39;s Blog">
-<meta property="og:url" content="https://kicheng.github.io/tags/Java/index.html">
+<meta property="og:url" content="https://kicheng.github.io/tags/java/index.html">
 <meta property="og:site_name" content="KiCheng&#39;s Blog">
 <meta property="og:description" content="记录成长">
 <meta property="og:locale" content="en_US">
@@ -433,19 +433,19 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2024/09/25/Condition%E5%92%8CLockSupport/">
+            <a class="abstract-title" href="/2024/09/20/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
                 
-                <span class="abstract-title-text">通知等待Condition</span>
+                <span class="abstract-title-text">Java内存模型(JMM)</span>
             </a>
             <div class="abstract-content">
-                <p>ConditonObject 是 Condition 接口的实现类，用来做线程同步的通知等待，最重要的是它维护了一个单向的等待队列，要明确它和 AQS 队列的关系。此外还介绍了 LockSupport 类，Condition 的 await 底层就是通过 LockSupport 实现的。</p>
+                <p>Java 内存模型（Java Memory Model，JMM）是个抽象的概念，负责 Java 并发中每个线程工作内存和共享主存之间的交互。JMM 很重要，也是后端程序员面试的重点。</p>
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/25</span>
+                <div class="abstract-date" title="Last updated: 2024/09/20">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/20</span>
                 </div>
                 <!-- tags -->
                 
@@ -454,83 +454,7 @@
     
         <a class="post-tag" href="javascript:void(0);" data-tags="并发编程">并发编程</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/">
-                
-                <span class="abstract-title-text">可重入锁 ReentrantLock、ReentrantReadWriteLock</span>
-            </a>
-            <div class="abstract-content">
-                <p>可重入锁支持重入性，表示能够对共享资源重复加锁，即当前线程获取该锁后再次获取不会被阻塞，主要介绍了 ReentrantLock、ReentrantReadWriteLock 两种。</p>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/24</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="并发编程">并发编程</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/09/23/volatile%E4%B8%8Esynchronized/">
-                
-                <span class="abstract-title-text">volatile和synchronized关键字</span>
-            </a>
-            <div class="abstract-content">
-                <p>之所以把 volatile 和 synchronized 放在一起是因为二者都是关键字，而 synchronized 相比 volatile 除了提供内存可见性外还提供了锁的作用，也就是在同一时刻只允许一个线程访问共享资源，保证了线程安全性。</p>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/23</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="并发编程">并发编程</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
     
 </div>
 
@@ -910,7 +834,16 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
         
         
         
@@ -1375,7 +1308,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 52
+        Total : 53
         </div>
         <!-- search  -->
         
@@ -1389,6 +1322,12 @@
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">线程池</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/25</span>
@@ -1635,13 +1574,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">04/01</span>
-            <a class="archive-post-title" href="/2023/04/01/07-Filter-Listener-Ajax/">07-Filter_Listener_Ajax</a>
+            <a class="archive-post-title" href="/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/">06-会话技术</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">04/01</span>
-            <a class="archive-post-title" href="/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/">06-会话技术</a>
+            <a class="archive-post-title" href="/2023/04/01/07-Filter-Listener-Ajax/">07-Filter_Listener_Ajax</a>
         </li>
     
         
@@ -1653,13 +1592,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/28</span>
-            <a class="archive-post-title" href="/2023/03/28/03-HTTP-Tomcat/">03_HTTP&Tomcat</a>
+            <a class="archive-post-title" href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">02_Mybatis练习</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/28</span>
-            <a class="archive-post-title" href="/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/">02_Mybatis练习</a>
+            <a class="archive-post-title" href="/2023/03/28/03-HTTP-Tomcat/">03_HTTP&Tomcat</a>
         </li>
     
         
@@ -1745,14 +1684,14 @@
                 并发编程
             </span>
         
-            <span class="sidebar-tag-name" data-tags="java">
-                <span class="iconfont-archer">&#xe606;</span>
-                java
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="Java">
                 <span class="iconfont-archer">&#xe606;</span>
                 Java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="java">
+                <span class="iconfont-archer">&#xe606;</span>
+                java
             </span>
         
             <span class="sidebar-tag-name" data-tags="database">
@@ -1781,14 +1720,9 @@
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="SpringMVC">
+        <span class="sidebar-category-name" data-categories="Spring">
             <span class="iconfont-archer">&#xe60a;</span>
-            SpringMVC
-        </span>
-    
-        <span class="sidebar-category-name" data-categories="Mysql">
-            <span class="iconfont-archer">&#xe60a;</span>
-            Mysql
+            Spring
         </span>
     
         <span class="sidebar-category-name" data-categories="JavaWeb">
@@ -1796,19 +1730,24 @@
             JavaWeb
         </span>
     
-        <span class="sidebar-category-name" data-categories="Spring">
+        <span class="sidebar-category-name" data-categories="Mysql">
             <span class="iconfont-archer">&#xe60a;</span>
-            Spring
+            Mysql
         </span>
     
-        <span class="sidebar-category-name" data-categories="Android">
+        <span class="sidebar-category-name" data-categories="SpringMVC">
             <span class="iconfont-archer">&#xe60a;</span>
-            Android
+            SpringMVC
         </span>
     
         <span class="sidebar-category-name" data-categories="Others">
             <span class="iconfont-archer">&#xe60a;</span>
             Others
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Android">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Android
         </span>
     
         <span class="sidebar-category-name" data-categories="Java并发">
