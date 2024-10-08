@@ -1,9 +1,9 @@
+https://kicheng.github.io/2024/09/18/MIT6.5830-Lab6/
 https://kicheng.github.io/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/
 https://kicheng.github.io/2024/09/25/Condition%E5%92%8CLockSupport/
 https://kicheng.github.io/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/
 https://kicheng.github.io/2024/09/23/volatile%E4%B8%8Esynchronized/
 https://kicheng.github.io/2024/09/20/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/
-https://kicheng.github.io/2024/09/18/MIT6.5830-Lab6/
 https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/
 https://kicheng.github.io/2024/08/15/MIT6.5830-Lab2/
 https://kicheng.github.io/2024/08/27/MIT6.5830-Lab4/
@@ -69,8 +69,8 @@ https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/JavaWeb/
 https://kicheng.github.io/categories/Mysql/
 https://kicheng.github.io/categories/SpringMVC/
-https://kicheng.github.io/categories/Others/
 https://kicheng.github.io/categories/Android/
+https://kicheng.github.io/categories/Others/
 https://kicheng.github.io/categories/Java%E5%B9%B6%E5%8F%91/
 https://kicheng.github.io/categories/Git/
 https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/
