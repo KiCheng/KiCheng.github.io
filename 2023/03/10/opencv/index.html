@@ -19,20 +19,27 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="记录成长">
-    <meta name="description" content="记录成长">
-<meta property="og:type" content="website">
-<meta property="og:title" content="KiCheng&#39;s Blog">
-<meta property="og:url" content="https://kicheng.github.io/archives/2023/12/index.html">
+    <meta name="description" content="​    前段时间毕设在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV特征检测">
+<meta property="og:url" content="https://kicheng.github.io/2023/03/10/opencv/index.html">
 <meta property="og:site_name" content="KiCheng&#39;s Blog">
-<meta property="og:description" content="记录成长">
+<meta property="og:description" content="​    前段时间毕设在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kicheng.github.io/2023/03/10/opencv/result1.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/03/10/opencv/result2_1.png">
+<meta property="og:image" content="https://kicheng.github.io/2023/03/10/opencv/result2_2.png">
+<meta property="article:published_time" content="2023-03-10T07:54:34.000Z">
+<meta property="article:modified_time" content="2025-01-10T13:42:40.569Z">
 <meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="OpenCV">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2023/03/10/opencv/result1.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/favicon.ico">
     
-    <title>KiCheng&#39;s Tracks</title>
+    <title>OpenCV特征检测 · KiCheng&#39;s Tracks</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -221,6 +228,8 @@
         }
     </script>
     
+        <body class="post-body">
+    
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -250,6 +259,17 @@
     </div>
     <!-- toggle banner for post layout -->
     
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">KiCheng&#39;s Tracks.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">OpenCV特征检测</a>
+            </div>
+        </div>
+    
 </header>
 
         <!-- fixed footer -->
@@ -276,24 +296,80 @@
 
 
 
+    height:50vh;
+
 ">
     
     <!-- 主页  -->
     
+        
+    <!-- 404页  -->
+    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+                OpenCV特征检测
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+                
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="OpenCV">OpenCV</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.2k</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/03/10</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -423,65 +499,94 @@
 
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
-                <main class="main index-page">
+                <main class="main post-page">
+    <article class="article-entry">
+        <p>​    前段时间毕设在研究Android开发，以及对第三方库的JNI编程和交叉编译，本想把FFmpeg和JNI先整理成博客发出来，奈何实在太懒了，可能还要过一段时间才能整理完了。正好这几天项目里用到了OpenCV里Detection的一些算法，就去学习了一下。</p>
+<span id="more"></span>
+
+<h1 id="OpenCV-Canny边缘检测、HoughLinesP直线检测"><a href="#OpenCV-Canny边缘检测、HoughLinesP直线检测" class="headerlink" title="[OpenCV]Canny边缘检测、HoughLinesP直线检测"></a>[OpenCV]Canny边缘检测、HoughLinesP直线检测</h1><h2 id="边缘检测Edge-detection"><a href="#边缘检测Edge-detection" class="headerlink" title="边缘检测Edge detection"></a>边缘检测Edge detection</h2><p>​    边缘检测算法是指利用灰度值的不连续性质，以灰度突变为基础分割出目标区域。大概原理是计算图像中每个像素点的梯度值和梯度方向。使用边缘检测算子计算图像在x和y方向上的一阶导数，然后计算每个像素点的梯度幅值和梯度方向；再利用NMS和阈值检测将边缘点标记和连接。</p>
+<p>​    最后的输出一定是一个二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<p>​    Canny边缘检测算法的优点是能够检测到比较细的边缘，且对噪声比较鲁棒。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Canny算法参数：</span><br><span class="line">   	InputArray 	image,  //输入图像，要求为灰度图</span><br><span class="line">   	OutputArray 	edges, //canny检测后的输出图像</span><br><span class="line">   	double 	threshold1, //阈值1,低阈值</span><br><span class="line">   	double 	threshold2, //阈值2，高阈值，低/高=比值1:2~1:3尤佳</span><br><span class="line">   	int 	apertureSize = 3,  //Sobel算子的孔径大小</span><br><span class="line">   	bool 	L2gradient = false  //计算梯度幅度值的标识，默认为false</span><br></pre></td></tr></table></figure>
+
+<p>​    实验代码，参数可以自行调整。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/people.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Canny&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Canny&quot;</span>, dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    网上随便找了一张图，实验结果是这样的。值得注意的是：Canny算法的output是二值图像，其中白色像素表示边缘，黑色像素表示非边缘。</p>
+<img src="result1.png" alt="result1" style="zoom:67%;" />
+
+<h2 id="直线检测Line-detection"><a href="#直线检测Line-detection" class="headerlink" title="直线检测Line detection"></a>直线检测Line detection</h2><p>​    霍夫变换直线检测是最基本的算法，也是今天学习和使用到的。他有<code>HoughLines</code>和<code>HoughLinesP</code>两种，后者是前者的优化，但并不意味着<code>HoughLines</code>完全被取代，他们适用于不同的场景，大家可以根据实际需要自行选择。</p>
+<p>​    需要我们注意的是霍夫直线检测是从二值图像中检测直线(线段)，所以在调用<code>HoughLines</code>或<code>HoughLinesP</code>算法前，要先将图像转换成二值图像，通常在之前先使用<code>Canny</code>将其简化成只有边缘特征的二值图像。</p>
+<p>​    这里我使用了OpenCV官方文档提供的示例代码进行测试。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HoughLinesP算法参数：</span><br><span class="line"><span class="code">	InputArray 	image,  //  8位的单通道二值图像。对于其他类型，在进行霍夫变换之前，需要将其修改为这个指定的格式</span></span><br><span class="line"><span class="code">	OutputArray lines,  // 输出的直线集合</span></span><br><span class="line"><span class="code">	double 	rho,  // 以像素为单位的距离 r 的精度。一般情况下，使用的精度是 1</span></span><br><span class="line"><span class="code">	double 	theta,  // 角度 θ 的精度。一般情况下，使用的精度是 pi/180，表示要搜索可能的角度</span></span><br><span class="line"><span class="code">	int 	threshold,  // 阈值。该值越小，判定出的直线越多；值越大，判定出的直线就越少</span></span><br><span class="line"><span class="code">	double 	minLineLength = 0,  // 控制「接受直线的最小长度」的值，默认值为 0</span></span><br><span class="line"><span class="code">	double 	maxLineGap = 0  // 控制接受共线线段之间的最小间隔，默认值为 0</span></span><br></pre></td></tr></table></figure>
+
+<p>​    实验代码，参数可以自行调整。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	Mat src, dst, color_dst;</span><br><span class="line">   	src = <span class="built_in">imread</span>(<span class="string">&quot;../../pictureRepo/building.jpg&quot;</span>);</span><br><span class="line">   	<span class="built_in">Canny</span>(src, dst, <span class="number">50</span>, <span class="number">200</span>, <span class="number">3</span>);</span><br><span class="line">   	<span class="built_in">cvtColor</span>(dst, color_dst, COLOR_GRAY2BGR);</span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">   COLOR_GRAY2BGR参数表示将灰度图像转换为3通道的BGR彩色图像。</span></span><br><span class="line"><span class="comment">   经过该转换后，color_dst中每个像素的R、G、B三个分量的值都相同，即为该像素的灰度值。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   	vector&lt;Vec4i&gt; lines;</span><br><span class="line">   	<span class="built_in">HoughLinesP</span>(dst, lines, <span class="number">1</span>, CV_PI / <span class="number">180</span>, <span class="number">200</span>, <span class="number">30</span>, <span class="number">10</span>);</span><br><span class="line">   	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; lines.<span class="built_in">size</span>(); i++)</span><br><span class="line">   	&#123;</span><br><span class="line">       	<span class="built_in">line</span>(color_dst, <span class="built_in">Point</span>(lines[i][<span class="number">0</span>], lines[i][<span class="number">1</span>]),</span><br><span class="line">           	<span class="built_in">Point</span>(lines[i][<span class="number">2</span>], lines[i][<span class="number">3</span>]), <span class="built_in">Scalar</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>, <span class="number">8</span>);</span><br><span class="line">   	&#125;</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;Orgin&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;Orgin&quot;</span>, src);</span><br><span class="line">   	<span class="built_in">namedWindow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, <span class="number">1</span>);</span><br><span class="line">   	<span class="built_in">imshow</span>(<span class="string">&quot;HoughLinesP&quot;</span>, color_dst);</span><br><span class="line">   	<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    实验结果如下。</p>
+<p>​    这是一个OpenCV官方文档提供的示例图片:</p>
+<img src="result2_1.png" alt="result2_1" style="zoom: 65%;" />
+
+<p>​    这是上述程序在概率霍夫变换后的输出：</p>
+<img src="result2_2.png" alt="result2_2" style="zoom:65%;" />
+
+<p>​    这是用<code> HoughLinesP</code>的结果，使用<code>HoughLines</code>进行检测出现比较严重的误判。我猜想的原因是这样的：根据官方文档的描述，<code> HoughLinesP</code>检测出来的是一条条可以控制长短的线段，而<code> HoughLines</code>只能检测出完整的直线。所以除了一些特殊的情景外，使用<code> HoughLinesP</code>的检测结果会更精确。</p>
+
+    </article>
+    <!-- license -->
     
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/12/19/springcloud02/">
-                
-                <span class="abstract-title-text">springcloud02</span>
-            </a>
-            <div class="abstract-content">
-                <p>springcloud入门笔记。</p>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/08">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/19</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
+        <div class="license-wrapper">
+            <p>Author：<a href="https://kicheng.github.io">KiCheng</a>
+            <p>Link：<a href="https://kicheng.github.io/2023/03/10/opencv/">https://kicheng.github.io/2023/03/10/opencv/</a>
+            <p>Publish date：<a href="https://kicheng.github.io/2023/03/10/opencv/">March 10th 2023, 3:54:34 pm</a>
+            <p>Update date：<a href="https://kicheng.github.io/2023/03/10/opencv/">January 10th 2025, 9:42:40 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
     
-        
-        
-        
-        
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
             
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2023/03/12/Android-jni/" title="Android平台JNI开发保姆级教程">
+                    <div class="nextTitle">Android平台JNI开发保姆级教程</div>
+                </a>
             
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/12/06/springcloud01/">
-                
-                <span class="abstract-title-text">springcloud02</span>
-            </a>
-            <div class="abstract-content">
-                <p>springcloud入门笔记。</p>
-            </div>
-            <!-- read more -->
+        </li>
+        <li class="previous">
             
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/08">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/06</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
+        </li>
+    </ul>
+    <!-- comment -->
     
-    <!-- paginator  -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
     
 </main>
 
@@ -580,6 +685,23 @@
 
         </div>
         <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenCV-Canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E3%80%81HoughLinesP%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">1.</span> <span class="toc-text">[OpenCV]Canny边缘检测、HoughLinesP直线检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8BEdge-detection"><span class="toc-number">1.1.</span> <span class="toc-text">边缘检测Edge detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E7%BA%BF%E6%A3%80%E6%B5%8BLine-detection"><span class="toc-number">1.2.</span> <span class="toc-text">直线检测Line detection</span></a></li></ol></li></ol>
+            </div>
         
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -812,16 +934,7 @@
         
         
         
-        
-        
-        
-        
-        
     
-        
-        
-        
-        
         
         
         
@@ -1206,7 +1319,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 45
+        Total : 44
         </div>
         <!-- search  -->
         
@@ -1295,18 +1408,6 @@
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/19</span>
-            <a class="archive-post-title" href="/2023/12/19/springcloud02/">springcloud02</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/06</span>
-            <a class="archive-post-title" href="/2023/12/06/springcloud01/">springcloud02</a>
-        </li>
-    
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/17</span>
@@ -1472,7 +1573,7 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/28</span>
-            <a class="archive-post-title" href="/2023/03/28/03-HTTP-Tomcat/">03_HTTP&Tomcat</a>
+            <a class="archive-post-title" href="/2023/03/28/HTTP-Tomcat/">HTTP&Tomcat</a>
         </li>
     
         
@@ -1484,7 +1585,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/28</span>
-            <a class="archive-post-title" href="/2023/03/28/02-Maven/">02_Maven</a>
+            <a class="archive-post-title" href="/2023/03/28/JDBC/">JDBC</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2023/03/28/Maven/">Maven</a>
         </li>
     
         
@@ -1496,7 +1603,7 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2023/03/10/opencv01/">OpenCV特征检测</a>
+            <a class="archive-post-title" href="/2023/03/10/opencv/">OpenCV特征检测</a>
         </li>
     
     </div>
@@ -1631,11 +1738,6 @@
             OpenCV
         </span>
     
-        <span class="sidebar-category-name" data-categories="SpingCloud">
-            <span class="iconfont-archer">&#xe60a;</span>
-            SpingCloud
-        </span>
-    
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
     <div class="sidebar-categories-list"></div>
@@ -1676,6 +1778,8 @@
         <!-- CNZZ -->
         
         <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
         
         <!-- mermaid -->
         

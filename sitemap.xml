@@ -2,7 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://kicheng.github.io/2023/03/10/opencv01/</loc>
+    <loc>https://kicheng.github.io/2023/03/28/HTTP-Tomcat/</loc>
+    
+    <lastmod>2025-01-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/2023/03/28/Maven/</loc>
+    
+    <lastmod>2025-01-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/2023/03/28/JDBC/</loc>
+    
+    <lastmod>2025-01-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/2023/03/10/opencv/</loc>
     
     <lastmod>2025-01-10</lastmod>
     
@@ -131,24 +158,6 @@
     <loc>https://kicheng.github.io/tags/index.html</loc>
     
     <lastmod>2024-07-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://kicheng.github.io/2023/12/06/springcloud01/</loc>
-    
-    <lastmod>2024-06-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://kicheng.github.io/2023/12/19/springcloud02/</loc>
-    
-    <lastmod>2024-06-08</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -380,15 +389,6 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/2023/03/28/03-HTTP-Tomcat/</loc>
-    
-    <lastmod>2023-03-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://kicheng.github.io/2023/03/28/02-Mybatis/</loc>
     
     <lastmod>2023-03-28</lastmod>
@@ -399,15 +399,6 @@
   
   <url>
     <loc>https://kicheng.github.io/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/</loc>
-    
-    <lastmod>2023-03-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://kicheng.github.io/2023/03/28/02-Maven/</loc>
     
     <lastmod>2023-03-28</lastmod>
     
@@ -609,13 +600,6 @@
   
   <url>
     <loc>https://kicheng.github.io/categories/OpenCV/</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://kicheng.github.io/categories/SpingCloud/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

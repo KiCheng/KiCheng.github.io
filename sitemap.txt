@@ -1,4 +1,7 @@
-https://kicheng.github.io/2023/03/10/opencv01/
+https://kicheng.github.io/2023/03/28/HTTP-Tomcat/
+https://kicheng.github.io/2023/03/28/Maven/
+https://kicheng.github.io/2023/03/28/JDBC/
+https://kicheng.github.io/2023/03/10/opencv/
 https://kicheng.github.io/2024/09/18/MIT6.5830-Lab6/
 https://kicheng.github.io/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/
 https://kicheng.github.io/2024/09/25/Condition%E5%92%8CLockSupport/
@@ -13,8 +16,6 @@ https://kicheng.github.io/2024/08/22/MIT6.5830-Lab3/
 https://kicheng.github.io/about/index.html
 https://kicheng.github.io/categories/index.html
 https://kicheng.github.io/tags/index.html
-https://kicheng.github.io/2023/12/06/springcloud01/
-https://kicheng.github.io/2023/12/19/springcloud02/
 https://kicheng.github.io/2023/07/17/Java%E9%9B%86%E5%90%88/
 https://kicheng.github.io/2023/07/14/Java%E7%9A%84%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/
 https://kicheng.github.io/2023/07/08/Linux%E5%85%A5%E9%97%A8/
@@ -40,10 +41,8 @@ https://kicheng.github.io/2023/04/01/06-%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF/
 https://kicheng.github.io/2023/04/01/05-JSP/
 https://kicheng.github.io/2023/04/01/04-Request-Response/
 https://kicheng.github.io/2023/03/28/03-Servlet/
-https://kicheng.github.io/2023/03/28/03-HTTP-Tomcat/
 https://kicheng.github.io/2023/03/28/02-Mybatis/
 https://kicheng.github.io/2023/03/28/02-Mybatis%E7%BB%83%E4%B9%A0/
-https://kicheng.github.io/2023/03/28/02-Maven/
 https://kicheng.github.io/2023/03/28/01-JDBC/
 https://kicheng.github.io/2023/03/12/Android-jni/
 https://kicheng.github.io/404/index.html
@@ -71,4 +70,3 @@ https://kicheng.github.io/categories/Linux/
 https://kicheng.github.io/categories/Maven/
 https://kicheng.github.io/categories/Springboot/
 https://kicheng.github.io/categories/OpenCV/
-https://kicheng.github.io/categories/SpingCloud/
