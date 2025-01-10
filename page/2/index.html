@@ -539,137 +539,6 @@
         
         
             
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/08/11/algorithm08-dp%E4%B9%8B%E5%AD%90%E5%BA%8F%E5%88%97/">
-                
-                <span class="abstract-title-text">algorithm08-dp之子序列</span>
-            </a>
-            <div class="abstract-content">
-                
-
-
-
-不连续子序列300. 最长递增子序列
-定义 dp[i] 为考虑前 i 个元素，以第 i 个数字结尾的最长上升子序列的长度，注意 nums[i] 必须被选取。
-我们从小到大计算 dp 数组的值，在计算 dp[i] 之前，我们已经计算出 dp[0…i−1] 的值，则状态转移方程为：$$dp[i]=max⁡(dp[j])+1,其中 0≤j&lt;i 且 num[j]&lt;num[i]$$
-12345678910111213141516171819class Solution &#123;    public int lengthOfLIS(int[] nums) &#123;    ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/08/12">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/08/11</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/08/05/algorithm07-dp%E4%B9%8B%E8%82%A1%E7%A5%A8%E7%B3%BB%E5%88%97/">
-                
-                <span class="abstract-title-text">algorithm07-dp之股票系列</span>
-            </a>
-            <div class="abstract-content">
-                
-
-121. 买卖股票的最佳时机
-只能买卖一次，所以维护一个历史最低价minprice变量，意为在第i天时，[0, …, i-1]天中的最底价。这是一种动态规划的思想。
-1234567891011class Solution &#123;    public int maxProfit(int[] prices) &#123;        int minprice = prices[0];        int maxprofit = 0;        for(int i=1;i&lt;prices.length;i++)&#123;            minprice = mi...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/08/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/08/05</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/07/21/algorithm06-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">
-                
-                <span class="abstract-title-text">algorithm06-回溯算法</span>
-            </a>
-            <div class="abstract-content">
-                
-
-
-
-组合77. 组合
-
-123456789101112131415161718192021class Solution &#123;    List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();    public List&lt;List&lt;Integer&gt;&gt; combine(int n, int k) &#123;        Deque&lt;Integer&gt; path = new LinkedList&lt;&gt;();        dfs(n, k, 1, path);    ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/08/29">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/21</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/07/18/algorithm05-%E4%BA%8C%E5%8F%89%E6%A0%91/">
-                
-                <span class="abstract-title-text">algorithm05-二叉树</span>
-            </a>
-            <div class="abstract-content">
-                
-
-二叉树的遍历方式递归遍历递归的实现就是：每一次递归调用都会把函数的局部变量、参数值和返回地址等压入栈中，然后递归返回的时候，从栈顶弹出上一次递归的各项参数，所以这就是递归为什么可以返回上一层位置的原因。
-
-前序遍历
-按照访问根节点→左子树→右子树的方式遍历这棵树，而在访问左子树或者右子树的时候，我们按照同样的方式遍历，直到遍历完整棵树。
-123456789101112131415class Solution &#123;    public List&lt;Integer&gt; preorderTraversal(TreeNode root) &#123;        List&...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/07/23">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/18</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
             
         
         <article class="index-post">
@@ -749,10 +618,122 @@
         </article>
         <div class="index-post-divider"></div>
     
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/07/07/01-MySQL%E5%9F%BA%E7%A1%80/">
+                
+                <span class="abstract-title-text">01-MySQL基础</span>
+            </a>
+            <div class="abstract-content">
+                <p>Mysql是一种关系型数据库，这篇博客作为数据库的基础篇主要讲解操作关系型数据的SQL编程语言。</p>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/08">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/07</span>
+                </div>
+                <!-- tags -->
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/07/07/MybatisPlus/">
+                
+                <span class="abstract-title-text">MybatisPlus</span>
+            </a>
+            <div class="abstract-content">
+                <p>MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。使用原生的Mybatis编写持久层逻辑时，所需要的代码是比较繁琐的，需要定义Mapper接口和Mapper.xml文件，每一个方法都需要编写对应的sql语句，会存在很多大量的重复工作，使用MP之后，对通用的方法做了高度的抽取，避免了很多重复工作，可以非常快速的实现了单表的各种增、删、改、查操作。</p>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/07">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/07</span>
+                </div>
+                <!-- tags -->
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/07/06/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day2/">
+                
+                <span class="abstract-title-text">瑞吉外卖项目实战day2</span>
+            </a>
+            <div class="abstract-content">
+                <p>适合新手小白入门Java后端开发的Springboot + Mybatis Plus 项目。</p>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/06">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/06</span>
+                </div>
+                <!-- tags -->
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/07/04/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98day1/">
+                
+                <span class="abstract-title-text">瑞吉外卖项目实战day1</span>
+            </a>
+            <div class="abstract-content">
+                <p>适合新手小白入门Java后端开发的Springboot + Mybatis Plus 项目。</p>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/06">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/04</span>
+                </div>
+                <!-- tags -->
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1202,131 +1183,7 @@
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         
@@ -1715,7 +1572,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 45
         </div>
         <!-- search  -->
         
@@ -1818,30 +1675,6 @@
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">08/11</span>
-            <a class="archive-post-title" href="/2023/08/11/algorithm08-dp%E4%B9%8B%E5%AD%90%E5%BA%8F%E5%88%97/">algorithm08-dp之子序列</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/05</span>
-            <a class="archive-post-title" href="/2023/08/05/algorithm07-dp%E4%B9%8B%E8%82%A1%E7%A5%A8%E7%B3%BB%E5%88%97/">algorithm07-dp之股票系列</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/21</span>
-            <a class="archive-post-title" href="/2023/07/21/algorithm06-%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">algorithm06-回溯算法</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/18</span>
-            <a class="archive-post-title" href="/2023/07/18/algorithm05-%E4%BA%8C%E5%8F%89%E6%A0%91/">algorithm05-二叉树</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">07/17</span>
             <a class="archive-post-title" href="/2023/07/17/Java%E9%9B%86%E5%90%88/">Java集合</a>
         </li>
@@ -1904,12 +1737,6 @@
         <li class="archive-post-item">
             <span class="archive-post-date">06/13</span>
             <a class="archive-post-title" href="/2023/06/13/02-RESTful%E5%BC%80%E5%8F%91/">02-RESTful开发</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/05</span>
-            <a class="archive-post-title" href="/2023/06/05/algorithm04-%E5%AD%97%E7%AC%A6%E4%B8%B2/">algorithm04 字符串</a>
         </li>
     
         
@@ -2038,33 +1865,6 @@
             <a class="archive-post-title" href="/2023/03/10/opencv01/">OpenCV特征检测</a>
         </li>
     
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/03</span>
-            <a class="archive-post-title" href="/2023/02/03/algorithm03/">algorithm03 链表</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2022 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/21</span>
-            <a class="archive-post-title" href="/2022/12/21/algorithm02/">algorithm02 哈希表</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/18</span>
-            <a class="archive-post-title" href="/2022/12/18/algorithm01/">Algorithm01 数组</a>
-        </li>
-    
     </div>
 </div>
 
@@ -2091,14 +1891,14 @@
                 并发编程
             </span>
         
-            <span class="sidebar-tag-name" data-tags="Java">
-                <span class="iconfont-archer">&#xe606;</span>
-                Java
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="java">
                 <span class="iconfont-archer">&#xe606;</span>
                 java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
             </span>
         
             <span class="sidebar-tag-name" data-tags="database">
@@ -2127,11 +1927,6 @@
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Spring">
-            <span class="iconfont-archer">&#xe60a;</span>
-            Spring
-        </span>
-    
         <span class="sidebar-category-name" data-categories="JavaWeb">
             <span class="iconfont-archer">&#xe60a;</span>
             JavaWeb
@@ -2147,9 +1942,19 @@
             SpringMVC
         </span>
     
+        <span class="sidebar-category-name" data-categories="Spring">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Spring
+        </span>
+    
         <span class="sidebar-category-name" data-categories="Android">
             <span class="iconfont-archer">&#xe60a;</span>
             Android
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Git">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Git
         </span>
     
         <span class="sidebar-category-name" data-categories="Others">
@@ -2162,24 +1967,19 @@
             Java并发
         </span>
     
-        <span class="sidebar-category-name" data-categories="Git">
-            <span class="iconfont-archer">&#xe60a;</span>
-            Git
-        </span>
-    
         <span class="sidebar-category-name" data-categories="Java基础">
             <span class="iconfont-archer">&#xe60a;</span>
             Java基础
         </span>
     
-        <span class="sidebar-category-name" data-categories="Linux">
-            <span class="iconfont-archer">&#xe60a;</span>
-            Linux
-        </span>
-    
         <span class="sidebar-category-name" data-categories="MySQL">
             <span class="iconfont-archer">&#xe60a;</span>
             MySQL
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Linux">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Linux
         </span>
     
         <span class="sidebar-category-name" data-categories="Maven">
@@ -2190,11 +1990,6 @@
         <span class="sidebar-category-name" data-categories="Springboot">
             <span class="iconfont-archer">&#xe60a;</span>
             Springboot
-        </span>
-    
-        <span class="sidebar-category-name" data-categories="算法">
-            <span class="iconfont-archer">&#xe60a;</span>
-            算法
         </span>
     
         <span class="sidebar-category-name" data-categories="OpenCV">
