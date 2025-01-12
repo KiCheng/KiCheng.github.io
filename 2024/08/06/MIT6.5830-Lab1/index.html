@@ -1,35 +1,552 @@
-extends includes/layout.pug
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MIT6.5830-Lab1 | KiCheng's Blog</title><meta name="author" content="KiCheng"><meta name="copyright" content="KiCheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT6.5830-Lab1">
+<meta property="og:url" content="https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kicheng.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-08-06T12:07:44.000Z">
+<meta property="article:modified_time" content="2024-09-19T07:31:47.055Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="database">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MIT6.5830-Lab1",
+  "url": "https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/",
+  "image": "https://kicheng.github.io/img/butterfly-icon.png",
+  "datePublished": "2024-08-06T12:07:44.000Z",
+  "dateModified": "2024-09-19T07:31:47.055Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "KiCheng",
+      "url": "https://kicheng.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
-block content
-  #post
-    if top_img === false
-      include includes/header/post-info.pug
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
-    article#article-container.container.post-content
-      if theme.noticeOutdate.enable && page.noticeOutdate !== false
-        include includes/post/outdate-notice.pug
-      else
-        !=page.content
-    include includes/post/post-copyright.pug
-    .tag_share
-      if (page.tags.length > 0 && theme.post_meta.post.tags)
-        .post-meta__tag-list
-          each item, index in page.tags.data
-            a(href=url_for(item.path)).post-meta__tags #[=item.name]
-      include includes/third-party/share/index.pug
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-    if theme.reward.enable && theme.reward.QR_code
-      !=partial('includes/post/reward', {}, {cache: true})
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MIT6.5830-Lab1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">MIT6.5830-Lab1</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">MIT6.5830-Lab1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-08-06T12:07:44.000Z" title="Created 2024-08-06 20:07:44">2024-08-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-09-19T07:31:47.055Z" title="Updated 2024-09-19 15:31:47">2024-09-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>前段时间学习一下 MySQL，正好准备一个手撕轮子项目，就准备完成这个 MIT6.5830 的数据库课程。Lab1 主要是完成一些简单的数据库定义以及实现简单的全表扫描。</p>
+<span id="more"></span>
 
-    //- ad
-    if theme.ad && theme.ad.post
-      .ads-wrap!=theme.ad.post
+<h2 id="任务目录"><a href="#任务目录" class="headerlink" title="任务目录"></a>任务目录</h2><ul>
+<li><p><input checked="" disabled="" type="checkbox">  exercise1：实现元组以及元组属性字段</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise2：实现数据库目录，包含数据库现有的表信息</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise3：实现BufferPool，将内存读取过的数据页缓存下来</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise4：实现页面id、数据记录id以及Page类</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise5：实现磁盘文件的接口HeapFile，通过HeapFile可以从磁盘读写数据</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  exercise6：实现全表扫描</p>
+</li>
+</ul>
+<h2 id="Exercise1"><a href="#Exercise1" class="headerlink" title="Exercise1"></a>Exercise1</h2><blockquote>
+<p>实现Tuple、TupleDesc两个类</p>
+</blockquote>
+<p>在数据库中，行被称为元组(tuple)或记录(record)，列称为字段(field)。tuple元组在数据库中是一组Field对象的集合。</p>
+<p><img src="image-18.png"></p>
+<h3 id="TupleDesc类"><a href="#TupleDesc类" class="headerlink" title="TupleDesc类"></a>TupleDesc类</h3><p><img src="image-15.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>private CopyOnWriteArrayList&lt;TDItem&gt; tdItems</code></li>
+</ul>
+<blockquote>
+<p>TupleDesc中提供了一个TDItem内部辅助类，类中定义了<code>Type fieldType</code>和<code>String fieldName</code>两个成员变量（Type是枚举类型，当前只实现了INT_TYPE和STRING_TYPE）。</p>
+</blockquote>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>初始化方法：<code>public TupleDesc(Type[] typeAr, String[] fieldAr)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">TupleDesc</span><span class="params">(Type[] typeAr, String[] fieldAr)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    tdItems = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (typeAr.length != fieldAr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; typeAr.length; i++) &#123;</span><br><span class="line">        tdItems.add(<span class="keyword">new</span> <span class="title class_">TDItem</span>(typeAr[i], fieldAr[i]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回所有属性的迭代器：<code>public Iterator&lt;TDItem&gt; iterator()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;TDItem&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (tdItems == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tdItems.iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回TupleDesc属性的数量：<code>public int numFields()</code></p>
+</li>
+<li><p>返回第i个属性的属性名：<code>public String getFieldName(int i)</code></p>
+</li>
+<li><p>返回第i个属性的属性类型：<code>public Type getFieldType(int i)</code></p>
+</li>
+<li><p>根据属性名返回属性在tditem中的序号：<code>public int indexForFieldName(String name)</code></p>
+</li>
+<li><p>返回此TupleDesc对应的元组所占字节大小：<code>public int getSize()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">dataSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numFields(); i++) &#123;</span><br><span class="line">        <span class="comment">// Type中存在getLen()方法，可获取INT_TYPE和STRING_TYPE字节数</span></span><br><span class="line">        dataSize += tdItems.get(i).fieldType.getLen();  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dataSize;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>合并两个TupleDesc：<code>public static TupleDesc merge(TupleDesc td1, TupleDesc td2)</code></p>
+</li>
+<li><p>判断两个TupleDesc是否相等：<code>public boolean equals(Object o)</code></p>
+<p>相等条件：两个TupleDesc的属性数量相等，且tditem1[i]和tditem2[i]属性类型相同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="comment">// instanceof 测试左边的对象是否是右边“特定类or其子类”的实例</span></span><br><span class="line">    <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> TupleDesc)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">TupleDesc</span> <span class="variable">other</span> <span class="operator">=</span> (TupleDesc) o;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.numFields() != other.numFields() || <span class="built_in">this</span>.tdItems.size() != other.tdItems.size()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="built_in">this</span>.numFields(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.getFieldType(i).equals(other.getFieldType(i))) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    if theme.post_pagination
-      include includes/pagination.pug
-    if theme.related_post && theme.related_post.enable
-      != related_posts(page,site.posts)
+<blockquote>
+<ol>
+<li>instanceof</li>
+</ol>
+<p>语法：<code>boolean result = object instanceof Class（该类、父类、接口）;</code></p>
+<p>用法：① 判断object对象是否是class类实例； ② 判断object对象是否是class类的子类的实例； ② 判断object对象是否是接口实现类的实例。</p>
+<p><img src="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试1===============&quot;</span>);</span><br><span class="line"><span class="comment">// 判断object对象是否为 class类本身的实例</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Computer);  <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 判断object对象是否为 class类的子类的实例</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Machine);  <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 判断object对象是否为 接口的实现类的实例</span></span><br><span class="line">System.out.println(mouse <span class="keyword">instanceof</span> usb);  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试2===============&quot;</span>);</span><br><span class="line"><span class="comment">// 所有对象都为Object类</span></span><br><span class="line">System.out.println(computer <span class="keyword">instanceof</span> Object);  <span class="comment">// true</span></span><br><span class="line">System.out.println(mouse <span class="keyword">instanceof</span> Object);  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;===============instanceof阶段测试3===============&quot;</span>);</span><br><span class="line"><span class="comment">// null不是任何类的实例</span></span><br><span class="line">System.out.println(<span class="literal">null</span> <span class="keyword">instanceof</span> Object);  <span class="comment">// false</span></span><br><span class="line">System.out.println(<span class="literal">null</span> <span class="keyword">instanceof</span> Computer);  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
 
-    if page.comments !== false && theme.comments.use
-      - var commentsJsLoad = true
-      !=partial('includes/third-party/comments/index', {}, {cache: true})
+<ul>
+<li>isInstance</li>
+</ul>
+<p>语法：<code>boolean result = Class.class.isInstance(object);</code></p>
+<p>用法：同上（判断object对象能否被转化为这个Class类）</p>
+</blockquote>
+</li>
+<li><p>返回该TupleDesc的哈希值：<code>public int hashCode()</code></p>
+</li>
+<li><p>展示TupleDesc的所有属性类型+属性名：<code>public String toString()</code></p>
+</li>
+</ul>
+<h3 id="Tuple类"><a href="#Tuple类" class="headerlink" title="Tuple类"></a>Tuple类</h3><p><img src="image-19.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p><code>private TupleDesc td;</code></p>
+</li>
+<li><p>元组的id：<code>private RecordId rid;</code></p>
+</li>
+<li><p>存储Tuple中所有字段：<code>CopyOnWriteArrayList&lt;Field&gt; fields;</code></p>
+<blockquote>
+<p>Field接口，包含compare()、getType()、equals()、toString()方法，IntField 和 StringField 类实现了该接口。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public Tuple(TupleDesc td)</code></p>
+</li>
+<li><p>获得元组对应的字段属性：<code>public TupleDesc getTupleDesc()</code></p>
+</li>
+<li><p>获得元组id：<code>public RecordId getRecordId()</code></p>
+</li>
+<li><p>设置元组id：<code>public void setRecordId(RecordId rid)</code></p>
+</li>
+<li><p>为Tuple的第i个字段赋值：<code>public void setField(int i, Field f)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setField</span><span class="params">(<span class="type">int</span> i, Field f)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (i &gt;= fields.size()) &#123;</span><br><span class="line">        fields.add(f);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fields.set(i, f);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>获得第i个字段：<code>public Field getField(int i)</code></p>
+</li>
+<li><p>展示该Tuple的所有字段值：<code>public String toString()</code></p>
+</li>
+<li><p>返回元组字段的迭代器：<code>public Iterator&lt;Field&gt; fields()</code></p>
+</li>
+<li><p>重置TupldeDesc：<code>public void resetTupleDesc(TupleDesc td)</code></p>
+</li>
+</ul>
+<p><img src="image-17.png"></p>
+<h2 id="Exercise2"><a href="#Exercise2" class="headerlink" title="Exercise2"></a>Exercise2</h2><blockquote>
+<p>实现Catalog类</p>
+</blockquote>
+<p><img src="image-4.png"></p>
+<h3 id="Catalog类"><a href="#Catalog类" class="headerlink" title="Catalog类"></a>Catalog类</h3><p>Catalog管理着数据库中的所有表：</p>
+<p><img src="image-1.png"></p>
+<blockquote>
+<p>dbFile是什么 —— 每一个DbFile对应数据库中的一张表。</p>
+<p><img src="image-10.png"></p>
+<p><img src="image-11.png"></p>
+</blockquote>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p>表id与表的映射：<code>ConcurrentHashMap&lt;Integer, Table&gt; tableIdMap;</code></p>
+<blockquote>
+<p>Table类包含参数tableName、pkeyField（表中的主键）、dbFile（存储表内容）</p>
+</blockquote>
+</li>
+<li><p>表名与表id的映射（方便通过tableName获取table）：<code>ConcurrentHashMap&lt;String, Integer&gt; tableNameMap;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public Catalog()</code></p>
+</li>
+<li><p>向Catalog中添加表：<code>public void addTable(DbFile file, String name, String pkeyField)</code></p>
+</li>
+<li><p>根据表明获取表id：<code>public int getTableId(String name)</code></p>
+</li>
+<li><p>&#x20;通过表id获取表TupleDesc：<code>public TupleDesc getTupleDesc(int tableId)</code></p>
+</li>
+<li><p>通过表id获取表的内容dbFile：<code>public DbFile getDatabaseFile(int tableId)</code></p>
+</li>
+<li><p>通过表id获取表的主键：<code>public String getPrimaryKey(int tableId)</code></p>
+</li>
+<li><p>返回tableId的迭代器：<code>public Iterator&lt;Integer&gt; tableIdIterator()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;Integer&gt; <span class="title function_">tableIdIterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> tableIdMap.keySet().iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>通过表id获取表名：<code>public String getTableName(int id)</code></p>
+</li>
+<li><p>清空Catalog：<code>public void clear()</code></p>
+</li>
+</ul>
+<p><img src="image-14.png"></p>
+<h2 id="Exercise3"><a href="#Exercise3" class="headerlink" title="Exercise3"></a>Exercise3</h2><blockquote>
+<p>实现BufferPool的构造器和getPage()方法</p>
+</blockquote>
+<h3 id="BufferPool类"><a href="#BufferPool类" class="headerlink" title="BufferPool类"></a>BufferPool类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>默认page大小：<code>private static final int </code><em><code>DEFAULT_PAGE_SIZE </code></em><code>= 4096;</code> <code>private static int </code><em><code>pageSize </code></em><code>= </code><em><code>DEFAULT_PAGE_SIZE</code></em><code>;</code></p>
+</li>
+<li><p>BufferPool能获取的page数量：<code>private final int numPages;</code></p>
+</li>
+<li><p>pageId到page的映射：<code>private final Map&lt;PageId, Page&gt; bufferPools = new ConcurrentHashMap&lt;&gt;();</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public BufferPool(int numPages)</code></p>
+</li>
+<li><p>从BufferPool中根据pageId获取对应的page，如果BufferPool中不存在就去磁盘搜索并保存到BufferPool：<code>public Page getPage(TransactionId tid, PageId pid, Permissions perm)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Page <span class="title function_">getPage</span><span class="params">(TransactionId tid, PageId pid, Permissions perm)</span></span><br><span class="line">        <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span>(!bufferPools.containsKey(pid)) &#123;</span><br><span class="line">        <span class="type">DbFile</span> <span class="variable">file</span> <span class="operator">=</span> Database.getCatalog().getDatabaseFile(pid.getTableId());</span><br><span class="line">        <span class="type">Page</span> <span class="variable">page</span> <span class="operator">=</span> file.readPage(pid);</span><br><span class="line">        bufferPools.put(pid, page);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bufferPools.get(pid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取page的方法有且只有<code>BufferPool.getPage()</code>。</p>
+<p>通过一个具体的索引页id就可以找到一张特定的数据表，所以我们可以认为：“<strong>在一个数据页上只能存储同一张表的数据”</strong>。</p>
+<p><img src="image-9.png" alt="copilot解答"></p>
+<ol>
+<li>数据组织和查询效率</li>
+</ol>
+<ul>
+<li><p><strong>连续存储</strong>：将同一张表的数据存储在连续的页面中，有助于提高查询效率。读取一个表的数据时，可以通过顺序扫描这些页面，减少磁盘寻道时间。</p>
+</li>
+<li><p><strong>索引效率</strong>：索引通常是基于表的。当页面只存储一张表的数据时，索引查找可以更快地定位数据。</p>
+</li>
+</ul>
+<ul>
+<li>数据一致性和隔离</li>
+</ul>
+<ul>
+<li><p><strong>事务管理</strong>：事务的隔离级别要求对表的操作是可预测和隔离的。将不同表的数据混合在同一个页面中，可能会导致复杂的锁管理和数据一致性问题。</p>
+</li>
+<li><p><strong>日志记录和恢复</strong>：数据库的日志记录机制（如WAL日志）通常基于表进行管理。将不同表的数据混合在一个页面中，恢复过程会变得更加复杂。</p>
+</li>
+</ul>
+<ul>
+<li>空间管理和回收</li>
+</ul>
+<ul>
+<li><p><strong>空间利用</strong>：将同一张表的数据放在同一页面中，可以更有效地利用空间。当需要扩展表时，只需分配新的页面，不需要考虑不同表的数据混合导致的空间浪费问题。</p>
+</li>
+<li><p><strong>垃圾回收</strong>：当删除数据时，页面中的空闲空间可以更容易地被同一表的新数据使用。如果不同表的数据混合在一起，空间回收和再利用会更加困难。</p>
+</li>
+</ul>
+<ul>
+<li>设计和实现的简化</li>
+</ul>
+<ul>
+<li><p><strong>代码复杂度</strong>：将每个页面绑定到一个特定的表，可以简化数据库管理系统的实现。比如，代码中的 <code>Database.getCatalog().getDatabaseFile(pid.getTableId())</code> 就是通过表ID来获取相关的数据库文件（包含多个页面）的。</p>
+</li>
+<li><p><strong>模块化设计</strong>：这种设计方式使得数据库系统的模块化和维护变得更简单。每个模块（如页面管理、缓冲区管理、事务管理）可以专注于处理单一表的数据。</p>
+<p>&#x20;                                                                                                                                —— chatGPT解答</p>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="Exercise4"><a href="#Exercise4" class="headerlink" title="Exercise4"></a>Exercise4</h2><blockquote>
+<p>实现HeapPageId类、RecordId类、HeapPage类</p>
+</blockquote>
+<p><img src="image-13.png"></p>
+<h3 id="HeapPageId类"><a href="#HeapPageId类" class="headerlink" title="HeapPageId类"></a>HeapPageId类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>page所在的数据表id：<code>private int tableId;</code></p>
+</li>
+<li><p>page的序号：<code>private int pgNo;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapPageId(int tableId, int pgNo)</code></p>
+</li>
+<li><p>返回该page所在的数据表id：<code>public int getTableId() </code></p>
+</li>
+<li><p>返回该page的序号：<code>public int getPageNumber()</code></p>
+</li>
+<li><p>返回该pageId的哈希值：<code>public int hashCode()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">        <span class="keyword">return</span> getPageNumber() * <span class="number">1000</span> + getTableId();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>判断两个PageId对应的page是否相等：<code>public boolean equals(Object o)</code></p>
+<p>相等条件：两个PageId的pageNo和tableId相等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (o <span class="keyword">instanceof</span> HeapPageId) &#123;</span><br><span class="line">        <span class="type">HeapPageId</span> <span class="variable">other</span> <span class="operator">=</span> (HeapPageId) o;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.getPageNumber() == other.getPageNumber() &amp;&amp; <span class="built_in">this</span>.getTableId() == other.getTableId();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="RecordId类"><a href="#RecordId类" class="headerlink" title="RecordId类"></a>RecordId类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>元组id所在页的pageId：<code>private PageId pid;</code></p>
+</li>
+<li><p>元组的序号：<code>private int tupleNo;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public RecordId(PageId pid, int tupleno)</code></p>
+</li>
+<li><p>返回元组的序号：<code>public int getTupleNumber()</code></p>
+</li>
+<li><p>返回元组所在页的pageId：<code>public PageId getPageId()</code></p>
+</li>
+<li><p>判断两个tuple是否相同：<code>public boolean equals(Object o)</code></p>
+</li>
+<li><p>返回 tuple的哈希值：<code>public int hashCode()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.pid.getPageNumber() * <span class="number">100</span> + <span class="built_in">this</span>.pid.getTableId() * <span class="number">10</span> + <span class="built_in">this</span>.tupleNo; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="HeapPage类"><a href="#HeapPage类" class="headerlink" title="HeapPage类"></a>HeapPage类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>pageId：<code>private final HeapPageId pid;</code></p>
+</li>
+<li><p>page所对应表格的tupleDesc：<code>private final TupleDesc td;</code></p>
+</li>
+<li><p>page中槽slot的bitmap，判断该页的slot是否被占用：<code>final byte[] header;</code></p>
+</li>
+<li><p>page中的元组：<code>final Tuple[] tuples;</code></p>
+</li>
+<li><p>page中slot的数量：<code>private final int numSlots;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapPage(HeapPageId id, byte[] data)</code></p>
+</li>
+<li><p>返回每个page中包含的tuple数量：<code>private int getNumTuples()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getNumTuples</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">page_bits</span> <span class="operator">=</span> BufferPool.getPageSize() * <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tuple_bits</span> <span class="operator">=</span> (td.getSize() * <span class="number">8</span> + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> page_bits / tuple_bits;  <span class="comment">// 进行下取整</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>数据库中每个page的tuple需要 tuple size*8 bit 的内容大小和 1bit 的header大小。&#x20;</p>
+<ul>
+<li><p>返回page中的header大小：<code>private int getHeaderSize()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getHeaderSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>) Math.ceil((<span class="type">double</span>) getNumTuples() / <span class="number">8</span>);  <span class="comment">// 进行上取整</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回pageId：<code>public HeapPageId getId()</code></p>
+</li>
+<li><p>判断第i个slot槽是否为空：<code>public boolean isSlotUsed(int i)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSlotUsed</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="comment">// 计算在header中的位置(哪一个字节)</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">iTh</span> <span class="operator">=</span> i / <span class="number">8</span>;</span><br><span class="line">    <span class="comment">// 计算具体在bitmap中的位置(哪一个比特位，或者理解为header字节位中的比特偏移量)</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">bitTh</span> <span class="operator">=</span> i % <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">onBit</span> <span class="operator">=</span> (header[iTh] &gt;&gt; bitTh) &amp; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> onBit == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>header的存储方式是byte数组，每个byte包含8个bit，例如某header的状态如下：{<code>11111111</code>, <code>11111111</code>, <code>00000011</code>}（byte的右侧为低位），此时先通过<code>iTh=i/8</code>变量确定槽i在哪一个byte中，再通过<code>bitTh=i%8</code>确定槽i在byte字节中具体是哪一个bit，最后通过 &amp; 异或确定该bit是0或1。</p>
+<ul>
+<li>返回page中空slot的数量：<code>public int getNumUnusedSlots()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getNumUnusedSlots</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">cnt</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numSlots; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isSlotUsed(i)) &#123;</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>返回page中所有tuple的迭代器（不包括空slot）：<code>public Iterator&lt;Tuple&gt; iterator()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;Tuple&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    List&lt;Tuple&gt; tupleList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numSlots; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isSlotUsed(i)) &#123;</span><br><span class="line">            tupleList.add(tuples[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tupleList.iterator();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>HeapPage中的tuple是通过数组存储的，为了访问迭代器方法需要将tuple数组转换成tuple集合。</p>
+<h2 id="Exercise5"><a href="#Exercise5" class="headerlink" title="Exercise5"></a>Exercise5</h2><blockquote>
+<p>实现HeapFile类</p>
+</blockquote>
+<p><img src="image-12.png"></p>
+<h3 id="HeapFile类"><a href="#HeapFile类" class="headerlink" title="HeapFile类"></a>HeapFile类</h3><p>一个HeapFile就是一张数据表。</p>
+<p><img src="image-8.png"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><p>表中的内容：<code>private final File f;</code></p>
+</li>
+<li><p>表的属性行：<code>private final TupleDesc td;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public HeapFile(File f, TupleDesc td)</code></p>
+</li>
+<li><p>返回表的内容：<code>public File getFile()</code></p>
+</li>
+<li><p>返回标识表文件的唯一id (heapfile绝对路径的哈希值)：<code>public int getId()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> f.getAbsolutePath().hashCode();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回表的属性行：<code>public TupleDesc getTupleDesc()</code></p>
+</li>
+<li><p>返回表的page数目：<code>public int numPages()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">numPages</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">file_length</span> <span class="operator">=</span> getFile().length();  <span class="comment">// 文件长度</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">pageSize</span> <span class="operator">=</span> BufferPool.getPageSize();  <span class="comment">// 每个页面的大小</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>) (file_length / pageSize);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>从表文件中读取page：<code>public Page readPage(PageId pid)</code></p>
+<blockquote>
+<p><code>readPage()</code>方法仅会被BufferPool中的<code>getPage()</code>方法调用，再其他地方获取page时也都要调用BufferPool的<code>getPage()</code>方法，这也是BufferPool的意义。</p>
+</blockquote>
+<p>利用 RandomAccessFile 来读写 HeapFile 中的Page：</p>
+<p><code>RandomAccessFile</code> 是 Java 中用于对文件进行读写操作的类，其支持随机访问文件内容的特性。这里的随机 <code>seek()</code> 方法指的是可以通过指定文件中的任意位置（偏移量）来读取或写入数据，而不是像顺序读写那样只能按照文件中数据的顺序逐个访问。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Page <span class="title function_">readPage</span><span class="params">(PageId pid)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">tableId</span> <span class="operator">=</span> pid.getTableId();</span><br><span class="line">    <span class="type">int</span> <span class="variable">pgNo</span> <span class="operator">=</span> pid.getPageNumber();</span><br><span class="line">    <span class="type">int</span> <span class="variable">offset</span> <span class="operator">=</span> pgNo * BufferPool.getPageSize();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// randomaccessfile try-catch-finally</span></span><br><span class="line">    <span class="type">RandomAccessFile</span> <span class="variable">randomAccessFile</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        randomAccessFile = <span class="keyword">new</span> <span class="title class_">RandomAccessFile</span>(f, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">        <span class="comment">// 保证pid页面的结束位置不大于文件randomFile的长度</span></span><br><span class="line">        <span class="keyword">if</span> ((<span class="type">long</span>) pgNo * BufferPool.getPageSize() &gt; randomAccessFile.length()) &#123;</span><br><span class="line">            randomAccessFile.close();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d is invalid&quot;</span>, tableId, pgNo));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">byte</span>[] bytes = <span class="keyword">new</span> <span class="title class_">byte</span>[BufferPool.getPageSize()];</span><br><span class="line">        <span class="comment">// 移动偏移量到页面的开头</span></span><br><span class="line">        randomAccessFile.seek(offset);</span><br><span class="line">        <span class="comment">// 不要在调用时将整个表加载到内存中，这将导致非常大的表出现内存不足错误</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">read</span> <span class="operator">=</span> randomAccessFile.read(bytes, <span class="number">0</span>, BufferPool.getPageSize());</span><br><span class="line">        <span class="keyword">if</span> (read != BufferPool.getPageSize()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d read %d bytes not equal to BufferPool.getPageSize()&quot;</span>,</span><br><span class="line">                    tableId, pgNo, read));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">HeapPageId</span> <span class="variable">heapPageId</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HeapPageId</span>(pid.getTableId(), pid.getPageNumber());</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HeapPage</span>(heapPageId, bytes);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (randomAccessFile != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                randomAccessFile.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(<span class="string">&quot;table %d page %d is invalid&quot;</span>, tableId, pgNo));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回表文件中所有heapPage中元组的迭代器：<code>public DbFileIterator iterator(TransactionId tid)</code></p>
+<p><img src="image-16.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> DbFileIterator <span class="title function_">iterator</span><span class="params">(TransactionId tid)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HeapFileIterator</span>(tid, <span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 迭代器内部类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">HeapFileIterator</span> <span class="keyword">implements</span> <span class="title class_">DbFileIterator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TransactionId tid;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> HeapFile heapFile;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 元组迭代器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Iterator&lt;Tuple&gt; tupleIterator;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当前页面索引</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> index;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HeapFileIterator</span><span class="params">(TransactionId tid, HeapFile heapFile)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.tid = tid;</span><br><span class="line">        <span class="built_in">this</span>.heapFile = heapFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        index = <span class="number">0</span>;</span><br><span class="line">        tupleIterator = getTupleIterator(index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Iterator&lt;Tuple&gt; <span class="title function_">getTupleIterator</span><span class="params">(<span class="type">int</span> pageNumber)</span> <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">        <span class="keyword">if</span> (pageNumber &gt;= <span class="number">0</span> &amp;&amp; pageNumber &lt; heapFile.numPages()) &#123;</span><br><span class="line">            <span class="type">HeapPageId</span> <span class="variable">heapPageId</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HeapPageId</span>(heapFile.getId(), pageNumber);</span><br><span class="line">            <span class="type">HeapPage</span> <span class="variable">heapPage</span> <span class="operator">=</span> (HeapPage) Database.getBufferPool().getPage(tid, heapPageId, Permissions.READ_ONLY);</span><br><span class="line">            <span class="keyword">return</span> heapPage.iterator();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">DbException</span>(String.format(<span class="string">&quot;heapFile %d does not exist in page %d&quot;</span>, heapFile.getId(), pageNumber));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        <span class="keyword">if</span> (tupleIterator == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(!tupleIterator.hasNext()) &#123;</span><br><span class="line">            <span class="comment">// 如果当前页面没有元组，则切换到下一个页面</span></span><br><span class="line">            index++;</span><br><span class="line">            <span class="keyword">if</span>(index &lt; heapFile.numPages()) &#123;</span><br><span class="line">                tupleIterator = getTupleIterator(index);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果当前页面还有元组，则返回true</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Tuple <span class="title function_">next</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException, NoSuchElementException &#123;</span><br><span class="line">        <span class="keyword">if</span> (tupleIterator == <span class="literal">null</span> || !tupleIterator.hasNext()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> tupleIterator.next();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">        close();</span><br><span class="line">        open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">        tupleIterator = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="image-7.png"></p>
+<h2 id="Exercise6"><a href="#Exercise6" class="headerlink" title="Exercise6"></a>Exercise6</h2><blockquote>
+<p>实现SeqScan类：该类应该能通过构造方法传入的tableId参数扫描数据表中的所有元组，并使用<code>dbFile.iterator()</code>访问元组</p>
+</blockquote>
+<h3 id="SeqScan类"><a href="#SeqScan类" class="headerlink" title="SeqScan类"></a>SeqScan类</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>事务id：<code>private TransactionId tid;</code></p>
+</li>
+<li><p>需要扫描的数据表id：<code>private int tableid;</code></p>
+</li>
+<li><p>表的别名（返回TupleDesc时，要在fieldName前加上tableAlias字段）：<code>private String tableAlias;</code></p>
+</li>
+<li><p>扫描数据表要访问的dbFile迭代器：<code>private DbFileIterator dbFileIterator;</code></p>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li><p>构造方法：<code>public SeqScan(TransactionId tid, int tableid, String tableAlias)</code></p>
+</li>
+<li><p>获取表名：<code>public String getTableName()</code></p>
+</li>
+<li><p>获取表的alias别名：<code>public String getAlias()</code></p>
+</li>
+<li><p>查找新的表（重新对tableId赋值）：<code>public void reset(int tableid, String tableAlias)</code></p>
+</li>
+<li><p>返回数据表的tupleDesc，需要在fieldName之前添加alias别名：<code>public TupleDesc getTupleDesc()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> TupleDesc <span class="title function_">getTupleDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="type">TupleDesc</span> <span class="variable">td_old</span> <span class="operator">=</span> Database.getCatalog().getTupleDesc(tableid);</span><br><span class="line">    String[] names = <span class="keyword">new</span> <span class="title class_">String</span>[td_old.numFields()];</span><br><span class="line">    Type[] types = <span class="keyword">new</span> <span class="title class_">Type</span>[td_old.numFields()];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; td_old.numFields(); i++) &#123;</span><br><span class="line">        names[i] = tableAlias + <span class="string">&quot;.&quot;</span> + td_old.getFieldName(i);</span><br><span class="line">        types[i] = td_old.getFieldType(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TupleDesc</span>(types, names);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>遍历表用到的方法</p>
+<ul>
+<li><p>打开迭代器：<code>public void open()</code></p>
+</li>
+<li><p>如果有更多元组可用，则为True，如果没有元组或未打开迭代器则为False：<code>public boolean hasNext()</code></p>
+</li>
+<li><p>根据迭代器获取下一个元组：<code>public Tuple next()</code></p>
+</li>
+<li><p>关闭迭代器（置空）：<code>public void close()</code></p>
+</li>
+<li><p>将迭代器重置为起始位置（关闭、开启）：<code>public void rewind()</code></p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> <span class="keyword">throws</span> DbException, TransactionAbortedException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    dbFileIterator = Database.getCatalog().getDatabaseFile(tableid).iterator(tid);</span><br><span class="line">    dbFileIterator.open();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> <span class="keyword">throws</span> TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (dbFileIterator == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;The dbFileIterator is null&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> dbFileIterator.hasNext();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Tuple <span class="title function_">next</span><span class="params">()</span> <span class="keyword">throws</span> NoSuchElementException,</span><br><span class="line">        TransactionAbortedException, DbException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    <span class="keyword">if</span> (dbFileIterator == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;The dbFileIterator is null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Tuple</span> <span class="variable">t</span> <span class="operator">=</span> dbFileIterator.next();</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>(<span class="string">&quot;No more tuples&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    dbFileIterator = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span> <span class="keyword">throws</span> DbException, NoSuchElementException,</span><br><span class="line">        TransactionAbortedException &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> some code goes here</span></span><br><span class="line">    close();</span><br><span class="line">    open();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="image-6.png"></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><blockquote>
+<p>Test：<code>select * from some_data_file</code></p>
+</blockquote>
+<p>在项目根目录下创建some_data_file.txt文件：</p>
+<p><img src="image-3.png"></p>
+<p>用 ant 编译出dist目录下simpleDB的jar包：</p>
+<p><img src="image-5.png"></p>
+<p>运行测试，展示结果：</p>
+<p><img src="image-2.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://kicheng.github.io">KiCheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/">https://kicheng.github.io/2024/08/06/MIT6.5830-Lab1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/database/">database</a><a class="post-meta__tags" href="/tags/mysql/">mysql</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/08/15/MIT6.5830-Lab2/" title="MIT6.5830-Lab2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-15</div><div class="info-item-2">MIT6.5830-Lab2</div></div><div class="info-2"><div class="info-item-1">MIT6.5830 的数据库课程。Lab2 主要是完成查询的连接和过滤、实现聚合下的查询操作、对表的插入删除以及实现数据库中非常重要的 LRU 页面置换算法。   任务目录   Exercise1：实现查询的连接和过滤    Exercise2：实现聚合操作MIN、MAX、COUNT、SUM、AVG    Exercise3：实现修改表的方法，完成添加和删除    Exercise4：实现Insert和Delete操作符    Exercise5：实现BufferPool的页面置换算法   Exercise1 实现Predicate、JoinPredicate、Filter、Join  Predicate类Filter的辅助类，用于筛选满足条件的tuple：将tuple中的字段与指定字段进行比较，实现对单个tuple的过滤操作（比较逻辑有==、&gt;=、&lt;=、&gt;、&lt;、!=、LIKE等）。  参数：  指定的比较字段(也是Field.compare()的参数)：private Field operand;  tuple中指定字段对应字段的索引：private...</div></div></div></a><a class="pagination-related" href="/2024/08/22/MIT6.5830-Lab3/" title="MIT6.5830-Lab3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-22</div><div class="info-item-2">MIT6.5830-Lab3</div></div><div class="info-2"><div class="info-item-1">MIT6.5830 的数据库课程。Lab3 主要是完成数据库查询优化的成本优化器。      Exercise1    Exercise2    Exercise3   ...</div></div></div></a><a class="pagination-related" href="/2024/08/27/MIT6.5830-Lab4/" title="MIT6.5830-Lab4"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-27</div><div class="info-item-2">MIT6.5830-Lab4</div></div><div class="info-2"><div class="info-item-1">MIT6.5830 的数据库课程。Lab4 主要是完成数据库事务以及锁机制，在 Lab 中只是考虑设计了 page 级别锁。      Exercise1    Exercise2    Exercise3    Exercise4    Exercise5    为了简化工作，Lab4采用了NO STEAL/FORCE缓冲区策略，不需要记录undo log和redo log日志（Lab6中完成）：  NO STEAL：不允许一个未提交的事务将修改更新到磁盘，即磁盘中不会存在uncommitted数据，因此无需回滚操作，不需记录undo log。  FORCE：事务在提交之后必须将所有更新立刻持久化到磁盘（产生很多随机写，效率低），但无需记录redo log。    背景知识事务事务：事务是一组以原子方式执行的数据库操作（读取、插入、删除），是不可分割的。 事务的四大特性（ACID）  原子性（Atomicity）：事务是一个不可分割的单位。  一致性（Consistency）：事务执行是从一个一致状态到另一个一致状态，一致指的是：①...</div></div></div></a><a class="pagination-related" href="/2024/09/18/MIT6.5830-Lab6/" title="MIT6.5830-Lab6"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-18</div><div class="info-item-2">MIT6.5830-Lab6</div></div><div class="info-2"><div class="info-item-1">MIT6.5830 的数据库课程。Lab6 主要是完成数据库的 STEAL / NO FORCE 策略，也就是基于 undo log 的日志回滚和基于 redo log 的崩溃恢复。     Undo log是什么  每当InnoDB引擎要对一条记录进行修改、删除、新增时，要把回滚时需要的信息都记录到undo log里，比如：  在插入一条记录时，要把这条记录的主键记录下来，方便回滚时根据主键将对应的记录删除；  在删除一条记录时，要把这条记录的所有内容都记录下来，方便回滚时把这些内容组成的记录插入回去；  在更新一条记录时，要把更新列的旧值记录下来，方便回滚时把该记录的旧值复原回去。     Redo log是什么  为什么要有Redo...</div></div></div></a><a class="pagination-related" href="/2024/09/08/MIT6.5830-Lab5/" title="MIT6.5830-Lab5"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-08</div><div class="info-item-2">MIT6.5830-Lab5</div></div><div class="info-2"><div class="info-item-1">MIT6.5830 的数据库课程。Lab5 主要是完成 InnoDB 的索引，完成 B+ 树的查询、插入、删除操作。   索引InnoDB存储数据InnoDB是以数据页（默认16KB）为单位进行I/O读写的。  多个数据页之间是以双向链表结构连接（逻辑上的连续）的，数据页中的指针存在于File Header文件头。  数据页中的数据检索数据页的作用是存储数据，重点就是User Records用户记录部分：数据页中的记录按照主键顺序组成单向链表。单向链表的特点是插入和删除非常方便，但是检索效率低——因此数据页中需要有一个页目录，起到快捷索引的功能。  上图要注意的细节：  每个分组最后一条记录的头信息中会存储该组一共有多少条记录，作为 n_owned...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KiCheng</div><div class="author-info-description">记录成长</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">任务目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise1"><span class="toc-number">2.</span> <span class="toc-text">Exercise1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TupleDesc%E7%B1%BB"><span class="toc-number">2.1.</span> <span class="toc-text">TupleDesc类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tuple%E7%B1%BB"><span class="toc-number">2.2.</span> <span class="toc-text">Tuple类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise2"><span class="toc-number">3.</span> <span class="toc-text">Exercise2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Catalog%E7%B1%BB"><span class="toc-number">3.1.</span> <span class="toc-text">Catalog类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise3"><span class="toc-number">4.</span> <span class="toc-text">Exercise3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BufferPool%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">BufferPool类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise4"><span class="toc-number">5.</span> <span class="toc-text">Exercise4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapPageId%E7%B1%BB"><span class="toc-number">5.1.</span> <span class="toc-text">HeapPageId类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RecordId%E7%B1%BB"><span class="toc-number">5.2.</span> <span class="toc-text">RecordId类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapPage%E7%B1%BB"><span class="toc-number">5.3.</span> <span class="toc-text">HeapPage类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise5"><span class="toc-number">6.</span> <span class="toc-text">Exercise5</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HeapFile%E7%B1%BB"><span class="toc-number">6.1.</span> <span class="toc-text">HeapFile类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exercise6"><span class="toc-number">7.</span> <span class="toc-text">Exercise6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SeqScan%E7%B1%BB"><span class="toc-number">7.1.</span> <span class="toc-text">SeqScan类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">7.2.</span> <span class="toc-text">测试</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器">垃圾收集器</a><time datetime="2025-01-11T13:00:41.000Z" title="Created 2025-01-11 21:00:41">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池">线程池</a><time datetime="2024-09-25T12:05:44.000Z" title="Created 2024-09-25 20:05:44">2024-09-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/25/Condition%E5%92%8CLockSupport/" title="通知等待Condition">通知等待Condition</a><time datetime="2024-09-25T11:55:44.000Z" title="Created 2024-09-25 19:55:44">2024-09-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/" title="可重入锁 ReentrantLock、ReentrantReadWriteLock">可重入锁 ReentrantLock、ReentrantReadWriteLock</a><time datetime="2024-09-24T13:11:44.000Z" title="Created 2024-09-24 21:11:44">2024-09-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/23/volatile%E4%B8%8Esynchronized/" title="volatile和synchronized关键字">volatile和synchronized关键字</a><time datetime="2024-09-23T12:09:44.000Z" title="Created 2024-09-23 20:09:44">2024-09-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By KiCheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

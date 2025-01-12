@@ -1,35 +1,248 @@
-extends includes/layout.pug
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android平台JNI开发保姆级教程 | KiCheng's Blog</title><meta name="author" content="KiCheng"><meta name="copyright" content="KiCheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android平台JNI开发保姆级教程">
+<meta property="og:url" content="https://kicheng.github.io/2023/03/12/Android-jni/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kicheng.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2023-03-12T13:41:38.000Z">
+<meta property="article:modified_time" content="2023-03-12T13:56:31.000Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="JNI开发">
+<meta property="article:tag" content="FFmpeg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Android平台JNI开发保姆级教程",
+  "url": "https://kicheng.github.io/2023/03/12/Android-jni/",
+  "image": "https://kicheng.github.io/img/butterfly-icon.png",
+  "datePublished": "2023-03-12T13:41:38.000Z",
+  "dateModified": "2023-03-12T13:56:31.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "KiCheng",
+      "url": "https://kicheng.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://kicheng.github.io/2023/03/12/Android-jni/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
-block content
-  #post
-    if top_img === false
-      include includes/header/post-info.pug
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
-    article#article-container.container.post-content
-      if theme.noticeOutdate.enable && page.noticeOutdate !== false
-        include includes/post/outdate-notice.pug
-      else
-        !=page.content
-    include includes/post/post-copyright.pug
-    .tag_share
-      if (page.tags.length > 0 && theme.post_meta.post.tags)
-        .post-meta__tag-list
-          each item, index in page.tags.data
-            a(href=url_for(item.path)).post-meta__tags #[=item.name]
-      include includes/third-party/share/index.pug
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-    if theme.reward.enable && theme.reward.QR_code
-      !=partial('includes/post/reward', {}, {cache: true})
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android平台JNI开发保姆级教程',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android平台JNI开发保姆级教程</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Android平台JNI开发保姆级教程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-03-12T13:41:38.000Z" title="Created 2023-03-12 21:41:38">2023-03-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-03-12T13:56:31.000Z" title="Updated 2023-03-12 21:56:31">2023-03-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>​        最近项目中在Android移动端需要用到音视频处理的部分，这离不开FFmpeg工具。但是FFmpeg源码是C语言，想要在Android java中调用FFmpeg工具，这就需要Android NDK登场了。</p>
+<span id="more"></span>
 
-    //- ad
-    if theme.ad && theme.ad.post
-      .ads-wrap!=theme.ad.post
+<h1 id="Android平台JNI开发保姆级教程"><a href="#Android平台JNI开发保姆级教程" class="headerlink" title="Android平台JNI开发保姆级教程"></a>Android平台JNI开发保姆级教程</h1><h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><p>​        FFmpeg源码：可以在官网下载，目前我是用的是最新版的6.0版本（只下载源代码即可，不要下载已经编译好的在不同平台可以运行的安装包）。</p>
+<p><img src="pic1.png" alt="image-20230312105234096"></p>
+<p>​        Android NDK：可以在官网下载，但更推荐在Android Studio中的Setting中可以直接下载NDK对应版本，我这里使用的是22.1.7171670版本的NDK（建议不要使用太新的NDK，否则可能会出现一些BUG）。</p>
+<img src="pic2.png" alt="image-20230312103532627" style="zoom: 33%;" />
 
-    if theme.post_pagination
-      include includes/pagination.pug
-    if theme.related_post && theme.related_post.enable
-      != related_posts(page,site.posts)
+<p>​        安装msys2：由于我是在Windows下对FFmpeg源码进行交叉编译，所以需要一个类Unix环境；或者你可以直接使用linux操作系统。</p>
+<p>​        由于第一次接触Android开发，对Android程序调用类库的流程不清楚，导致走了很多弯路。其实总结下来也很简单，我这里引用了雷神的流程图：</p>
+<p><img src="pic3.png" alt="img"></p>
+<blockquote>
+<p><strong>在FFmpeg的最新版本6.0中，已经不需要在源码中修改configure设置了（我记得貌似从4.0版本之后就不需要修改了，记不太清了）。</strong></p>
+</blockquote>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="Android-NDK"><a href="#Android-NDK" class="headerlink" title="Android NDK"></a>Android NDK</h3><p>​        NDK 主要提供了一些库和工具，包括交叉编译器、调试器、库文件等，开发者可以使用这些工具将原生代码编译为针对不同 CPU 架构的本地库，然后在 Android 应用中通过 Java Native Interface（JNI）来调用这些本地库，以实现一些高性能、低级别的操作，例如图形处理、音频处理、加密、数据处理等。</p>
+<p>​        Android NDK 是一个允许使用 C、C++ 等本地语言编写 Android 应用的工具包，可以提高应用的运行效率和系统性能。</p>
+<h3 id="JNI"><a href="#JNI" class="headerlink" title="JNI"></a>JNI</h3><p>​        JNI（Java Native Interface）是Java平台提供的一种机制，用于在Java虚拟机中运行本地代码。它允许Java应用程序通过调用本地语言编写的函数来使用底层操作系统和硬件资源，从而实现高性能的计算和底层操作。简单来说，JNI提供了一种在Java程序中调用本地代码的方式，可以扩展Java程序的功能和性能。</p>
+<h3 id="so库"><a href="#so库" class="headerlink" title=".so库"></a>.so库</h3><p>​        在Android中，C语言代码需要被编译为.so库的形式才能被Android应用程序调用。这是因为Android系统是基于Linux内核的，而Linux系统下的.so库是一种常见的代码共享形式，可以被多个进程动态链接使用，避免了代码的重复编写和内存占用。通过将C语言代码编译为.so库的形式，Android应用程序可以在运行时动态加载和链接所需的库，从而实现对底层系统和硬件资源的访问和控制。</p>
+<p>​        通过.so库的形式调用C语言代码，可以让Android应用程序更高效地使用底层系统和硬件资源，从而提高程序的性能和可靠性。同时，.so库也方便了代码的管理和维护，可以将公共的代码打包成库，供多个应用程序共享使用。</p>
+<h2 id="开发流程（敲黑板！）"><a href="#开发流程（敲黑板！）" class="headerlink" title="开发流程（敲黑板！）"></a>开发流程（敲黑板！）</h2><h3 id="编译FFmpeg库"><a href="#编译FFmpeg库" class="headerlink" title="编译FFmpeg库"></a>编译FFmpeg库</h3><p>​        首先要把NDK安装好，路径是在你SDK路径下的NDK目录中，最好把你要用到的版本加入到环境变量当中。</p>
+<p>​        在任意目录中新建一个脚本<code>build_ffmpeg.sh</code>，添加内容：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line">SRC_DIR=D:\Android-Studio\ffmpeg-6.0</span><br><span class="line">DST_DIR=D:\Android-Studio\ffmpeg_build_out</span><br><span class="line">NDK=D:/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64</span><br><span class="line">API=23  </span><br><span class="line"> </span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$SRC_DIR</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">function</span> build_onearch</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&gt;&gt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	./configure --enable-cross-compile --target-os=android  \</span><br><span class="line">	--prefix=<span class="variable">$DST_DIR</span>/<span class="variable">$ANDROID_ABI</span>  --cross-prefix=<span class="variable">$CROSS_PREFIX</span>  \</span><br><span class="line">	--cc=<span class="variable">$CLANG_PREFIX</span> --cxx=<span class="variable">$CLANG_PREFIX</span>++  \</span><br><span class="line">	--<span class="built_in">arch</span>=<span class="variable">$ARCH</span>  --cpu=<span class="variable">$CPU</span>  --sysroot=<span class="variable">$NDK</span>/sysroot \</span><br><span class="line">	--enable-shared --disable-static \</span><br><span class="line">	--enable-small --disable-programs --disable-doc \</span><br><span class="line">	--enable-asm --enable-neon \</span><br><span class="line">	--enable-jni --enable-mediacodec </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;&lt;&lt; configure <span class="variable">$CPU</span>&quot;</span></span><br><span class="line">	make clean</span><br><span class="line">	make</span><br><span class="line">	make install</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">ANDROID_ABI=arm64-v8a</span><br><span class="line">ARCH=arm64</span><br><span class="line">CPU=armv8-a</span><br><span class="line">CROSS_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android-</span><br><span class="line">CLANG_PREFIX=<span class="variable">$NDK</span>/bin/aarch64-linux-android<span class="variable">$API</span>-clang</span><br><span class="line">build_onearch</span><br></pre></td></tr></table></figure>
 
-    if page.comments !== false && theme.comments.use
-      - var commentsJsLoad = true
-      !=partial('includes/third-party/comments/index', {}, {cache: true})
+<p>​        <font color=red>前面几行要根据自己的电脑路径进行配置，切莫照搬全抄！</font>这里的API的版本是最低版本，注意不要大于自己设备的Android API版本。网上有很多类似的配置脚本，可以对configure响应的修改进行功能增减。</p>
+<p>​        我这里只编译了<code>arm64-v8a</code>的.so库，通常来说64位的CPU架构是对先前的CPU架构是兼容的。</p>
+<p>​        将脚本保存后关闭，然后打开安装好的msys2，在脚本目录下运行脚本：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build_ffmpeg.sh</span><br></pre></td></tr></table></figure>
+
+<p>​        整个编译过程大概有二十多分钟吧，编译好后的动态库会生成在你前面设置的<code>DST_DIR</code>路径下。</p>
+<p><img src="pic4.png" alt="image-20230312111053279"></p>
+<p>​        <code>include</code>目录下是一些头文件，<code>lib</code>目录下就是相应的.so库了。    </p>
+<h3 id="JNI调用C程序"><a href="#JNI调用C程序" class="headerlink" title="JNI调用C程序"></a>JNI调用C程序</h3><p>使用<code>JNI</code>调用C语言代码需要做以下几步：</p>
+<ul>
+<li>编写带有native方法的Java类和声明要加载的类库</li>
+<li>使用javah命令生成.h头文件（也可以用<strong>JNI_OnLoad</strong>动态注册函数，就不用生成.h头文件了）</li>
+<li>编写C代码实现头文件中的方法</li>
+</ul>
+<h4 id="编写Java端代码"><a href="#编写Java端代码" class="headerlink" title="编写Java端代码"></a>编写Java端代码</h4><p>​        用官方文档中的<code>hello_jni</code>例程修改的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.hellojni;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloJni</span> <span class="keyword">extends</span> <span class="title class_">Activity</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/** Called when the activity is first created. */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        </span><br><span class="line">        <span class="type">TextView</span>  <span class="variable">tv</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TextView</span>(<span class="built_in">this</span>);</span><br><span class="line">        tv.setText( stringFromJNI() );</span><br><span class="line">        setContentView(tv);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">stringFromJNI</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> String  <span class="title function_">unimplementedStringFromJNI</span><span class="params">()</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">&quot;hellojni&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="编写C端代码"><a href="#编写C端代码" class="headerlink" title="编写C端代码"></a>编写C端代码</h4><p>1、获取C语言的接口函数声明</p>
+<p>​        根据Java对于C语言接口的定义，生成相应的接口函数声明。说通俗点就是Java层只是用<strong>native</strong>关键词声明了一个C语言的函数，要在Java层的函数和C语言层的函数之间形成一个映射关系，这一步需要用到JDK中的“javac -h”命令。</p>
+<p>​        尴尬的是在生成头文件的时候出现了<strong>程序包XX.XX不存在</strong>的BUG，网上找了一会发现并没有卵用，于是乎就直接定义<code>JNI_Onload</code>方法形成动态函数映射。<font color=red>（跳过第一步生成.h头文件的步骤即可）</font></p>
+<p>下面的第三步就讲讲如何用<code>JNI_Onload</code>：</p>
+<blockquote>
+<p>传统java  JNI方式： 编写带有native方法的Java类 → 使用javah命令生成.h头文件 → 编写代码实现头文件中的方法</p>
+<p>但是上述每次都需要通过javah依据java类的全类名生成对应的native函数全名称，其实我们可以使用RegisterNatives方法把c/c++中的方法隐射到Java中的native方法，这样就可以随意定义你的函数名而不用写那么长的又看不懂的全名类啦！</p>
+</blockquote>
+<p>2、编写C语言代码</p>
+<p>在项目根目录下创建<code>jni</code>目录：<code>jni</code>目录中新建<code>hellojni.c</code>文件，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;libavcodec/avcodec.h&quot;</span></span></span><br><span class="line"><span class="comment">// 用的雷佬的代码 -- 该函数调用了libavcodec的avcodec_configuration()方法，用于获取FFmpeg的配置信息。</span></span><br><span class="line">jstring <span class="title function_">stringFromJNI</span><span class="params">( JNIEnv* env,jobject thiz )</span></span><br><span class="line">&#123;</span><br><span class="line">   	<span class="type">char</span> info[<span class="number">10000</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">   	<span class="built_in">sprintf</span>(info, <span class="string">&quot;%s\n&quot;</span>, avcodec_configuration());</span><br><span class="line">   	<span class="keyword">return</span> (*env)-&gt;NewStringUTF(env, info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、定义函数<code>JNI_OnLoad</code>动态注册函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">jint <span class="title function_">JNI_OnLoad</span><span class="params">(JavaVM* pVm, <span class="type">void</span>* reserved)</span> &#123;</span><br><span class="line">	JNIEnv* env;</span><br><span class="line">	<span class="keyword">if</span> ((*pVm)-&gt;GetEnv(pVm, (<span class="type">void</span> **)&amp;env, JNI_VERSION_1_6) != JNI_OK) &#123;</span><br><span class="line">	 	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	JNINativeMethod nm[<span class="number">1</span>];</span><br><span class="line">	nm[<span class="number">0</span>].name = <span class="string">&quot;stringFromJNI&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].signature = <span class="string">&quot;()Ljava/lang/String;&quot;</span>;</span><br><span class="line">	nm[<span class="number">0</span>].fnPtr = (<span class="type">void</span>*)stringFromJNI;</span><br><span class="line">	jclass cls = (*env)-&gt;FindClass(env, <span class="string">&quot;com/example/hellojni/HelloJni&quot;</span>);</span><br><span class="line">	(*env)-&gt;RegisterNatives(env, cls, nm, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> JNI_VERSION_1_6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        前后都是固定的模板，不需要修改，只需要更改<code>JNINativeMethod</code>中的字段信息，关于JNI编程的简单语法都很简单，去了解一下就可，不在这里说了。其实就是用这个<code>RegisterNatives</code>注册方法，C语言本地的函数与Java层的类和函数进行动态绑定。</p>
+<p><code>JNINativeMethod</code>结构体的字段信息：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span>  </span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;     <span class="comment">// java层对应的方法名称  </span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* signature;<span class="comment">// 该方法的返回值类型和参数类型  </span></span><br><span class="line">    <span class="type">void</span>*       fnPtr;    <span class="comment">// native中对应的函数指针  </span></span><br><span class="line">&#125; JNINativeMethod;  </span><br></pre></td></tr></table></figure>
+
+<p>3、<code>Android.mk</code>和 <code>Application.mk</code>编写</p>
+<p>​        在<code>JNI</code>目录下创建<code>Android.mk</code>和 <code>Application.mk</code>文件。这是NDK官方推荐的<code>ndk-build</code>（是一个命令行工具，它用于构建使用C/C++编写的Android Native库）构建方式的脚本文件（不过yysy现在用的更多的是<code>cmake</code>了，反正ndk-build很好用，管他的呢）。</p>
+<p><code>Android.mk</code>的编写规范可以看NDK的官方文档，<code>Android.mk</code>添加如下代码：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">LOCAL<span class="emphasis">_PATH := $(call my-dir)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># FFmpeg library</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avcodec</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavcodec.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avdevice</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavdevice.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avfilter</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavfilter.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avformat</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavformat.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := avutil</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libavutil.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swresample</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswresample.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := swscale</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := lib/libswscale.so</span></span><br><span class="line"><span class="emphasis">include $(PREBUILT_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"># Program</span></span><br><span class="line"><span class="emphasis">include $(CLEAR_</span>VARS)</span><br><span class="line">LOCAL<span class="emphasis">_MODULE := hellojni</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SRC<span class="emphasis">_FILES := hellojni.c</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>C<span class="emphasis">_INCLUDES += $(LOCAL_</span>PATH)/include</span><br><span class="line">LOCAL<span class="emphasis">_LDLIBS := -llog -lz</span></span><br><span class="line"><span class="emphasis">LOCAL_</span>SHARED<span class="emphasis">_LIBRARIES := avcodec avdevice avfilter avformat avutil swresample swscale</span></span><br><span class="line"><span class="emphasis">include $(BUILD_</span>SHARED<span class="emphasis">_LIBRARY)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Application.mk</code>代码如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">APP<span class="emphasis">_ABI := arm64-v8a</span></span><br><span class="line"><span class="emphasis">APP_</span>PLATFORM := android-23  # minAPI</span><br></pre></td></tr></table></figure>
+
+<p><code>APP_ABI</code> 指定了设备CPU的架构。因为前面编译<code>FFmpeg</code>的时候我只编译了64位版本的，这里就对应上。</p>
+<p>4、NDK-BUILD编译</p>
+<p>​        将先前编译的FFmpeg的<code>include</code>和<code>lib</code>目录复制到<code>jni</code>目录当中来，现在看<code>jni</code>目录结构应该是这样的：</p>
+<img src="pic5.png" alt="image-20230312171910710" style="zoom: 80%;" />
+
+<p>​        命令行<code>cd</code>到这一层目录下，执行<code>ndk-build</code>命令即可。</p>
+<img src="pic6.png" alt="image-20230312172026460" style="zoom:80%;" />
+
+<p>​        然后你还会发现项目的根目录下生成了这两个目录。</p>
+<p><img src="pic7.png" alt="image-20230312172123920"></p>
+<p>​        <code>libs</code>里面就是根据<code>android.mk</code>脚本编译的.so库了，<code>obj</code>没什么用，里面就是一些编译的过程文件。将<code>libs</code>目录中的内容（应该是cpu架构文件夹，下层目录才是.so库）copy到<code>app/src/main</code>目录的<code>jniLibs</code>目录当中（项目运行时默认就是在<code>jniLibs</code>中寻找加载相应的第三方.so库）。</p>
+<img src="pic8.png" alt="image-20230312172450844" style="zoom: 67%;" />
+
+<p>​        接下来就可以在手机上对项目进行测试啦！因为我使用的是<code>arm64-v8a</code>cpu架构，这种架构好像不支持在虚拟机上测试（虚拟机架构是<code>x86</code>和<code>x86_64</code>，但可不可以我也没试过）。</p>
+<p>​        下面是测试的结果啦：</p>
+<img src="result_pic.jpg" alt="result_pic" style="zoom: 33%;" />
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://kicheng.github.io">KiCheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://kicheng.github.io/2023/03/12/Android-jni/">https://kicheng.github.io/2023/03/12/Android-jni/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Android/">Android</a><a class="post-meta__tags" href="/tags/JNI%E5%BC%80%E5%8F%91/">JNI开发</a><a class="post-meta__tags" href="/tags/FFmpeg/">FFmpeg</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KiCheng</div><div class="author-info-description">记录成长</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Android%E5%B9%B3%E5%8F%B0JNI%E5%BC%80%E5%8F%91%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">Android平台JNI开发保姆级教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">背景知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Android-NDK"><span class="toc-number">1.2.1.</span> <span class="toc-text">Android NDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JNI"><span class="toc-number">1.2.2.</span> <span class="toc-text">JNI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#so%E5%BA%93"><span class="toc-number">1.2.3.</span> <span class="toc-text">.so库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%EF%BC%88%E6%95%B2%E9%BB%91%E6%9D%BF%EF%BC%81%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">开发流程（敲黑板！）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91FFmpeg%E5%BA%93"><span class="toc-number">1.3.1.</span> <span class="toc-text">编译FFmpeg库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JNI%E8%B0%83%E7%94%A8C%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text">JNI调用C程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99Java%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">编写Java端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99C%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">编写C端代码</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器">垃圾收集器</a><time datetime="2025-01-11T13:00:41.000Z" title="Created 2025-01-11 21:00:41">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池">线程池</a><time datetime="2024-09-25T12:05:44.000Z" title="Created 2024-09-25 20:05:44">2024-09-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/25/Condition%E5%92%8CLockSupport/" title="通知等待Condition">通知等待Condition</a><time datetime="2024-09-25T11:55:44.000Z" title="Created 2024-09-25 19:55:44">2024-09-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/" title="可重入锁 ReentrantLock、ReentrantReadWriteLock">可重入锁 ReentrantLock、ReentrantReadWriteLock</a><time datetime="2024-09-24T13:11:44.000Z" title="Created 2024-09-24 21:11:44">2024-09-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/23/volatile%E4%B8%8Esynchronized/" title="volatile和synchronized关键字">volatile和synchronized关键字</a><time datetime="2024-09-23T12:09:44.000Z" title="Created 2024-09-23 20:09:44">2024-09-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By KiCheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
