@@ -445,6 +445,47 @@
         
         
             
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/">
+                
+                <span class="abstract-title-text">垃圾收集器</span>
+            </a>
+            <div class="abstract-content">
+                
+
+JVM垃圾收集器JVM的垃圾回收机制一共分为两步：第一步先识别出不再使用的内存空间，第二步回收这些内存空间。
+判断对象死亡的方式：1、引用计数法 → 无法解决对象之间循环引用2、可达性分析法
+回收内存空间的方法：1、标记-清除算法 → 产生内存碎片2、复制算法（为了解决内存碎片问题：可用内存减少一半） → 对于存活时间久的对象需要频繁的复制，所以更适合存活时间短的新生代对象3、标记-整理算法（整理开销大） → 更适合不需要频繁GC的老年代4、分代收集算法：对堆内存分为新生代和老年代，应用不同的垃圾回收策略，提高回收效率。
+
+介绍完这么多，终于可以引出今天的主题，也就是垃圾收集器。如果...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/01/12">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/11</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="JVM">JVM</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
             
         
         <article class="index-post">
@@ -765,44 +806,6 @@
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/09/19">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/22</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="database">database</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="mysql">mysql</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/15/MIT6.5830-Lab2/">
-                
-                <span class="abstract-title-text">MIT6.5830-Lab2</span>
-            </a>
-            <div class="abstract-content">
-                <p>MIT6.5830 的数据库课程。Lab2 主要是完成查询的连接和过滤、实现聚合下的查询操作、对表的插入删除以及实现数据库中非常重要的 LRU 页面置换算法。</p>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/19">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/15</span>
                 </div>
                 <!-- tags -->
                 
@@ -1263,7 +1266,24 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1630,7 +1650,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 43
+        Total : 44
         </div>
         <!-- search  -->
         
@@ -1640,6 +1660,21 @@
     
         
             
+            
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/">垃圾收集器</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
@@ -1960,6 +1995,11 @@
             <span class="sidebar-tag-name" data-tags="OpenCV">
                 <span class="iconfont-archer">&#xe606;</span>
                 OpenCV
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="JVM">
+                <span class="iconfont-archer">&#xe606;</span>
+                JVM
             </span>
         
     </div>
