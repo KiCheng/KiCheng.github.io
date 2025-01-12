@@ -71,3 +71,4 @@ https://kicheng.github.io/categories/MySQL/
 https://kicheng.github.io/categories/Maven/
 https://kicheng.github.io/categories/Springboot/
 https://kicheng.github.io/categories/OpenCV/
+https://kicheng.github.io/categories/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/

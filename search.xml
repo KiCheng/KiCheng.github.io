@@ -7093,6 +7093,9 @@
 <p>正是采用指针染色+读屏障的方式，在访问对象时就能及时记录和处理引用关系的变化，这样 GC 就无需停顿来扫描除 GC Roots 之外的对象。由此也可以呼应 ZGC 的一个特点—— ZGC 的 GC 停顿不随着堆内存或者存活对象大小的增长而增长，因为 STW 停顿只和 GC Roots 有关。</p>
 <p>参考文章<br><a href="https://javabetter.cn/jvm/gc-collector.html">https://javabetter.cn/jvm/gc-collector.html</a><br><a href="https://mp.weixin.qq.com/s/Ywj3XMws0IIK-kiUllN87Q">https://mp.weixin.qq.com/s/Ywj3XMws0IIK-kiUllN87Q</a><br><a href="https://www.cnblogs.com/chanshuyi/p/head-first-of-triple-color-marking-algorithm.html">https://www.cnblogs.com/chanshuyi/p/head-first-of-triple-color-marking-algorithm.html</a><br><a href="https://zhuanlan.zhihu.com/p/340530051">https://zhuanlan.zhihu.com/p/340530051</a></p>
 ]]></content>
+      <categories>
+        <category>Java虚拟机</category>
+      </categories>
       <tags>
         <tag>JVM</tag>
       </tags>
