@@ -61,8 +61,8 @@ https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/Mysql/
 https://kicheng.github.io/categories/SpringMVC/
 https://kicheng.github.io/categories/JavaWeb/
-https://kicheng.github.io/categories/Android/
 https://kicheng.github.io/categories/Others/
+https://kicheng.github.io/categories/Android/
 https://kicheng.github.io/categories/Java%E5%B9%B6%E5%8F%91/
 https://kicheng.github.io/categories/Git/
 https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/
