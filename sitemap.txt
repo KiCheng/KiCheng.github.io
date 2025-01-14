@@ -1,3 +1,5 @@
+https://kicheng.github.io/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/
+https://kicheng.github.io/2025/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/
 https://kicheng.github.io/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/
 https://kicheng.github.io/2023/03/28/HTTP-Tomcat/
 https://kicheng.github.io/2023/03/28/Maven/
@@ -55,14 +57,15 @@ https://kicheng.github.io/tags/Java/
 https://kicheng.github.io/tags/java/
 https://kicheng.github.io/tags/database/
 https://kicheng.github.io/tags/mysql/
+https://kicheng.github.io/tags/MySQL/
 https://kicheng.github.io/tags/OpenCV/
 https://kicheng.github.io/tags/JVM/
 https://kicheng.github.io/categories/Spring/
 https://kicheng.github.io/categories/Mysql/
 https://kicheng.github.io/categories/SpringMVC/
 https://kicheng.github.io/categories/JavaWeb/
-https://kicheng.github.io/categories/Others/
 https://kicheng.github.io/categories/Android/
+https://kicheng.github.io/categories/Others/
 https://kicheng.github.io/categories/Java%E5%B9%B6%E5%8F%91/
 https://kicheng.github.io/categories/Git/
 https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/
