@@ -7994,12 +7994,12 @@
 
 <h4 id="步骤6-发布Starter"><a href="#步骤6-发布Starter" class="headerlink" title="步骤6 发布Starter"></a>步骤6 发布Starter</h4><p>发布到 Maven 仓库，这里为了快速验证，将项目打成 jar 包并手动导入到主项目中。</p>
 <h4 id="步骤7-使用Starter"><a href="#步骤7-使用Starter" class="headerlink" title="步骤7 使用Starter"></a>步骤7 使用Starter</h4><p>在主应用中添加 starter 依赖或手动将 jar 包导入 Maven 项目。</p>
-<p>手动导入 jar 包的方法：<br><img src="assets/17372941640582.jpg"></p>
+<p>手动导入 jar 包的方法：<br><img src="17372941640582.jpg"></p>
 <p>在 application.yml 中配置属性：</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">my:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">KiCheng</span></span><br></pre></td></tr></table></figure>
 
-<p>接口测试成功访问 yml 配置中的内容：<br><img src="assets/17372948233075.jpg"></p>
-<h3 id="SpringBoot-自动装配原理"><a href="#SpringBoot-自动装配原理" class="headerlink" title="SpringBoot 自动装配原理"></a>SpringBoot 自动装配原理</h3><p>实现自动装配最重要的注解是<code>@EnableAutoConfiguration</code>，底层的 AutoConfigurationImportSelector 会扫描外部引用的 jar 包的 META_INF/spring.factories 目录，收集「自动配置类」并将其导入到 Spring 容器中。<br><img src="assets/17372956074451.jpg"></p>
+<p>接口测试成功访问 yml 配置中的内容：<br><img src="17372948233075.jpg"></p>
+<h3 id="SpringBoot-自动装配原理"><a href="#SpringBoot-自动装配原理" class="headerlink" title="SpringBoot 自动装配原理"></a>SpringBoot 自动装配原理</h3><p>实现自动装配最重要的注解是<code>@EnableAutoConfiguration</code>，底层的 AutoConfigurationImportSelector 会扫描外部引用的 jar 包的 META_INF/spring.factories 目录，收集「自动配置类」并将其导入到 Spring 容器中。<br><img src="17372956074451.jpg"></p>
 <blockquote>
 <p>根据 META_INF/spring.factories 配置文件中的信息自动加载指定的类或功能。</p>
 </blockquote>
