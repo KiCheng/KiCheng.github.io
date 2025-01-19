@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>手写SpringBoot Starter | KiCheng's Blog</title><meta name="author" content="KiCheng"><meta name="copyright" content="KiCheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SpringBoot 自动装配手动实现SpringBoot Starter步骤1 创建Maven项目创建新 Maven 项目，手动添加必要的 pom 依赖。 12345678910111213141516&lt;parent&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;spr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手写SpringBoot Starter">
+<meta property="og:url" content="https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="SpringBoot 自动装配手动实现SpringBoot Starter步骤1 创建Maven项目创建新 Maven 项目，手动添加必要的 pom 依赖。 12345678910111213141516&lt;parent&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;spr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg">
+<meta property="article:published_time" content="2025-01-19T13:09:48.000Z">
+<meta property="article:modified_time" content="2025-01-19T14:14:05.692Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "手写SpringBoot Starter",
+  "url": "https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/",
+  "image": "https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg",
+  "datePublished": "2025-01-19T13:09:48.000Z",
+  "dateModified": "2025-01-19T14:14:05.692Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "KiCheng",
+      "url": "https://kicheng.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '手写SpringBoot Starter',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(2025/01/19/手写SpringBoot-Starter/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">手写SpringBoot Starter</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">手写SpringBoot Starter</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-19T13:09:48.000Z" title="发表于 2025-01-19 21:09:48">2025-01-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-19T14:14:05.692Z" title="更新于 2025-01-19 22:14:05">2025-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="SpringBoot-自动装配"><a href="#SpringBoot-自动装配" class="headerlink" title="SpringBoot 自动装配"></a>SpringBoot 自动装配</h2><h3 id="手动实现SpringBoot-Starter"><a href="#手动实现SpringBoot-Starter" class="headerlink" title="手动实现SpringBoot Starter"></a>手动实现SpringBoot Starter</h3><h4 id="步骤1-创建Maven项目"><a href="#步骤1-创建Maven项目" class="headerlink" title="步骤1 创建Maven项目"></a>步骤1 创建Maven项目</h4><p>创建新 Maven 项目，手动添加必要的 pom 依赖。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤2-添加自动配置"><a href="#步骤2-添加自动配置" class="headerlink" title="步骤2 添加自动配置"></a>步骤2 添加自动配置</h4><p>在 src/main/resources/META-INF 目录下创建 spring.factories，并添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">com.kicheng.self_defined_starter.configuration.MyAutoConfiguration</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤3-自动配置类"><a href="#步骤3-自动配置类" class="headerlink" title="步骤3 自动配置类"></a>步骤3 自动配置类</h4><p>自动配置类中用到的两个重要的注解：</p>
+<ul>
+<li><code>@Configuration</code>：声明配置类，负责定义和装配 Bean；</li>
+<li><code>@EnableConfigurationProperties</code>：启用属性绑定，将配置文件中的属性映射到对应的 Java 类中。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(MyProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyAutoConfiguration</span> &#123;</span><br><span class="line">    <span class="comment">// 依赖注入</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MyProperties properties;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 手动创建bean对象注册到容器</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyService <span class="title function_">myService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyServiceImpl</span>(properties);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤4-配置属性类"><a href="#步骤4-配置属性类" class="headerlink" title="步骤4 配置属性类"></a>步骤4 配置属性类</h4><p>创建一个配置属性类，使用<code>@ConfigurationProperties</code>注解来绑定配置文件中的属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;my&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤5-创建后端服务的Service和Controller"><a href="#步骤5-创建后端服务的Service和Controller" class="headerlink" title="步骤5 创建后端服务的Service和Controller"></a>步骤5 创建后端服务的Service和Controller</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">MyService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> MyProperties properties;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 依赖注入</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyServiceImpl</span><span class="params">(MyProperties properties)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.properties = properties;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> properties.getName();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> MyService myService;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 依赖注入</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyController</span><span class="params">(MyService myService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.myService = myService;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@GetMapping(&quot;/name&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> myService.getName();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤6-发布Starter"><a href="#步骤6-发布Starter" class="headerlink" title="步骤6 发布Starter"></a>步骤6 发布Starter</h4><p>发布到 Maven 仓库，这里为了快速验证，将项目打成 jar 包并手动导入到主项目中。</p>
+<h4 id="步骤7-使用Starter"><a href="#步骤7-使用Starter" class="headerlink" title="步骤7 使用Starter"></a>步骤7 使用Starter</h4><p>在主应用中添加 starter 依赖或手动将 jar 包导入 Maven 项目。</p>
+<p>手动导入 jar 包的方法：<br><img src="assets/17372941640582.jpg"></p>
+<p>在 application.yml 中配置属性：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">my:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">KiCheng</span></span><br></pre></td></tr></table></figure>
+
+<p>接口测试成功访问 yml 配置中的内容：<br><img src="assets/17372948233075.jpg"></p>
+<h3 id="SpringBoot-自动装配原理"><a href="#SpringBoot-自动装配原理" class="headerlink" title="SpringBoot 自动装配原理"></a>SpringBoot 自动装配原理</h3><p>实现自动装配最重要的注解是<code>@EnableAutoConfiguration</code>，底层的 AutoConfigurationImportSelector 会扫描外部引用的 jar 包的 META_INF/spring.factories 目录，收集「自动配置类」并将其导入到 Spring 容器中。<br><img src="assets/17372956074451.jpg"></p>
+<blockquote>
+<p>根据 META_INF/spring.factories 配置文件中的信息自动加载指定的类或功能。</p>
+</blockquote>
+<h3 id="SpringBoot-启动原理"><a href="#SpringBoot-启动原理" class="headerlink" title="SpringBoot 启动原理"></a>SpringBoot 启动原理</h3><ol>
+<li>创建 SpringApplication 实例，负责应用启动和初始化；</li>
+<li>从 application.yml 中加载配置文件和环境变量；</li>
+<li>创建上下文环境 ApplicationContext，加载 Bean 完成依赖注入；</li>
+<li>启动内嵌的 Tomcat 服务器；</li>
+<li>发布启动完成事件。</li>
+</ol>
+<p>启动类利用 Java 反射获取启动类的对象实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SpringApplication.run(SelfDefinedStarterApplication.class, args);</span><br></pre></td></tr></table></figure>
+<p>其中启动类中最重要的<code>@SpringBootApplication</code>注解包含了<code>@Configuration</code>、<code>@ComponentScan</code>、<code>@EnableAutoConfiguration</code>三大注解，它们的作用就不在这里重复了，只是提一下只是因为这个注解和上面的启动过程息息相关。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kicheng.github.io">KiCheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/">https://kicheng.github.io/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kicheng.github.io" target="_blank">KiCheng's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a></div><div class="post-share"><div class="social-share" data-image="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KiCheng</div><div class="author-info-description">杂乱无章的记事本</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">SpringBoot 自动装配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%9E%E7%8E%B0SpringBoot-Starter"><span class="toc-number">1.1.</span> <span class="toc-text">手动实现SpringBoot Starter</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A41-%E5%88%9B%E5%BB%BAMaven%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">步骤1 创建Maven项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A42-%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">步骤2 添加自动配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A43-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">步骤3 自动配置类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A44-%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E7%B1%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">步骤4 配置属性类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A45-%E5%88%9B%E5%BB%BA%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E7%9A%84Service%E5%92%8CController"><span class="toc-number">1.1.5.</span> <span class="toc-text">步骤5 创建后端服务的Service和Controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A46-%E5%8F%91%E5%B8%83Starter"><span class="toc-number">1.1.6.</span> <span class="toc-text">步骤6 发布Starter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A47-%E4%BD%BF%E7%94%A8Starter"><span class="toc-number">1.1.7.</span> <span class="toc-text">步骤7 使用Starter</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBoot-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">SpringBoot 自动装配原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBoot-%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">SpringBoot 启动原理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/" title="手写SpringBoot Starter"><img src="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="手写SpringBoot Starter"/></a><div class="content"><a class="title" href="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/" title="手写SpringBoot Starter">手写SpringBoot Starter</a><time datetime="2025-01-19T13:09:48.000Z" title="发表于 2025-01-19 21:09:48">2025-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/" title="MySQL是如何存储数据的"><img src="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/mysql-logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL是如何存储数据的"/></a><div class="content"><a class="title" href="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/" title="MySQL是如何存储数据的">MySQL是如何存储数据的</a><time datetime="2025-01-14T06:57:39.000Z" title="发表于 2025-01-14 14:57:39">2025-01-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/" title="消息队列选型">消息队列选型</a><time datetime="2025-01-13T12:57:00.000Z" title="发表于 2025-01-13 20:57:00">2025-01-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器"><img src="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/JVM.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="垃圾收集器"/></a><div class="content"><a class="title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器">垃圾收集器</a><time datetime="2025-01-11T13:00:41.000Z" title="发表于 2025-01-11 21:00:41">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池">线程池</a><time datetime="2024-09-25T12:05:44.000Z" title="发表于 2024-09-25 20:05:44">2024-09-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By KiCheng</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
