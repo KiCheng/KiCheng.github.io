@@ -7201,6 +7201,9 @@
 <li>系统可用性降低</li>
 </ol>
 <h2 id="消息队列选型"><a href="#消息队列选型" class="headerlink" title="消息队列选型"></a>消息队列选型</h2><h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h3 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h3>]]></content>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
   </entry>
   <entry>
     <title>瑞吉外卖项目实战day1</title>

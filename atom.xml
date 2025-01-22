@@ -70,7 +70,7 @@
     <link href="https://kicheng.github.io/2025/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/"/>
     <id>https://kicheng.github.io/2025/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/</id>
     <published>2025-01-13T12:57:00.000Z</published>
-    <updated>2025-01-22T03:39:54.284Z</updated>
+    <updated>2025-01-22T03:47:24.124Z</updated>
     
     <content type="html"><![CDATA[<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。</p><h2 id="消息队列基础"><a href="#消息队列基础" class="headerlink" title="消息队列基础"></a>消息队列基础</h2><h3 id="消息队列有什么作用"><a href="#消息队列有什么作用" class="headerlink" title="消息队列有什么作用"></a>消息队列有什么作用</h3><blockquote><p>这部分来自 JavaGuide</p></blockquote><ol><li><p>异步处理<br> 将服务中一些「非核心的耗时业务」以异步方式执行，将消息加入消息队列中之后就立即返回结果，减少响应时间。<br> <img src="17367747169475.jpg"><br> 由于用户请求在将数据写入消息队列后就返回给用户，但是下游任务可能会因为各种情况而失败。<strong>所以在使用消息队列异步处理下游业务时还要进行一些流程上的修改</strong>——比如订机票、酒店时用户提交订单，后台将订单写入 MQ，不能立即返回订单提交成功，需要等待 MQ 中的订单消费者将订单出库后，再通过短信的方式通知用户。</p><blockquote><p>为了保证消息队列中的消息被消费，会将消息缓存在生产者服务器的 buffer 中，直到收到消费者服务器的成功消费通知。</p></blockquote></li><li><p>削峰 / 限流<br> 将短时间高并发产生的用户请求存储在消息队列中，然后后端服务根据自己的处理能力一点点消费这些请求，避免短时间内大量请求将后端服务打垮。也就是<strong>将后台服务系统的处理压力转移到消息队列中</strong>。<br> <img src="17367752502559.jpg"></p></li><li><p>降低系统耦合度<br> 客户端将请求打到消息队列中，服务端来处理消息，这样做的好处是需要消费的业务直接去 MQ 中拿到消息进行消费而不需要和其他业务产生耦合，提高了系统的可扩展性。也就是<strong>将本身需要串行化关联调用的模块优化为各自独立的模块</strong>。<br> <img src="17367757716339.jpg"><br> 比如说在上图的商城系统中，使用消息队列将订单服务和其他服务完成解耦，假设需要新增风控服务，只需要让其订阅这个消息，实现网站业务的可拓展性。</p><h3 id="消息队列的使用场景"><a href="#消息队列的使用场景" class="headerlink" title="消息队列的使用场景"></a>消息队列的使用场景</h3><p>除了上面所说的三大作用之外，消息队列还有一些其他的使用场景。</p></li><li><p>MQ 作为分布式事务的解决方案之一<br> 事务允许将事件流定义为一个原子操作。</p></li></ol><h3 id="合格的消息队列要满足哪些特点"><a href="#合格的消息队列要满足哪些特点" class="headerlink" title="合格的消息队列要满足哪些特点"></a>合格的消息队列要满足哪些特点</h3><h3 id="消息队列带来的问题"><a href="#消息队列带来的问题" class="headerlink" title="消息队列带来的问题"></a>消息队列带来的问题</h3><p>前面说了那么多使用消息队列的好处，但是凡事都有两面性，它在实际项目中也会带来一些问题，具体就要看业务中的需要。</p><ol><li>一致性问题：也就是前面说的，在实现异步处理的同时，如果下游业务没有正确的消费消息，就会导致上下游服务数据不一致的情况。</li><li>系统复杂度提高</li><li>系统可用性降低</li></ol><h2 id="消息队列选型"><a href="#消息队列选型" class="headerlink" title="消息队列选型"></a>消息队列选型</h2><h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h3 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h3>]]></content>
     
@@ -82,6 +82,8 @@
     
     
     
+    
+    <category term="中间件" scheme="https://kicheng.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
   </entry>
   
