@@ -535,13 +535,6 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/tags/MySQL/</loc>
-    <lastmod>2025-01-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://kicheng.github.io/tags/OpenCV/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -549,14 +542,21 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/tags/JVM/</loc>
+    <loc>https://kicheng.github.io/tags/SpringBoot/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/tags/SpringBoot/</loc>
+    <loc>https://kicheng.github.io/tags/MySQL/</loc>
+    <lastmod>2025-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/tags/JVM/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -572,13 +572,6 @@
 
   
   <url>
-    <loc>https://kicheng.github.io/categories/Spring/</loc>
-    <lastmod>2025-01-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://kicheng.github.io/categories/Mysql/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -586,7 +579,7 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/SpringMVC/</loc>
+    <loc>https://kicheng.github.io/categories/Spring/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -594,6 +587,13 @@
   
   <url>
     <loc>https://kicheng.github.io/categories/JavaWeb/</loc>
+    <lastmod>2025-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/categories/SpringMVC/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -628,13 +628,6 @@
   </url>
   
   <url>
-    <loc>https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2025-01-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://kicheng.github.io/categories/Linux/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -643,6 +636,13 @@
   
   <url>
     <loc>https://kicheng.github.io/categories/MySQL/</loc>
+    <lastmod>2025-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://kicheng.github.io/categories/Java%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
