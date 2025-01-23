@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>消息队列选型 | KiCheng's Blog</title><meta name="author" content="KiCheng"><meta name="copyright" content="KiCheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="消息队列这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。 消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。 消息队列基础消息队列有什么作用 这部分来自 JavaGuide   异步处理 将服务中一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消息队列选型">
+<meta property="og:url" content="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="消息队列这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。 消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。 消息队列基础消息队列有什么作用 这部分来自 JavaGuide   异步处理 将服务中一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.png">
+<meta property="article:published_time" content="2025-01-23T04:57:00.000Z">
+<meta property="article:modified_time" content="2025-01-23T03:24:43.936Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="中间件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "消息队列选型",
+  "url": "https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/",
+  "image": "https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.png",
+  "datePublished": "2025-01-23T04:57:00.000Z",
+  "dateModified": "2025-01-23T03:24:43.936Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "KiCheng",
+      "url": "https://kicheng.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '消息队列选型',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(2025/01/23/消息队列选型/bg.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">消息队列选型</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">消息队列选型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-23T04:57:00.000Z" title="发表于 2025-01-23 12:57:00">2025-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-23T03:24:43.936Z" title="更新于 2025-01-23 11:24:43">2025-01-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。</p>
+<p>消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。</p>
+<h2 id="消息队列基础"><a href="#消息队列基础" class="headerlink" title="消息队列基础"></a>消息队列基础</h2><h3 id="消息队列有什么作用"><a href="#消息队列有什么作用" class="headerlink" title="消息队列有什么作用"></a>消息队列有什么作用</h3><blockquote>
+<p>这部分来自 JavaGuide</p>
+</blockquote>
+<ol>
+<li><p>异步处理<br> 将服务中一些「非核心的耗时业务」以异步方式执行，将消息加入消息队列中之后就立即返回结果，减少响应时间。<br> <img src="17367747169475.jpg"><br> 由于用户请求在将数据写入消息队列后就返回给用户，但是下游任务可能会因为各种情况而失败。<strong>所以在使用消息队列异步处理下游业务时还要进行一些流程上的修改</strong>——比如订机票、酒店时用户提交订单，后台将订单写入 MQ，不能立即返回订单提交成功，需要等待 MQ 中的订单消费者将订单出库后，再通过短信的方式通知用户。</p>
+<blockquote>
+<p>为了保证消息队列中的消息被消费，会将消息缓存在生产者服务器的 buffer 中，直到收到消费者服务器的成功消费通知。</p>
+</blockquote>
+</li>
+<li><p>削峰 / 限流<br> 将短时间高并发产生的用户请求存储在消息队列中，然后后端服务根据自己的处理能力一点点消费这些请求，避免短时间内大量请求将后端服务打垮。也就是<strong>将后台服务系统的处理压力转移到消息队列中</strong>。<br> <img src="17367752502559.jpg"></p>
+</li>
+<li><p>降低系统耦合度<br> 客户端将请求打到消息队列中，服务端来处理消息，这样做的好处是需要消费的业务直接去 MQ 中拿到消息进行消费而不需要和其他业务产生耦合，提高了系统的可扩展性。也就是<strong>将本身需要串行化关联调用的模块优化为各自独立的模块</strong>。<br> <img src="17367757716339.jpg"><br> 比如说在上图的商城系统中，使用消息队列将订单服务和其他服务完成解耦，假设需要新增风控服务，只需要让其订阅这个消息，实现网站业务的可拓展性。</p>
+<h3 id="消息队列的使用场景"><a href="#消息队列的使用场景" class="headerlink" title="消息队列的使用场景"></a>消息队列的使用场景</h3><p>除了上面所说的三大作用之外，消息队列还有一些其他的使用场景。</p>
+</li>
+<li><p>MQ 作为分布式事务的解决方案之一<br> 事务允许将事件流定义为一个原子操作。</p>
+</li>
+<li><p>顺序保证</p>
+</li>
+<li><p>延时、定时处理</p>
+</li>
+<li><p>数据流处理<br> 针对分布式系统产生的海量数据流，如业务日志、监控数据、用户行为等，消息队列可以实时或批量收集这些数据，并将其导入到大数据处理引擎中，实现高效的数据流管理和处理。</p>
+</li>
+</ol>
+<h3 id="合格的消息队列要满足哪些特点"><a href="#合格的消息队列要满足哪些特点" class="headerlink" title="合格的消息队列要满足哪些特点"></a>合格的消息队列要满足哪些特点</h3><p>消息有序性、消息不丢失、消息可堆积……</p>
+<h3 id="消息队列带来的问题"><a href="#消息队列带来的问题" class="headerlink" title="消息队列带来的问题"></a>消息队列带来的问题</h3><p>前面说了那么多使用消息队列的好处，但是凡事都有两面性，它在实际项目中也会带来一些问题，具体就要看业务中的需要。</p>
+<ol>
+<li>一致性问题：也就是前面说的，在实现异步处理的同时，如果下游业务没有正确的消费消息，就会导致上下游服务数据不一致的情况。</li>
+<li>系统复杂度提高</li>
+<li>系统可用性降低</li>
+</ol>
+<h2 id="消息队列选型"><a href="#消息队列选型" class="headerlink" title="消息队列选型"></a>消息队列选型</h2><h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><p>RabbitMQ 是采用 Erlang 语言实现 AMQP 协议的消息中间件，常用于在分布式系统中存储转发消息。</p>
+<blockquote>
+<p>AMQP 协议是一个<strong>应用层</strong>高级消息队列的<strong>二进制协议</strong>，它的特点是：①更好的跨语言、跨平台性； ②消息格式只能为 byte[]； ③exchange 提供 pub/sub 更多路由方式。</p>
+</blockquote>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>RabbitMQ 的结构如下所示：<br><img src="17375187916252.jpg"></p>
+<ul>
+<li><p>生产者和消费者<br>  <img src="17375290940196.jpg"></p>
+</li>
+<li><p>消息</p>
+<ul>
+<li>消息头（或标签label）<br>  生产者将消息交给 RabbitMQ，RabbitMQ 根据消息头把消息发送给相应的消费者。<ul>
+<li>「最核心」路由键 routing-key</li>
+<li>消息优先级 priority</li>
+</ul>
+</li>
+<li>消息体(payload)</li>
+</ul>
+</li>
+<li><p>交换机 Exchange<br>  消息不是直接加入消息队列 Queue 中，而是生产者将消息发送给交换器时，需要一个 RoutingKey，当 BindingKey 和 RoutingKey 相匹配时，消息才会被路由到对应的队列中。<br>  <img src="17375199166540.jpg"><br>  交换机的四种类型，对应着不同的路由策略：</p>
+<ul>
+<li><p>fanout<br>  无需任何路由键的判断，直接把所有发送到该 Exchange 的消息广播到所有与它绑定的 Queue 中；</p>
+</li>
+<li><p>direct<br>  把消息路由到那些 Bindingkey 与 RoutingKey 完全匹配的 Queue 中；<br>  <img src="17375293552101.jpg"></p>
+</li>
+<li><p>topic<br>  direct 的模糊匹配版本：规定 RoutingKey 和 BindingKey 为一个点号”.”分隔的字符串（被点号”.”分隔开的每一段独立的字符串称为一个单词）；BindingKey 有 “*”和”#”，分别用于匹配一个单词和多个单词；</p>
+</li>
+<li><p>headers<br>  不根据消息头的 RoutingKey 来路由消息，而是根据消息中的 header&lt;key,value&gt; 属性。性能很差，且不实用。</p>
+</li>
+</ul>
+</li>
+<li><p>消息队列 Queue<br>  多个消费者可以订阅同一个队列，这时候队列中消息会被平均分摊给多个消费者（轮询）。RabbitMQ 不支持「队列」层面的广播消费，也就是不支持一个队列的消息被多个消费者同时消费。</p>
+</li>
+<li><p>信道 Channel<br>  TCP 连接的创建和销毁开销较大，且并发数受系统资源限制，会造成性能瓶颈，所以 RabbitMQ 使用「信道」的方式来传输数据。TCP 被多个线程共享，每个信道在 RabbitMQ 都有唯一的 ID，保证了信道私有性，每个信道对应一个线程使用。</p>
+</li>
+</ul>
+<h4 id="应用集成"><a href="#应用集成" class="headerlink" title="应用集成"></a>应用集成</h4><ol>
+<li>Mac 中环境搭建，为我们搭建整套 RabbitMQ 依赖的环境，包括 erlang <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install rabbitmq</span><br></pre></td></tr></table></figure>
+ 后台启动： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start rabbitmq</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在 RabbitMQ 配置页的其他配置，可参考：<a target="_blank" rel="noopener" href="https://netfilx.github.io/spring-boot/8.springboot-rabbitmq/springboot-rabbitmq">https://netfilx.github.io/spring-boot/8.springboot-rabbitmq/springboot-rabbitmq</a> </p>
+</blockquote>
+</li>
+<li>项目配置 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-amqp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br></pre></td></tr></table></figure>
+ <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">    <span class="attr">rabbitmq:</span></span><br><span class="line">        <span class="attr">host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="comment"># 客户端，你的虚拟机IP</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">5672</span> <span class="comment"># 客户端端口</span></span><br><span class="line">        <span class="attr">virtual-host:</span> <span class="string">/</span> <span class="comment"># 虚拟主机</span></span><br><span class="line">        <span class="attr">username:</span> <span class="string">guest</span> <span class="comment"># 默认用户名</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">guest</span> <span class="comment"># 默认密码</span></span><br></pre></td></tr></table></figure></li>
+<li>发布消息<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RabbitmqServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">RabbitmqService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RabbitTemplate rabbitTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> DirectExchange directExchange;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">publishDirectMsg</span><span class="params">(MessageQueueEvent&lt;T&gt; messageQueueEvent, String key)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.publishDirectMsg(messageQueueEvent, key, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">publishDirectMsg</span><span class="params">(MessageQueueEvent&lt;T&gt; messageQueueEvent, String key, <span class="type">boolean</span> isPersist)</span> &#123;</span><br><span class="line">        <span class="comment">// 消息头中的优先级、是否持久化等配置 </span></span><br><span class="line">        <span class="type">MessageProperties</span> <span class="variable">messageProperties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MessageProperties</span>();</span><br><span class="line">        messageProperties.setDeliveryMode(isPersist? MessageDeliveryMode.PERSISTENT: MessageDeliveryMode.NON_PERSISTENT);</span><br><span class="line">        <span class="comment">// MessageConverter:将Java对象转换为RabbitMQ的消息</span></span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> rabbitTemplate.getMessageConverter().toMessage(messageQueueEvent, messageProperties);</span><br><span class="line">        <span class="comment">// convertAndSend是发送的核心：指定交换机、路由键和消息本身</span></span><br><span class="line">        rabbitTemplate.convertAndSend(directExchange.getName(), key, message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>MessageConverter 用于将 Java 对象转换为 RabbitMQ 的消息。默认情况下，Spring Boot 使用 SimpleMessageConverter，只能发送 String 和 byte[] 类型的消息。</p>
+</blockquote>
+</li>
+</ol>
+<p>MessageQueueEvent 泛型类是我学习到的一种高级写法，因为在进入消息队列之前要将 JavaBean 序列化为 Message 对象才能被 RabbitMQ 处理，这里为了封装消息的类型<code>notifyType</code>，将 JavaBean 封装到泛型类的成员变量<code>content</code>中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MessageQueueEvent</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> NotifyTypeEnum notifyType;</span><br><span class="line">    <span class="keyword">private</span> T content;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>消费消息——<code>@RabbitListener</code>指定queue<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RabbitmqConsumer</span> &#123;</span><br><span class="line">    <span class="meta">@RabbitListener(bindings = @QueueBinding(</span></span><br><span class="line"><span class="meta">        value = @Queue(</span></span><br><span class="line"><span class="meta">                    name = CommonConstants.MESSAGE_QUEUE_NAME_NOTIFY_EVENT,  // 队列名称queue.notify</span></span><br><span class="line"><span class="meta">                    durable = &quot;true&quot;</span></span><br><span class="line"><span class="meta">                ),</span></span><br><span class="line"><span class="meta">                // 交换机名称 direct.exchange</span></span><br><span class="line"><span class="meta">                exchange = @Exchange(name = CommonConstants.MESSAGE_QUEUE_EXCHANGE_NAME_DIRECT, type = ExchangeTypes.DIRECT),</span></span><br><span class="line"><span class="meta">                key = &#123;CommonConstants.MESSAGE_QUEUE_KEY_NOTIFY&#125;  // 路由键notify</span></span><br><span class="line"><span class="meta">            ),</span></span><br><span class="line"><span class="meta">        concurrency = &quot;10&quot;  // 并发消费者数量</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">listenNotifyEventQueue</span><span class="params">(MessageQueueEvent&lt;T&gt; msgEvent)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;消费者接收到direct.queue的消息：【&#123;&#125;】&quot;</span>, msgEvent);</span><br><span class="line">    <span class="comment">// 调用下游业务处理消息</span></span><br><span class="line">    <span class="keyword">switch</span> (msgEvent.getNotifyType())&#123;</span><br><span class="line">        <span class="keyword">case</span> PRAISE:</span><br><span class="line">        <span class="keyword">case</span> COLLECT:</span><br><span class="line">            messageQueueNotifyMsgConsumer.saveArticleNotify(objectMapper.convertValue(msgEvent, <span class="keyword">new</span> <span class="title class_">TypeReference</span>&lt;&gt;() &#123;&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> CANCEL_PRAISE:</span><br><span class="line">        <span class="keyword">case</span> CANCEL_COLLECT:</span><br><span class="line">            messageQueueNotifyMsgConsumer.removeArticleNotify(objectMapper.convertValue(msgEvent, <span class="keyword">new</span> <span class="title class_">TypeReference</span>&lt;&gt;() &#123;&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+很多教程中<code>@RabbitListener</code>注解中只指定了 queue 的 Name，就像这样：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RabbitListener(queues = &quot;queue1&quot;)</span></span><br></pre></td></tr></table></figure>
+因为它们是在 rabbitmq 配置界面中手动设定了交换机和队列之间的绑定关系以及 bindingKey，这里的复杂配置帮助完成自动绑定。</li>
+</ol>
+<h4 id="业务应用"><a href="#业务应用" class="headerlink" title="业务应用"></a>业务应用</h4><p>在开发的项目中，目前只有文章中的点赞会走 rabbitmq 消息队列，其他的操作走 Java 内置的消息机制。    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((notifyType.equals(NotifyTypeEnum.PRAISE) || notifyType.equals(NotifyTypeEnum.CANCEL_PRAISE)) &amp;&amp; rabbitmqService.enabled()) &#123;</span><br><span class="line">    rabbitmqService.publishDirectMsg(<span class="keyword">new</span> <span class="title class_">MessageQueueEvent</span>&lt;&gt;(notifyType, foot), CommonConstants.MESSAGE_QUEUE_KEY_NOTIFY);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    Optional.ofNullable(notifyType).ifPresent(notify -&gt; SpringUtil.publishEvent(<span class="keyword">new</span> <span class="title class_">NotifyMsgEvent</span>&lt;&gt;(<span class="built_in">this</span>, notify, foot)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Kafka-流式处理平台"><a href="#Kafka-流式处理平台" class="headerlink" title="Kafka 流式处理平台"></a>Kafka 流式处理平台</h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>十万级别的吞吐量：比 RabbitMQ 高一个数量级，基于 Java 开发大量使用了批量处理和异步的思想。</li>
+<li>生态系统的兼容性。</li>
+</ol>
+<p><del>RabbitMQ 采用的是<strong>队列模型</strong></del>，队列模型存在的问题是：不支持「将生产者产生的消息分发给多个消费者，并且每个消费者都能接收到完整的消息内容」的场景。</p>
+<blockquote>
+<p>修正：RabbitMQ 有不同工作模式，点对点的工作模式是基于队列模型，像路由模型就是基于发布-订阅模型，但并不是基于主题 Topic 的广播消费、而是基于交换机 Exchange 的广播消费。</p>
+</blockquote>
+<p>而 Kafka (和 RocketMQ) 采用的<strong>发布-订阅模型</strong>就是为了解决队列模型存在的问题，发布者发布一条消息，该消息通过 Topic 主题传递给所有的订阅者。<br><img src="17375594059671.jpg"></p>
+<p>Partition(分区) 属于 Topic 的一部分。一个 Topic 可以有多个 Partition ，并且同一 Topic 下的 Partition 可以分布在不同的 Broker 上，提供了更好的并发能力以及容灾能力。</p>
+<h4 id="如何保证消息有序、不丢失、不重复"><a href="#如何保证消息有序、不丢失、不重复" class="headerlink" title="如何保证消息有序、不丢失、不重复"></a>如何保证消息有序、不丢失、不重复</h4><ol>
+<li><p>消息有序<br><img src="17375608634383.jpg"><br>每次添加消息到分区的时候都会采用尾加法，Kafka 只能为我们保证分区中的消息有序。</p>
+<p> 为了保证同一订单 A 的创建、支付、发货的有序性，通过 Hash 将同一语义的消息们放到一个队列中，就能解决下图的问题了：<br> <img src="17375986431769.jpg"></p>
+</li>
+<li><p>消息不丢失<br> 1）生产者丢失消息：生产者 send 之后消息可能因为网络原因没有发送过去<br> 通过回调函数的方式异步的捕获成功或失败的响应。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ListenableFuture&lt;SendResult&lt;String, Object&gt;&gt; future = kafkaTemplate.send(topic, o);</span><br><span class="line">future.addCallback(</span><br><span class="line">    result -&gt; logger.info(<span class="string">&quot;生产者成功发送消息到topic:&#123;&#125; partition:&#123;&#125;的消息&quot;</span>, result.getRecordMetadata().topic(), result.getRecordMetadata().partition()),</span><br><span class="line">    ex -&gt; logger.error(<span class="string">&quot;生产者发送消失败，原因：&#123;&#125;&quot;</span>, ex.getMessage())</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p> 同时还可以设置合理的生产者 retries 次数，通常为 3。<br> 2）消费者丢失消息：消息在分区中分配 offset，消费者拉取到分区中消息时，消费者就会自动提交 offset。</p>
+<p> 3）Kafka 实例弄丢消息：分区中的多副本机制包含 leader 和 follower，假如 leader 副本所在的 broker 突然挂掉，那么就要从 follower 副本重新选出一个 leader ，但是 leader 的数据还有一些没有被 follower 副本的同步的话，就会造成消息丢失。</p>
+</li>
+<li><p>消息不重复<br> 根本原因就是当关闭了消费者的自动提交 offset，采取手动提交之后，已经消费的 offset 没有成功提交。<br> 方案一（最有效）：利用 Redis set、MySQL 主键来幂等；<br> 方案二：<br> 和消费者丢失消息的解决方案互斥，通常来说会在允许延迟的场景中采用拉取到消息即提交 offset 来解决不重复问题，消息丢失则通过数据兜底避免。</p>
+</li>
+</ol>
+<h3 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h3><h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>吞吐量和 Kafka 都是十万级别的，最高档；</li>
+<li>阿里系 Java 开发的开源项目。</li>
+</ol>
+<p>RocketMQ 的模型和 Kafka 是一样的，只不过将分区的概念替换成队列，功能上没有差别。<br><img src="17375970168449.jpg"><br>发布订阅模式中一般会涉及到多个消费者组，而每个消费者组在每个队列中的消费位置都是不同的。如果此时有多个消费者组，那么消息被一个消费者组消费完之后是不会删除的(因为其它消费者组也需要），它仅仅是为每个消费者组维护一个 offset。</p>
+<blockquote>
+<p>Kafka、RocketMQ 支持广播消费（RabbitMQ是交换机层面的广播）：</p>
+<ul>
+<li>每个分区（队列）只能被一个消费组中的一个消费者消费：为了保证队列内消息消费的有序性，如上图所示。</li>
+<li>如果多个消费者属于不同的消费组，则不同消费组可以并行独立地消费相同的分区（队列），从而实现广播消费的效果。</li>
+</ul>
+</blockquote>
+<h4 id="RocketMQ-的分布式架构"><a href="#RocketMQ-的分布式架构" class="headerlink" title="RocketMQ 的分布式架构"></a>RocketMQ 的分布式架构</h4><p><img src="17376008617978.jpg"><br>第一、Broker 做了集群并且还进行了主从部署；</p>
+<p>第二、为了保证 HA ，NameServer 也做了集群部署，但是请注意它是「去中心化」的。在 RocketMQ 中是通过 单个 Broker 和所有 NameServer 保持长连接 ，并且在每隔 30 秒 Broker 会向所有 Nameserver 发送心跳，心跳包含了自身的 Topic 配置信息，这个步骤就对应这上面的 Routing Info；</p>
+<p>第三、生产者需要向 Broker 发送消息的时候，需要先从 NameServer 获取关于 Broker 的路由信息 Routing Info；</p>
+<p>第四、消费者通过 NameServer 获取所有 Broker 的路由信息后，向 Broker 发送 Pull 请求来获取消息数据。</p>
+<blockquote>
+<p>RabbitMQ 是基于主从（非分布式）做高可用的，主要是采用镜像集群模式。</p>
+</blockquote>
+<p>【我的一些理解】<br><strong>分布式</strong>和<strong>集群</strong>都是为了「提升并发能力」的组织架构：<br>    分布式是以缩短单个任务的执行时间来提升效率的，而集群则是通过提高单位时间内执行的任务数来提升效率。换句话说，分布式是将整个系统拆分成不同的服务，集群是将同一个服务通过多安排人手的方式来处理。</p>
+<p><img src="17376014833793.jpg"></p>
+<p><strong>主从</strong>是和前面两个不同的，本质区别是主从架构是「中心化」的（主节点负责所有的写入操作，并通过同步机制将数据传递给从节点），目的是「备份容灾」。而集群系统内部也可以通过主从方式来实现容灾，比如 RocketMQ 的 Broker Cluster：<br><img src="17376019176954.jpg"></p>
+<h3 id="RabbitMQ、Kafka、RocketMQ-的比较"><a href="#RabbitMQ、Kafka、RocketMQ-的比较" class="headerlink" title="RabbitMQ、Kafka、RocketMQ 的比较"></a>RabbitMQ、Kafka、RocketMQ 的比较</h3><p><img src="17375997029823.jpg"></p>
+<blockquote>
+<p>• 并发量：指的是同一时间消息队列能支持的活跃连接数量（如生产者和消费者连接数）。<br>    • 吞吐量：指的是单位时间内消息队列系统能够处理的消息数量（如每秒处理百万条消息）。</p>
+</blockquote>
+<p>RabbitMQ 基于 Erlang 的并发模型，通过 Channel 复用 TCP 连接，大大提升了 MQ 的并发能力，可以达到「微秒」级别的时延。</p>
+<p>Kafka 唯一的一点劣势是有可能<strong>消息重复消费（消费完成但 offset 没有提交成功）</strong>，那么对数据准确性会造成极其轻微的影响，在大数据领域中以及日志采集中，这点轻微影响可以忽略，这个特性天然适合大数据实时计算以及日志收集。</p>
+<blockquote>
+<p>Kafka 和 RocketMQ 的核心是日志存储，采用多副本同步机制，消息存储可靠性设计是它们的强项；RabbitMQ 的设计是内存优先，持久化存储需要额外配置，更注重消息传递的灵活性和低延迟。</p>
+</blockquote>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><p>Redis 做消息队列的缺点有哪些？</p>
+<blockquote>
+<p>源自 <a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/redis/data_struct/command.html#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-9">https://www.xiaolincoding.com/redis/data_struct/command.html#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-9</a></p>
+</blockquote>
+<ol>
+<li><p>消息可能会丢失</p>
+<p> 1）Redis 中间件：会，Redis 持久化本身就可能导致消息丢失、外加主从复制时也有丢失数据的风险；<br> 2）生产者：不会，只要正确处理响应 ack 或异常，并重发消息，就不会出现丢失；<br> 3）消费者：不会，Stream 采用内部队列(Pending List)留存每个消费者读取、但还未确认的消息。</p>
+</li>
+<li><p>消息不可堆积</p>
+<p> Redis 的数据都存储在内存中，这就意味着一旦发生消息积压，则会导致 Redis 的内存持续增长，如果超过机器内存上限，就会面临 OOM 的风险。</p>
+<p> 但 Kafka、RabbitMQ 专业的消息队列它们的数据都是存储在磁盘上，当消息积压时，无非就是多占用一些磁盘空间。</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kicheng.github.io">KiCheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/">https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kicheng.github.io" target="_blank">KiCheng's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></div><div class="post-share"><div class="social-share" data-image="/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KiCheng</div><div class="author-info-description">杂乱无章的记事本</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">1.</span> <span class="toc-text">消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%9F%BA%E7%A1%80"><span class="toc-number">1.1.</span> <span class="toc-text">消息队列基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">消息队列有什么作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.1.2.</span> <span class="toc-text">消息队列的使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E6%A0%BC%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E8%A6%81%E6%BB%A1%E8%B6%B3%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9"><span class="toc-number">1.1.3.</span> <span class="toc-text">合格的消息队列要满足哪些特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.4.</span> <span class="toc-text">消息队列带来的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">消息队列选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-number">1.2.1.</span> <span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E9%9B%86%E6%88%90"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">应用集成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">业务应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kafka-%E6%B5%81%E5%BC%8F%E5%A4%84%E7%90%86%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.2.2.</span> <span class="toc-text">Kafka 流式处理平台</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%9C%89%E5%BA%8F%E3%80%81%E4%B8%8D%E4%B8%A2%E5%A4%B1%E3%80%81%E4%B8%8D%E9%87%8D%E5%A4%8D"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">如何保证消息有序、不丢失、不重复</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RocketMQ"><span class="toc-number">1.2.3.</span> <span class="toc-text">RocketMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-1"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RocketMQ-%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">RocketMQ 的分布式架构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ%E3%80%81Kafka%E3%80%81RocketMQ-%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-number">1.2.4.</span> <span class="toc-text">RabbitMQ、Kafka、RocketMQ 的比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis"><span class="toc-number">1.2.5.</span> <span class="toc-text">Redis</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/" title="消息队列选型"><img src="/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="消息队列选型"/></a><div class="content"><a class="title" href="/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/" title="消息队列选型">消息队列选型</a><time datetime="2025-01-23T04:57:00.000Z" title="发表于 2025-01-23 12:57:00">2025-01-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/" title="手写SpringBoot Starter"><img src="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="手写SpringBoot Starter"/></a><div class="content"><a class="title" href="/2025/01/19/%E6%89%8B%E5%86%99SpringBoot-Starter/" title="手写SpringBoot Starter">手写SpringBoot Starter</a><time datetime="2025-01-19T13:09:48.000Z" title="发表于 2025-01-19 21:09:48">2025-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/" title="MySQL是如何存储数据的"><img src="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/mysql-logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL是如何存储数据的"/></a><div class="content"><a class="title" href="/2025/01/14/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%9A%84/" title="MySQL是如何存储数据的">MySQL是如何存储数据的</a><time datetime="2025-01-14T06:57:39.000Z" title="发表于 2025-01-14 14:57:39">2025-01-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器"><img src="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/JVM.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="垃圾收集器"/></a><div class="content"><a class="title" href="/2025/01/11/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="垃圾收集器">垃圾收集器</a><time datetime="2025-01-11T13:00:41.000Z" title="发表于 2025-01-11 21:00:41">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/22/springboot%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0%E8%B5%84%E6%BA%90/" title="springboot访问本地资源">springboot访问本地资源</a><time datetime="2024-11-22T01:40:40.000Z" title="发表于 2024-11-22 09:40:40">2024-11-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By KiCheng</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
