@@ -6,7 +6,7 @@
   <link href="https://kicheng.github.io/atom.xml" rel="self"/>
   
   <link href="https://kicheng.github.io/"/>
-  <updated>2025-01-23T03:34:08.249Z</updated>
+  <updated>2025-02-02T14:32:31.451Z</updated>
   <id>https://kicheng.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计模式</title>
+    <link href="https://kicheng.github.io/2025/02/02/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    <id>https://kicheng.github.io/2025/02/02/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</id>
+    <published>2025-02-02T03:43:52.000Z</published>
+    <updated>2025-02-02T14:32:31.451Z</updated>
+    
+    <content type="html"><![CDATA[<p>我理解的设计模式实际上是在某些编码场景下，针对某类问题的一种通用的设计方法和解决方案。设计模式有 23 种共分为三大类：创建型模式、结构型模式、行为型模式，这篇文章总结我用过的设计模式。</p><p><img src="17385067108922.jpg"></p><h2 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>单例模式保证<strong>一个类只有一个实例</strong>——如果你创建了一个对象，同时过一会儿后你决定再创建一个新对象，此时你会获得之前已创建的对象，而不是一个新对象；为该实例<strong>提供全局访问节点</strong>，允许在程序的任何地方访问特定对象。<br><img src="17384684245334.jpg"><br>通过「双重检查锁」支持多线程创建单例对象：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">SingletonDemo</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">SingletonDemo</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 禁用构造方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">SingletonDemo</span><span class="params">()</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="title function_">singletonDemogetInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 先判断实例是否存在</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 加锁创建实例</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDemo.class) &#123;</span><br><span class="line">                <span class="comment">// 再次判断, 因为可能出现某个线程拿了锁之后创建对象</span></span><br><span class="line">                <span class="comment">// 而此时其他的线程拿到了锁又执行到此处 ==&gt; 这些线程都会创建一个实例, 从而创建多个实例对象</span></span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">SingletonDemo</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>【应用】Spring 中管理的 Bean 默认就是单例的，所有请求共享同一个实例。极大提高了性能和资源利用率，避免了重复创建对象的开销。</p><h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>定义一个抽象工厂接口，让子类实现这个工厂，负责创建具体的「一类对象」。</p><p>【应用】Spring 中 Bean 的创建（实例化）方法就有通过「静态工厂」、「实例工厂」来实现的，此外 Spring 还提供了 <code>FactoryBean&lt;T&gt;</code> 接口，允许我们自定义工厂来创建复杂的 Bean。</p><h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>使用抽象的接口提供一个工厂的工厂，用于创建「多个产品族」中的产品。<br><img src="17384693466193.jpg"></p><p>【应用】ApplicationContext 继承了 BeanFactory，可以看作是一个 Spring 内部的抽象工厂。</p><h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>在应用程序中需要两个不同接口的类进行通信，在不修改两个接口的前提下需要通过某个中间件来完成这个衔接工作，这个中间件就是适配器。<br><img src="17384697310889.jpg"></p><p>【应用】</p><p>一）适配器 Adapter，被用于 SpringMVC 中。众所周知的是 SpringMVC 工作原理在 url 经过 HandlerMapping 查找能够处理请求的 Handler 之后，就要将请求交给实际的 Handler 进行处理，在 Handler 之前就要通过一个适配器，目的是将不同类型的 Handler(有最常见的控制层 Controller 之外还有更低级别的 HttpRequestServlet 等) 统一处理请求。</p><p>二）Java IO 中将字节流通过 InputStreamReader 适配器将字节转换为字符 FileReader。</p><h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><p>运行时为对象动态添加新功能，而不改变原始对象的结构。</p><p>它和继承的区别在于：装饰器是「组合」而非继承。虽然我们可以通过继承的方式给一个对象添加新行为，但是 ①对象之间的关系复杂不利于维护 ②单继承的局限性。<br><img src="17384699712067.jpg"></p><p>【应用】</p><p>一）Java IO 中对于字节流的 FilterInputStream 和 FilterOutputStream 是装饰器模式的核心，分别用于增强 InputStream 和 OutputStream 对象的功能——BufferedInputStream(字节缓冲输入流)、DataInputStream 就是 FilterInputStream 的子类。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">BufferedInputStream</span> <span class="variable">bis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedInputStream</span>(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;input.txt&quot;</span>));</span><br></pre></td></tr></table></figure><p>二）<font color="blue">【存疑】</font>ThreadLocal → InheritableThreadLocal → TransmittableThreadLocal 的升级，在不改变 ThreadLocal 原本机制的情况下，增强 ThreadLocal 的功能。</p><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p>代理对象代替真实对象的访问，可以在不修改原目标对象的前提下提供额外操作——无入侵式的拓展代码。又分为静态代理和动态代理，根本区别是编译时或是运行时的字节码修改。</p><h2 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h2><h3 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h3><p>模式建议你将这些处理者连成一条链。链上的每个处理者都有一个成员变量来保存对于下一处理者的引用，除了处理请求外，处理者还负责沿着链传递请求。<br><img src="17384703080926.jpg"></p><p>【应用】Java 中 Web Servlet 的 Filter 过滤器。 </p><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>用于「一对多」的依赖关系，当一个对象状态变化时，自动通知所有依赖它的对象。</p><p><img src="17384704447703.jpg"></p><p>【应用】Spring 中的事件监听机制。</p><h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><p>声明一个抽象的父类，将部分逻辑以具体方法的形式实现，然后声明一些抽象方法让子类来实现剩余的逻辑。<br>【应用】Java 中的抽象队列同步器 AQS 实现可重入锁、信号量、 CountDownLatch 倒计时器、CyclicBarrier 循环栅栏等。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;我理解的设计模式实际上是在某些编码场景下，针对某类问题的一种通用的设计方法和解决方案。设计模式有 23 种共分为三大类：创建型模式、结构型模式、行为型模式，这篇文章总结我用过的设计模式。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;17385067108922.jpg&quot;&gt;&lt;/p&gt;
+&lt;</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="https://kicheng.github.io/categories/Java/"/>
+    
+    
+    <category term="设计模式" scheme="https://kicheng.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>消息队列选型</title>
