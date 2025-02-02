@@ -8212,4 +8212,48 @@
         <tag>设计模式</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ThreadLocal机制</title>
+    <url>/2025/01/27/ThreadLocal%E6%9C%BA%E5%88%B6/</url>
+    <content><![CDATA[<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><h3 id="为什么要有-ThreadLocal"><a href="#为什么要有-ThreadLocal" class="headerlink" title="为什么要有 ThreadLocal"></a>为什么要有 ThreadLocal</h3><p>为了解决多线程存在「线程安全」的问题——线程并发对同一临界区的共享资源进行访问而导致的内存数据安全问题，才引入的 ThreadLocal——每个线程拥有自己线程隔离的「本地变量」。</p>
+<h3 id="ThreadLocal-中弱引用问题"><a href="#ThreadLocal-中弱引用问题" class="headerlink" title="ThreadLocal 中弱引用问题"></a>ThreadLocal 中弱引用问题</h3><p>要说清楚 ThreadLocal 中的弱引用机制，还要从 ThreadLocal 的设计初衷讲起。为了解决多线程线程安全问题，每一个 Thread 中都有一个 ThreadLocalMap，其中 key 为 ThreadLocal 本地变量，value 为想要存放的具体值。为了实现线程安全，不允许用户直接接触 ThreadLocalMap 向里面 put Entry，而是通过 ThreadLocal 的 API：get、set、remove 来间接操作。具体的实现是，ThreadLocalMap 作为 ThreadLocal 中的静态内部类，ThreadLocal 为 Map 提供了外层的用户封装，而将可能出现的线程冲突交由内部实现来解决。</p>
+<p>这就造成了当使用者没有正确的通过 remove 方法将 ThreadLocal 删除而通过将 ThreadLocal 变量置为 null 时，就会造成这个 Entry 永远存在于 ThreadLocalMap 中且无法被访问和删除，进而造成 OOM 的风险。</p>
+<p>为了避免 OOM，设计者将 ThreadLocalMap 中的 key(ThreadLocal引用) 设置为弱引用，也就是没有外部引用时会被 GC 自动回收。</p>
+<p>但是就算是通过弱引用的设计方式，也无法完全避免 OOM 的发生。这是因为虽然 ThreadLocalMap 会通过线性探测清理、启发式清理的方式清除脏 Entry，但实际并不能保证脏 Entry 被清除。所以呼吁使用者在使用完 ThreadLocal 变量之后一定要通过 remove 手动回收。</p>
+<h3 id="ThreadLocal-的进化"><a href="#ThreadLocal-的进化" class="headerlink" title="ThreadLocal 的进化"></a>ThreadLocal 的进化</h3><p>画个图来说明 ThreadLocal、InheritableThreadLocal、TransmittableThreadLocal 之间的区别：<br><img src="pic1.png" alt="pic1"></p>
+<h4 id="ThreadLocal-1"><a href="#ThreadLocal-1" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h4><p>为了避免线程安全而维护的本地变量副本。</p>
+<h4 id="InheritableThreadLocal"><a href="#InheritableThreadLocal" class="headerlink" title="InheritableThreadLocal"></a>InheritableThreadLocal</h4><p>使用 ThreadLocal 时在异步场景下无法给子线程提供父线程所创建的数据副本，由此才有了 InheritableThreadLocal 登场：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InheritableThreadLocalDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ThreadLocal&lt;String&gt; ThreadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">        ThreadLocal&lt;String&gt; inheritableThreadLocal = <span class="keyword">new</span> <span class="title class_">InheritableThreadLocal</span>&lt;&gt;();</span><br><span class="line">        ThreadLocal.set(<span class="string">&quot;父类数据:threadLocal&quot;</span>);</span><br><span class="line">        inheritableThreadLocal.set(<span class="string">&quot;父类数据:inheritableThreadLocal&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;子线程获取父类ThreadLocal数据：&quot;</span> + ThreadLocal.get());</span><br><span class="line">                System.out.println(<span class="string">&quot;子线程获取父类inheritableThreadLocal数据：&quot;</span> + inheritableThreadLocal.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>原理</strong><br>在 Thread 类中维护了两个 hashMap：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">threadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">inheritableThreadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+<p>在父线程中通过<code>new Thread()</code>创建子线程时，Thread 的构造方法会复制父线程的 inheritThreadLocals 为子线程的 inheritableThreadLocals 赋值。</p>
+<h4 id="TransmittableThreadLocal"><a href="#TransmittableThreadLocal" class="headerlink" title="TransmittableThreadLocal"></a>TransmittableThreadLocal</h4><p>在实际项目中使用异步处理都采用线程池，线程池是 Thread 复用的逻辑，而 InheritableThreadLocal 是在<code>new Thread()</code>时才进行本地变量的传递，这时候就不灵了。</p>
+<p>因为需求由「父子线程的 ThreadLocal 值传递」变成了「<strong>任务提交给线程池时的 ThreadLocal 传递到任务执行时</strong>」。</p>
+<blockquote>
+<p>阿里巴巴开源组件：<a href="https://github.com/alibaba/transmittable-thread-local">https://github.com/alibaba/transmittable-thread-local</a></p>
+</blockquote>
+<p>TransmittableThreadLocal 类继承自 InheritableThreadLocal，就解决了在线程池以及线程复用的情况下的本地变量传递问题。</p>
+<p><strong>TransmittableThreadLocal 使用</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>transmittable-thread-local<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>实例代码：<br>这里能体现出 TransmittableThreadLocal 和 InheritableThreadLocal 的区别——向线程池中提交任务时由主线程先设置 ttl 的值，在线程池中执行任务的线程能够得到传递的 ttl 值。</p>
+<blockquote>
+<p>保证线程池中传递值的 2 种方式：</p>
+<ul>
+<li>使用 TtlRunnable 和 TtlCallable 修饰传入线程池的 Runnable 和 Callable 任务；</li>
+<li>（更推荐）使用 TtlExecutors 修饰线程池。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    ThreadLocal&lt;String&gt; ttl = <span class="keyword">new</span> <span class="title class_">TransmittableThreadLocal</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 创建线程池</span></span><br><span class="line">    <span class="type">ExecutorService</span> <span class="variable">executorService</span> <span class="operator">=</span> Executors.newFixedThreadPool(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">ExecutorService</span> <span class="variable">ttlExecutorService</span> <span class="operator">=</span> TtlExecutors.getTtlExecutorService(executorService);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        ttl.set(<span class="string">&quot;主线程的值：&quot;</span> + i);  <span class="comment">// 主线程修改值</span></span><br><span class="line"><span class="comment">//          executorService.execute(() -&gt; &#123;</span></span><br><span class="line">        ttlExecutorService.execute(() -&gt; &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- &quot;</span> + ttl.get());</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pool-1-thread-1 ---- 主线程的值：0</span><br><span class="line">pool-1-thread-3 ---- 主线程的值：2</span><br><span class="line">pool-1-thread-1 ---- 主线程的值：5</span><br><span class="line">pool-1-thread-2 ---- 主线程的值：1</span><br><span class="line">pool-1-thread-3 ---- 主线程的值：6</span><br><span class="line">pool-1-thread-5 ---- 主线程的值：4</span><br><span class="line">pool-1-thread-3 ---- 主线程的值：8</span><br><span class="line">pool-1-thread-2 ---- 主线程的值：9</span><br><span class="line">pool-1-thread-1 ---- 主线程的值：7</span><br><span class="line">pool-1-thread-4 ---- 主线程的值：3</span><br></pre></td></tr></table></figure>
+
+<p>在线程池中线程出现复用时，如果不使用 TransmittableThreadLocal 存储本地变量副本，那在复用时会造成本地变量的「数据污染」，也就是错误地保留了该 Thread 的历史副本，导致读到错误的值。</p>
+]]></content>
+      <categories>
+        <category>Java 并发编程</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
 </search>
