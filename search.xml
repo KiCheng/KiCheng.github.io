@@ -7157,6 +7157,7 @@
     <title>消息队列选型</title>
     <url>/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。</p>
+<p><img src="17396261175790.jpg"></p>
 <p>消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。</p>
 <h2 id="消息队列基础"><a href="#消息队列基础" class="headerlink" title="消息队列基础"></a>消息队列基础</h2><h3 id="消息队列有什么作用"><a href="#消息队列有什么作用" class="headerlink" title="消息队列有什么作用"></a>消息队列有什么作用</h3><blockquote>
 <p>这部分来自 JavaGuide</p>
