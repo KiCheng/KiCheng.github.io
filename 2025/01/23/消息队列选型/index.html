@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.jpg">
 <meta property="article:published_time" content="2025-01-23T04:57:00.000Z">
-<meta property="article:modified_time" content="2025-01-23T03:34:08.249Z">
+<meta property="article:modified_time" content="2025-02-04T12:26:18.587Z">
 <meta property="article:author" content="KiCheng">
 <meta property="article:tag" content="中间件">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/",
   "image": "https://kicheng.github.io/2025/01/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B/bg.jpg",
   "datePublished": "2025-01-23T04:57:00.000Z",
-  "dateModified": "2025-01-23T03:34:08.249Z",
+  "dateModified": "2025-02-04T12:26:18.587Z",
   "author": [
     {
       "@type": "Person",
@@ -155,7 +155,7 @@
   isToc: true,
   pageType: 'post'
 }</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(2025/01/23/消息队列选型/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">消息队列选型</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">消息队列选型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-23T04:57:00.000Z" title="发表于 2025-01-23 12:57:00">2025-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-23T03:34:08.249Z" title="更新于 2025-01-23 11:34:08">2025-01-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。</p>
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(2025/01/23/消息队列选型/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">消息队列选型</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">消息队列选型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-23T04:57:00.000Z" title="发表于 2025-01-23 12:57:00">2025-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-04T12:26:18.587Z" title="更新于 2025-02-04 20:26:18">2025-02-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>这是一篇对消息队列的详细总结（可能对于高可用和架构方面的总结还不够，未来会随着对知识理解的加深继续完善）。在项目中使用了 RabbitMQ，所以也记录了 RabbitMQ 的使用集成。</p>
 <p>消息队列可以看成一个存放消息的容器，由于 Queue 是一种先进先出的数据结构，所以消息队列消费数据也是「按序」的。</p>
 <h2 id="消息队列基础"><a href="#消息队列基础" class="headerlink" title="消息队列基础"></a>消息队列基础</h2><h3 id="消息队列有什么作用"><a href="#消息队列有什么作用" class="headerlink" title="消息队列有什么作用"></a>消息队列有什么作用</h3><blockquote>
 <p>这部分来自 JavaGuide</p>
@@ -169,16 +169,14 @@
 <li><p>削峰 / 限流<br> 将短时间高并发产生的用户请求存储在消息队列中，然后后端服务根据自己的处理能力一点点消费这些请求，避免短时间内大量请求将后端服务打垮。也就是<strong>将后台服务系统的处理压力转移到消息队列中</strong>。<br> <img src="17367752502559.jpg"></p>
 </li>
 <li><p>降低系统耦合度<br> 客户端将请求打到消息队列中，服务端来处理消息，这样做的好处是需要消费的业务直接去 MQ 中拿到消息进行消费而不需要和其他业务产生耦合，提高了系统的可扩展性。也就是<strong>将本身需要串行化关联调用的模块优化为各自独立的模块</strong>。<br> <img src="17367757716339.jpg"><br> 比如说在上图的商城系统中，使用消息队列将订单服务和其他服务完成解耦，假设需要新增风控服务，只需要让其订阅这个消息，实现网站业务的可拓展性。</p>
+</li>
+</ol>
 <h3 id="消息队列的使用场景"><a href="#消息队列的使用场景" class="headerlink" title="消息队列的使用场景"></a>消息队列的使用场景</h3><p>除了上面所说的三大作用之外，消息队列还有一些其他的使用场景。</p>
-</li>
-<li><p>MQ 作为分布式事务的解决方案之一<br> 事务允许将事件流定义为一个原子操作。</p>
-</li>
-<li><p>顺序保证</p>
-</li>
-<li><p>延时、定时处理</p>
-</li>
-<li><p>数据流处理<br> 针对分布式系统产生的海量数据流，如业务日志、监控数据、用户行为等，消息队列可以实时或批量收集这些数据，并将其导入到大数据处理引擎中，实现高效的数据流管理和处理。</p>
-</li>
+<ol>
+<li>MQ 作为分布式事务的解决方案之一<br> 事务允许将事件流定义为一个原子操作。</li>
+<li>顺序保证</li>
+<li>延时、定时处理</li>
+<li>数据流处理<br> 针对分布式系统产生的海量数据流，如业务日志、监控数据、用户行为等，消息队列可以实时或批量收集这些数据，并将其导入到大数据处理引擎中，实现高效的数据流管理和处理。</li>
 </ol>
 <h3 id="合格的消息队列要满足哪些特点"><a href="#合格的消息队列要满足哪些特点" class="headerlink" title="合格的消息队列要满足哪些特点"></a>合格的消息队列要满足哪些特点</h3><p>消息有序性、消息不丢失、消息可堆积……</p>
 <h3 id="消息队列带来的问题"><a href="#消息队列带来的问题" class="headerlink" title="消息队列带来的问题"></a>消息队列带来的问题</h3><p>前面说了那么多使用消息队列的好处，但是凡事都有两面性，它在实际项目中也会带来一些问题，具体就要看业务中的需要。</p>
