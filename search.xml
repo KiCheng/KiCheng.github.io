@@ -8390,4 +8390,98 @@
         <tag>ZooKeeper</tag>
       </tags>
   </entry>
+  <entry>
+    <title>NIO编程</title>
+    <url>/2025/04/16/NIO%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>经过前面对 NIO 的介绍，我们理解 NIO 不会在数据没有准备好的时候一直阻塞线程，线程可以继续做其他事情。正是因为这个特点，NIO 可以做到通过一个线程来处理多个操作。</p>
+<blockquote>
+<p><strong>使用场景分析</strong></p>
+<ul>
+<li>BIO 方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，JDK1.4 以前的唯一选择，但程序简单易理解。</li>
+<li>NIO 方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，弹幕系统，服务器间通讯等。编程比较复杂，JDK1.4 开始支持。</li>
+<li>AIO 方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用 OS 参与并发操作，编程比较复杂，JDK7 开始支持。</li>
+</ul>
+</blockquote>
+<h3 id="NIO-的三大核心组件"><a href="#NIO-的三大核心组件" class="headerlink" title="NIO 的三大核心组件"></a>NIO 的三大核心组件</h3><p><img src="17447711273180.jpg"></p>
+<ol>
+<li>每一个 channel 都会对应一个 Buffer；</li>
+<li>Selector 对应一个线程，一个线程对应多个 channel 连接；</li>
+<li>Selector 会根据不同的事件在各个通道上切换，因为程序切换到哪个 channel 是由事件决定的；</li>
+<li>Buffer 是一个内存块，底层是一个数组；</li>
+<li>和 BIO 的输入输出流不同， NIO 的 Buffer 可以读也可以写，需要使用 flip 方法切换。</li>
+</ol>
+<h4 id="缓冲区Buffer"><a href="#缓冲区Buffer" class="headerlink" title="缓冲区Buffer"></a>缓冲区Buffer</h4><p><img src="17447714979367.jpg"><br>缓冲区本质是一个读写数据的内存块，该对象提供一组方法，可以更轻松的使用内存块。Channel 提供从文件、网络读取数据的通道，读写数据必须经过 Buffer。</p>
+<p>Buffer 是一个顶层的抽象类，常用的 Buffer 子类为不同的基本数据类型提供了存储到缓冲区的方式。</p>
+<p>Buffer 抽象类定义了所有缓冲区都具备的四个属性来提供关于缓冲区的数据元素信息：<br><img src="17447724942344.jpg"></p>
+<p>其中所有的 Buffer 子类中最常用的是存储二进制数据的 ByteBuffer，主要方法包括：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">ByteBuffer</span> &#123;</span><br><span class="line">    <span class="comment">// 缓冲区创建</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title function_">allocateDirect</span><span class="params">(<span class="type">int</span> capacity)</span>  <span class="comment">// 直接缓冲区</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title function_">allocate</span><span class="params">(<span class="type">int</span> capacity)</span>  <span class="comment">// 堆缓冲区</span></span><br><span class="line">    <span class="comment">// 缓冲区存取</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">byte</span> <span class="title function_">get</span><span class="params">()</span>  <span class="comment">// 从当前position上get，position自动+1</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">byte</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title function_">put</span><span class="params">(<span class="type">byte</span> b)</span>  <span class="comment">// 从当前position上添加，position自动+1</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title function_">put</span><span class="params">(<span class="type">int</span> index, <span class="type">byte</span> b)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通道Channel"><a href="#通道Channel" class="headerlink" title="通道Channel"></a>通道Channel</h4><p>NIO 的通道可以同时进行读写，可以从缓冲读数据、也可写数据到缓冲。常用的 Channel 类有：<code>FileChannel</code>、<code>DatagramChannel</code>（UDP文件读写）、<code>ServerSocketChannel</code> 和 <code>SocketChannel</code>（用于 TCP 的数据读写，ServerSocketChannel 类似于 ServerSocket，SocketChannel 类似于 Socket）。</p>
+<blockquote>
+<p>Channel 相当于输入输出流的媒介，用户侧对 buffer 缓冲区进行读写：写时 <code>buffer.put()</code> 写入内容，再 write 到 channel 中；读时从 channel 将内容 read 到 buffer 中，再 <code>buffer.array()</code> 打印内容。</p>
+</blockquote>
+<h4 id="选择器Selector"><a href="#选择器Selector" class="headerlink" title="选择器Selector"></a>选择器Selector</h4><p>NIO 用一个线程处理多个客户端的连接，就会用到 Selector，Selector 能够检测多个注册的通道是否有事件发生，如果有事件发生便获取事件然后针对事件进行相应的处理。<br><img src="17447892553007.jpg"></p>
+<p>只有在连接 or 读写事件发生时才会进行读写，大大减少了系统开销，不必为每个连接创建线程。</p>
+<p>IO 线程通常将非阻塞 IO 的空闲时间用于在其他通道上执行 IO 操作，所以单独的线程可以管理多个输入和输出的通道。</p>
+<h3 id="NIO非阻塞网络编程"><a href="#NIO非阻塞网络编程" class="headerlink" title="NIO非阻塞网络编程"></a>NIO非阻塞网络编程</h3><p><img src="17447918596542.jpg"></p>
+<ul>
+<li>当有客户端连接时，会通过 ServerSocketChannel 得到 SocketChannel；</li>
+<li>Selector 监听 select 方法，返回有事件发生的通道个数；</li>
+<li>将多个 socketChannel 注册到 Selector 上，注册后返回一个 SelectionKey 会和 Selector 关联；</li>
+<li>有事件发生时通过 selecttionKey 得到 socketChannel，进一步完成业务处理。</li>
+</ul>
+<h4 id="ServerSocketChannel"><a href="#ServerSocketChannel" class="headerlink" title="ServerSocketChannel"></a>ServerSocketChannel</h4><p>ServerSocketChannel 用于在服务端监听新的客户端 Socket 连接。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">ServerSocketChannel</span> &#123;</span><br><span class="line">    <span class="comment">// 得到通道</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ServerSocketChannel <span class="title function_">open</span><span class="params">()</span>  </span><br><span class="line">    <span class="comment">// 设置服务端端口号    </span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> ServerSocketChannel <span class="title function_">bind</span><span class="params">(SocketAddress local)</span>  </span><br><span class="line">    <span class="comment">// 接受一个连接，返回代表这个连接的通道对象</span></span><br><span class="line">    <span class="keyword">public</span> SocketChannel <span class="title function_">accept</span><span class="params">()</span>  </span><br><span class="line">    <span class="comment">// 注册一个选择器并设置监听事件</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> SelectionKey <span class="title function_">register</span><span class="params">(Selector sel, <span class="type">int</span> ops)</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="SocketChannel"><a href="#SocketChannel" class="headerlink" title="SocketChannel"></a>SocketChannel</h4><p>SocketChannel 是网络 IO 通道，具体负责进行读写操作，NIO 将缓冲区的数据写入通道，或者将通道的数据读到缓冲区中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">SocketChannel</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> SocketChannel <span class="title function_">open</span><span class="params">()</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">connect</span><span class="params">(SocketAddress remote)</span>  <span class="comment">// 连接服务器</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">write</span><span class="params">(ByteBuffer src)</span>  <span class="comment">// 向通道写数据</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">read</span><span class="params">(ByteBuffer dst)</span>  <span class="comment">// 从通道读数据</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> SelectionKey <span class="title function_">register</span><span class="params">(Selector sel, <span class="type">int</span> ops, Object att)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="NIO和零拷贝"><a href="#NIO和零拷贝" class="headerlink" title="NIO和零拷贝"></a>NIO和零拷贝</h3><p>在数据需要在用户态和内核态之间切换时，数据传输的工作都需要 CPU 参与，而 DMA 技术在进行 I/O 设备和内存数据传输时，数据搬运的工作交给 DMA 控制器而 CPU 可以空出来处理别的事情。<br><img src="17448905703041.jpg"></p>
+<p>传统的文件传输方式在进行 I/O 操作时，需要先从磁盘中进行 DMA 拷贝到内核态的 PageCache，再进行 CPU 拷贝到用户态缓冲区中，再进行 CPU 拷贝从用户缓冲区到内核态 socket 缓冲区中，最后再执行 DMA 拷贝到网卡中待发送。总共需要 4 次上下文切换和 4 次数据拷贝<br><img src="17448908381241.jpg"><br>为了提升文件传输的性能，就需要减少上下文切换的次数和数据拷贝的次数。</p>
+<blockquote>
+<p>减少「上下文切换」的方式是减少系统调用次数，而减少系统调用次数的方式就是通过零拷贝的两种方式——mmap 和 sendFile 优化；<br>减少「数据拷贝」的方式是避免涉及用户态的两次 CPU 拷贝，因为在文件传输中用户态不会对数据再加工。</p>
+</blockquote>
+<h4 id="mmap-write"><a href="#mmap-write" class="headerlink" title="mmap + write"></a>mmap + write</h4><p>为了减少 read 从内核缓冲区到用户缓冲区的数据拷贝开销，通过<code>mmap</code>替换<code>read</code>系统调用函数。<br><img src="17448918138343.jpg"><br>mmap 会以共享缓冲区的方式把内核缓冲区的数据映射到用户缓冲区中，在进行<code>write</code>系统调用时操作系统将内核缓冲区的数据拷贝到 socket 缓冲区中。</p>
+<blockquote>
+<p>通过 mmap + write 的零拷贝方式，仍然需要 4 次上下文切换 + 3 次数据拷贝。</p>
+</blockquote>
+<h4 id="sendFile"><a href="#sendFile" class="headerlink" title="sendFile"></a>sendFile</h4><p>通过<code>sendFile</code>系统调用函数可以将上下文切换的次数缩减到 2 次。<br><img src="17448925217756.jpg"><br>甚至更新版本只需要 2 次数据拷贝，PageCache 将描述符和数据长度传给 socket 缓冲区，可以直接将 PageCache 的数据拷贝到网卡中。<br><img src="17448926559177.jpg"></p>
+<blockquote>
+<p>通过 sendFile 的零拷贝方式，只需要 2 次上下文切换 + 2 次数据拷贝。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>IO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RPC-动态代理</title>
+    <url>/2025/04/07/RPC-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<p>使用 JDK 动态代理的核心是<code>InvocationHandler</code>接口和<code>Proxy</code>类。</p>
+<ul>
+<li>InvocationHandler 接口<br>实现该接口来处理自定义逻辑，当动态代理对象调用一个方法时，这个方法的调用就会被转发到实现了 InvocationHandler 接口类的<code>invoke</code>方法来调用。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当你使用代理对象调用方法的时候实际会调用到这个方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span><br></pre></td></tr></table></figure></li>
+<li>Proxy 类<br>使用最多的是 Proxy 类的<code>newProxyInstance()</code>方法，用来生成代理对象。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">newProxyInstance</span><span class="params">(ClassLoader loader,</span></span><br><span class="line"><span class="params">                                      Class&lt;?&gt;[] interfaces,</span></span><br><span class="line"><span class="params">                                      InvocationHandler h)</span> &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>生成代理对象方法的三个参数分别是：<br><code>loader</code>：类加载器，用于加载代理对象；<br><code>interfaces</code>：被代理类实现的接口；<br><code>h</code>：实现了 InvocationHandler 接口的对象。</p>
+<p>总的来说，JDK 动态代理的使用步骤：</p>
+<ol>
+<li>定义一个接口及实现类；</li>
+<li>自定义 InvocationHandler 并重写 invoke 方法，在 invoke 方法中通常会调用原生方法并自定义一些处理逻辑；</li>
+<li>通过 Proxy.newProxyInstance() 方法创建代理对象。</li>
+</ol>
+<p>在 RPC 中，是如何使用 JDK 动态代理的呢？</p>
+<p>定义 JDK 动态代理类，实现核心的 InvocationHandler 接口，重写 invoke 方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ClientProxy</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="comment">// 传入参数service接口的class对象，反射封装成一个request</span></span><br><span class="line">    <span class="keyword">private</span> String host;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// jdk动态代理，每一次代理对象调用方法，都会经过此方法增强（反射获取request对象，socket发送到服务端）</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">// 通过建造者模式构建RPC请求</span></span><br><span class="line">        <span class="type">RpcRequest</span> <span class="variable">request</span> <span class="operator">=</span> RpcRequest.builder()</span><br><span class="line">                .interfaceName(method.getDeclaringClass().getName())</span><br><span class="line">                .methodName(method.getName())</span><br><span class="line">                .params(args)</span><br><span class="line">                .paramsType(method.getParameterTypes())</span><br><span class="line">                .build();</span><br><span class="line">        <span class="comment">// IOClient.sendRequest 和服务端进行数据传输</span></span><br><span class="line">        <span class="type">RpcResponse</span> <span class="variable">response</span> <span class="operator">=</span> IOClient.sendRequest(host, port, request);</span><br><span class="line">        <span class="keyword">return</span> response.getData();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取代理对象的工厂类，这里我将工厂类的<code>getProxy()</code>方法定义在动态代理类当中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建代理对象</span></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">getProxy</span><span class="params">(Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> Proxy.newProxyInstance(clazz.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;clazz&#125;, <span class="built_in">this</span>);</span><br><span class="line">    <span class="keyword">return</span> (T) o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他的，在原生实现类和对应的接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">getUserByUserId</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;客户端查询了&quot;</span> + id + <span class="string">&quot;的用户&quot;</span>);</span><br><span class="line">        <span class="comment">// 模拟从数据库中取用户的行为</span></span><br><span class="line">        <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> User.builder()</span><br><span class="line">                .userName(UUID.randomUUID().toString())</span><br><span class="line">                .id(id)</span><br><span class="line">                .sex(random.nextBoolean()).build();</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">insertUserId</span><span class="params">(User user)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;插入数据成功&quot;</span> + user.getUserName());</span><br><span class="line">        <span class="keyword">return</span> user.getId();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
 </search>
