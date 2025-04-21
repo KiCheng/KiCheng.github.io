@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Netty高性能架构 | KiCheng's Blog</title><meta name="author" content="KiCheng"><meta name="copyright" content="KiCheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="网络线程模型不同的线程模型，对程序的性能影响很大，目前存在的线程模型有：传统阻塞 I&#x2F;O 模型、Reactor 模式、Proactor 模式。 Netty 线程模式主要是基于主从 Reactor 多线程模型（多 Reactor 多线程）做了一定改进。 传统阻塞I&#x2F;O模型传统阻塞式的最大特点是每个 client 的连接都需要独立的线程完成数据的输入→业务处理→数据返回。 它存在的两大问题是：  当并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty高性能架构">
+<meta property="og:url" content="https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="KiCheng&#39;s Blog">
+<meta property="og:description" content="网络线程模型不同的线程模型，对程序的性能影响很大，目前存在的线程模型有：传统阻塞 I&#x2F;O 模型、Reactor 模式、Proactor 模式。 Netty 线程模式主要是基于主从 Reactor 多线程模型（多 Reactor 多线程）做了一定改进。 传统阻塞I&#x2F;O模型传统阻塞式的最大特点是每个 client 的连接都需要独立的线程完成数据的输入→业务处理→数据返回。 它存在的两大问题是：  当并">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/cover.png">
+<meta property="article:published_time" content="2025-04-18T03:08:05.000Z">
+<meta property="article:modified_time" content="2025-04-21T09:01:04.324Z">
+<meta property="article:author" content="KiCheng">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/cover.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Netty高性能架构",
+  "url": "https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/",
+  "image": "https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/cover.png",
+  "datePublished": "2025-04-18T03:08:05.000Z",
+  "dateModified": "2025-04-21T09:01:04.324Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "KiCheng",
+      "url": "https://kicheng.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Netty高性能架构',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="KiCheng's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(2025/04/18/Netty高性能架构/cover.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">KiCheng's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Netty高性能架构</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Netty高性能架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-18T03:08:05.000Z" title="发表于 2025-04-18 11:08:05">2025-04-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-21T09:01:04.324Z" title="更新于 2025-04-21 17:01:04">2025-04-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Netty/">Netty</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="网络线程模型"><a href="#网络线程模型" class="headerlink" title="网络线程模型"></a>网络线程模型</h2><p>不同的线程模型，对程序的性能影响很大，目前存在的线程模型有：传统阻塞 I/O 模型、Reactor 模式、Proactor 模式。</p>
+<p>Netty 线程模式主要是基于主从 Reactor 多线程模型（多 Reactor 多线程）做了一定改进。</p>
+<h3 id="传统阻塞I-O模型"><a href="#传统阻塞I-O模型" class="headerlink" title="传统阻塞I/O模型"></a>传统阻塞I/O模型</h3><p>传统阻塞式的最大特点是每个 client 的连接都需要独立的线程完成数据的输入→业务处理→数据返回。</p>
+<p>它存在的两大问题是：</p>
+<ul>
+<li>当并发数很大时，会创建大量的线程；</li>
+<li>连接创建后如果当前线程没有数据可读，会一直阻塞在<code>read</code>操作，造成资源浪费。</li>
+</ul>
+<h3 id="Reactor模式"><a href="#Reactor模式" class="headerlink" title="Reactor模式"></a>Reactor模式</h3><p>Reactor 是一种高性能的网络模式，市面上常见的开源软件比如 Redis、Nginx、Netty 等都采用了这个方案。</p>
+<p>Reactor 采用「资源复用」的思想解决 BIO 存在的两大问题：</p>
+<ul>
+<li>不再为每个连接创建线程，而是创建<strong>线程池</strong>将连接分配给线程，一个线程可以处理多个连接的业务；</li>
+<li>避免一个连接对应一个线程时，线程「read-&gt;业务处理-&gt;send」的处理流程在没有数据可读时会阻塞在<code>read</code>上。采用 I/O 多路复用技术会用一个系统调用函数监听所有关心的连接，只有当连接上有数据时线程才发起读请求，而不用 read 来试探是否有数据。</li>
+</ul>
+<h4 id="单Reactor单线程"><a href="#单Reactor单线程" class="headerlink" title="单Reactor单线程"></a>单Reactor单线程</h4><blockquote>
+<p>在应用程序中有三个主要的对象：<code>Reactor</code>、<code>Acceptor</code>、<code>Handler</code>，Reactor 对象的作用是监听和分发事件、Acceptor 对象的作用是获取连接、Handler 对象的作用是处理业务。</p>
+</blockquote>
+<p>Reactor 对象通过<code>select</code>（I/O多路复用接口）监听事件，收到事件后通过 dispatch 进行分发：如果是连接建立事件，则交由 Acceptor通过<code>accept</code>处理连接请求，然后创建一个 Handler 对象处理连接后的业务处理；如果不是连接建立事件，则交由对应的 Handler 来响应，Handler 通过「read-&gt;业务处理-&gt;send」完成完整业务流程。 </p>
+<p><img src="17449475273734.jpg"></p>
+<p>单 Reactor 单线程的方案存在几个缺点：</p>
+<ul>
+<li>服务端用一个线程通过多路复用搞定所有 IO 操作，虽然不存在进程通信、多线程竞争等问题，但无法充分利用多核 CPU 的性能；</li>
+<li>Handler 在进行业务处理时，整个进程无法处理其他连接事件，容易造成响应延迟和性能瓶颈。</li>
+<li>线程意外终止或进入死循环造成的可靠性问题，不能接收和处理外部消息。</li>
+</ul>
+<blockquote>
+<p>单 Reactor 单线程的方案只适用于业务处理速度非常快的场景，在 Redis6.0 之前采用的正是单 Reactor 单线程的方案，因为 Redis 业务处理主要是在内存中完成速度非常快，所以采用单线程模型。</p>
+</blockquote>
+<h4 id="单Reactor多线程"><a href="#单Reactor多线程" class="headerlink" title="单Reactor多线程"></a>单Reactor多线程</h4><p>Reactor 对象通过<code>select</code>监听事件，收到时间后通过 dispatch 进行分发：如果建立连接请求，则 Acceptor 通过<code>accept</code>处理连接请求，然后创建 Handler 对象处理连接后的事件；如果不是连接请求，则由调用连接对应的 handler 来处理。</p>
+<p>前面的步骤和单 Reactor 单线程是一致的，区别在于「多线程的 handler 只负责响应事件，不做具体的业务处理」，通过<code>read</code>读取数据后会发给后面的线程池中通过封装的 Processor(Worker)对象进行业务处理，处理完后将结果发送给主线程的 Handler 对象，Handler 通过 send 方法将响应结果发送给 client。</p>
+<p><img src="17449607641449.jpg"></p>
+<p>单 Reactor 多线程的方案优势在于能充分利用多核 CPU 来处理 handler 阻塞造成的性能瓶颈，但与此同时会出现多线程共享数据竞争的问题。</p>
+<p>例如，线程池中子线程在完成业务处理后将结果传递给主线程的 Handler 进行 send，要避免对 Handler 共享资源的竞争问题就需要在操作之前加互斥锁，保证任意时间只能一个线程操作共享资源。</p>
+<blockquote>
+<p>除此之外，单 Reactor 多线程模型虽然解决了多核 CPU 利用率的问题，但是单一 Reactor 对象所承担所有事件的监听和响应，而且只在主线程中运行，在面对高并发场景时容易变成性能瓶颈。</p>
+</blockquote>
+<h4 id="主从Reactor多线程"><a href="#主从Reactor多线程" class="headerlink" title="主从Reactor多线程"></a>主从Reactor多线程</h4><p>因为单一 Reactor 对象在主线程中运行可能存在性能瓶颈，所以可以让 Reactor 在多线程中运行。</p>
+<p>Reactor 主线程 MainReactor 对象通过<code>select</code>监听「连接」事件，收到事件后通过 Acceptor 处理连接事件，进而 MainReactor 将连接分配给 SubReactor，subReactor 对象将连接加入到 select 继续进行监听，并创建 handler 进行事件处理；每当有新事件发生，subreactor 就调用对应的 handler 处理，handler 通过 read-&gt;业务处理-&gt;send 完成业务流程。<br><img src="17449624875223.jpg"></p>
+<p>多 Reactor 模式下，主线程只负责接受新连接，子线程负责完成后续业务处理。而且主线程和子线程的交互很简单，主线程只需要把新连接传给子线程，子线程无须返回数据，直接可以在子线程中将处理结果发送给 client。</p>
+<blockquote>
+<p>Netty 和 Nginx 都是采用了「主从 Reactor 多线程」的方案。</p>
+</blockquote>
+<h2 id="Netty模型"><a href="#Netty模型" class="headerlink" title="Netty模型"></a>Netty模型</h2><p>Netty 主要基于主从 Reactors 多线程模型，并做了一定改进。</p>
+<p>Netty 抽象出两组线程池，BossGroup 专门负责接收客户端的连接，WorkerGroup 专门负责网络的读写。</p>
+<p>BossGroup 和 WorkerGroup 类型都是<code>NioEventLoopGroup</code>。<code>NioEventLoopGroup</code>是事件循环组，每个组含有多个事件<code>NioEventLoop</code>是一个不断循环处理任务的线程，每个<code>NioEventLoop</code>都有一个 Selector 用于监听绑定在上面的 socket 网络通讯。</p>
+<p>每个 BossNioEventLoop 循环执行的步骤：</p>
+<ul>
+<li>轮询 accept 事件</li>
+<li>处理 accept 事件，与 client 建立连接，生成 NioSocketChannel，并注册到某个 worker 的 NioEventLoop 上的 Selector</li>
+<li>处理任务队列的任务，即 runAllTasks</li>
+</ul>
+<p>每个 Worker NioEventLoop 循环执行的步骤：</p>
+<ul>
+<li>轮询 read、write 事件</li>
+<li>在 NIOSocketChannel 上处理 read 和 write I/O 事件</li>
+<li>处理任务队列的任务，即 runAllTasks</li>
+</ul>
+<p><img src="17450534998980.jpg"></p>
+<h3 id="Netty编程入门"><a href="#Netty编程入门" class="headerlink" title="Netty编程入门"></a>Netty编程入门</h3><p>对于 NettyServer 来说，如 Netty 的模型示意图上图所示，需要创建<code>BossGroup</code>和<code>WorkerGroup</code>两个线程组，BossGroup 负责处理连接请求、WorkerGroup 负责客户端的业务处理。</p>
+<ul>
+<li><p>Bootstrap、ServerBootstrap<br>  Bootstrap 是引导，Netty 应用通常由一个 Bootstrap 开始配置整个程序、串联组件。其中 Bootstrap 是客户端程序的启动引导类，ServerBootstrap 是服务端启动引导类。</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建服务器端的启动对象，配置参数</span></span><br><span class="line"><span class="type">ServerBootstrap</span> <span class="variable">bootstrap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerBootstrap</span>();</span><br><span class="line"><span class="comment">// 配置</span></span><br><span class="line">bootstrap.group(bossGroup, workerGroup)  <span class="comment">// 设置两个线程组</span></span><br><span class="line">        .channel(NioServerSocketChannel.class)  <span class="comment">// 使用NioSocketChannel作为服务器的通道</span></span><br><span class="line">        .option(ChannelOption.SO_BACKLOG, <span class="number">128</span>)  <span class="comment">// 设置线程队列得到连接个数</span></span><br><span class="line">        .childOption(ChannelOption.SO_KEEPALIVE, <span class="literal">true</span>)  <span class="comment">// 设置保持活动连接状态</span></span><br><span class="line">        .childHandler(<span class="keyword">new</span> <span class="title class_">ChannelInitializer</span>&lt;SocketChannel&gt;() &#123;  <span class="comment">// 创建一个通道初始化对象（匿名对象）</span></span><br><span class="line">            <span class="comment">// 给pipeline设置处理器</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">initChannel</span><span class="params">(SocketChannel socketChannel)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;客户socketChannel hashcode=&quot;</span> + socketChannel.hashCode());</span><br><span class="line">                socketChannel.pipeline().addLast(<span class="keyword">new</span> <span class="title class_">NettyServerHandler</span>());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);  <span class="comment">// 给workerGroup的EventLoop对应的管道设置处理器</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Future、ChannelFuture<br>  Netty 中所有的 IO 操作都是异步的，不能立刻得知消息是否被处理，但是可以通过 Future、ChannelFuture 注册一个监听，当操作执行成功或失败时会自动触发注册的监听事件。</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 绑定一个端口并且等待同步完成，生成一个channelFuture对象</span></span><br><span class="line"><span class="comment">// 启动服务器并绑定端口</span></span><br><span class="line"><span class="type">ChannelFuture</span> <span class="variable">channelFuture</span> <span class="operator">=</span> bootstrap.bind(<span class="number">6668</span>).sync();</span><br><span class="line"><span class="comment">// 给ChannelFuture注册监听器，监控我们关心的事件</span></span><br><span class="line">channelFuture.addListener(<span class="keyword">new</span> <span class="title class_">ChannelFutureListener</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">operationComplete</span><span class="params">(ChannelFuture future)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span> (channelFuture.isSuccess()) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;监听端口 6668 成功&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;监听端口 6668 失败&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对关闭通道进行监听</span></span><br><span class="line">channelFuture.channel().closeFuture().sync();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于 Netty 所有操作都是异步的，所以在一些需要同步阻塞完成才能继续执行程序的操作，就需要通过<code>sync()</code>方法完成。</p>
+</blockquote>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th align="left">含义</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>connect(…).sync()</td>
+<td align="left">等待连接建立完成</td>
+<td>等连接完成再做其他事</td>
+</tr>
+<tr>
+<td>closeFuture().sync()</td>
+<td align="left">等待通道关闭事件完成</td>
+<td>保证程序不退出直到通道被关闭</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>ChannelHandler<br>  处理 I/O 事件或拦截 I/O 操作，并将其转发到 Handler 所在的 ChannelPipeline 业务处理链中的下一个处理程序。<br>  <img src="17451340638196.jpg"><br>  我们通常需要自定义 Handler 去继承 <code>ChannelInboundHandlerAdapter</code>，通过重写相应方法实现业务逻辑。</p>
+<blockquote>
+<p>ChannelOutboundHandlerAdapter 用来处理出站事件，比如<code>write</code>,<code>flush</code>,<code>connect</code>,<code>bind</code>等。我们常常继承 ChannelInboundHandlerAdapter 的原因是最常见的业务需求往往是：处理客户端请求、接收和解析消息、执行业务逻辑并相应，这些都是入站逻辑。</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通道就绪事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">channelActive</span><span class="params">(ChannelHandlerContext ctx)</span></span><br><span class="line"><span class="comment">// 通道读取数据事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span>;</span><br><span class="line"><span class="comment">// 数据读取完毕事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">channelReadComplete</span><span class="params">(ChannelHandlerContext ctx, Object evt)</span></span><br><span class="line"><span class="comment">// 通道发生异常事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">exceptionCaught</span><span class="params">(ChannelHandlerContext ctx, Throwable cause)</span>    </span><br></pre></td></tr></table></figure>
+<p>  上述方法在满足相应条件时会自动触发。</p>
+</blockquote>
+</li>
+<li><p>Pipeline、ChannelPipeline<br>  一个 Channel 包含了一个 ChannelPipeline，而 ChannelPipeline 又维护了一个由 ChannelHandlerContext 组成的双向链表，每个 context 中又关联着一个 ChannelHandler。<br>  <img src="17451347315014.jpg"></p>
+<blockquote>
+<p>入站事件和出站事件在同一个双向链表中，入站事件会从链表 head 往后传递到最后一个入站的 handler，出站事件会从链表 tail 往前传递到最前一个出站的 handler，两种类型的 handler 只处理自己类型的事件互不干扰。</p>
+</blockquote>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">socketChannel.pipeline().addLast(<span class="keyword">new</span> <span class="title class_">NettyServerHandler</span>());</span><br><span class="line"><span class="comment">// socketChannel.pipeline().addFirst(new NettyServerHandler());</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ChannelHandlerContext<br>  关联一个具体的事件处理器 ChannelHandler，同时保存 Channel 和 pipeline 相关的所有上下文信息方便对 ChannelHandler 进行调用。</p>
+<p>  对于 handlercontext 方法的调用，通常用在 ChannelHandler 的业务逻辑重写方法中：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 关闭通道</span></span><br><span class="line">ChannelFuture <span class="title function_">close</span><span class="params">()</span></span><br><span class="line"><span class="comment">// 获取通道和pipeline对象</span></span><br><span class="line">Channel <span class="title function_">channel</span><span class="params">()</span></span><br><span class="line">ChannelPipeline <span class="title function_">pipeline</span><span class="params">()</span></span><br><span class="line"><span class="comment">// 刷新缓冲区</span></span><br><span class="line">ChannelHandlerContext <span class="title function_">flush</span><span class="params">()</span></span><br><span class="line"><span class="comment">// 写入并刷新</span></span><br><span class="line">ChannelFuture <span class="title function_">writeAndFlush</span><span class="params">(Object <span class="keyword">var</span>)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>EventLoopGroup、NioEventLoopGroup</p>
+<p>  EventLoopGroup 是一组 EventLoop 的抽象，Netty 为了更好的利用多核 CPU 资源，一般会有多个 EventLoop 同时工作，每个 EventLoop 维护着一个 Selector 实例。</p>
+<p>  通常一个服务端口 ServerSocketChannel 对应一个 Selector 和一个 EventLoop 线程，BossEventLoop 负责接收客户端的连接并将 SocketChannel 交给 WorkerEventLoopGroup 进行 IO 处理，EventLoopGroup 提供<code>next</code>接口可以按照一定规则从组里获取一个 EventLoop 来处理任务。</p>
+<p>  <img src="17451397059328.jpg"></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kicheng.github.io">KiCheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/">https://kicheng.github.io/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kicheng.github.io" target="_blank">KiCheng's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post-share"><div class="social-share" data-image="/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/cover.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/09/25/Condition%E5%92%8CLockSupport/" title="通知等待Condition"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-25</div><div class="info-item-2">通知等待Condition</div></div><div class="info-2"><div class="info-item-1">ConditonObject 是 Condition 接口的实现类，用来做线程同步的通知等待，最重要的是它维护了一个单向的等待队列，要明确它和 AQS 队列的关系。此外还介绍了 LockSupport 类，Condition 的 await 底层就是通过 LockSupport 实现的。   等待通知 ConditionCondition 的等待队列是一个不带头节点的链式队列，而 AQS 的同步队列是带头节点的。    多个 Condition 对象的多个等待队列有什么用？    同步队列和等待队列的关系：  调用 Condition 的 await 方法，会使当前持有锁的线程进入同步队列，并释放锁，线程进入等待状态。相当于将同步队列的头节点（占用线程）移动到等待队列的尾部。  调用 Condition 的 signal 方法，唤醒该线程，相当于将等待队列的头节点移动到同步队列的尾部。    Condition 是个接口，它的实现类是 ConditionObject，是 AQS 的子类。 Condition 的 await 方法当前线程调用 Condtion.await()...</div></div></div></a><a class="pagination-related" href="/2024/09/23/volatile%E4%B8%8Esynchronized/" title="volatile和synchronized关键字"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-23</div><div class="info-item-2">volatile和synchronized关键字</div></div><div class="info-2"><div class="info-item-1">之所以把 volatile 和 synchronized 放在一起是因为二者都是关键字，而 synchronized 相比 volatile 除了提供内存可见性外还提供了锁的作用，也就是在同一时刻只允许一个线程访问共享资源，保证了线程安全性。   volatile关键字当使用 volatile 关键字修饰一个变量，Java 内存模型会插入一个内存屏障，确保执行到 volatile 变量的时候前面的语句全都执行完，后面的语句全都没有执行， 且前面的语句对 volatile 变量及后面的语句是可见的。 volatile 可以保证可见性，但不保证原子性：  当写一个 volatile 变量时，JMM 会把该线程在本地内存中的变量强制刷新到主内存中去；  这个写操作会导致其他线程中的 volatile 变量缓存无效（修改对其他线程立即可见）。   保证可见性： 1234567891011121314class ReorderExample &#123;  int a = 0;  boolean volatile flag = false;  public void writer()...</div></div></div></a><a class="pagination-related" href="/2024/09/25/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-25</div><div class="info-item-2">线程池</div></div><div class="info-2"><div class="info-item-1">线程池的核心思想就是实现线程的复用，避免线程反复创建和销毁带来的性能开销。这里主要介绍了基本的 ThreadPoolExecutor 以及用于定时循环任务的 ScheduledThreadPoolExecutor ，而且线程池是面试的重点。   ThreadPoolExecutor线程池的核心思想就是实现线程的复用，避免线程反复创建和销毁带来的性能开销。 Java 通过 ThreadPoolExecutor 来创建线程池，其核心参数如下：   线程池 execute 工作&#x20;1public void execute(Runnable command)&#123;&#125;   线程在线程池内部被封装成内部类 Worker 创建的对象。&#x20;  在线程池的 execute 方法中是通过 addWorker 方法来创建线程并执行任务的，Worker 会将线程和任务一同封装到 Worker 对象中，在通过 runWorker 方法来执行任务。  在 runWorker 方法内部，通过 while 循环保证执行完任务的线程不被销毁，而是复用不断地 getTask...</div></div></div></a><a class="pagination-related" href="/2024/09/24/%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/" title="可重入锁 ReentrantLock、ReentrantReadWriteLock"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-24</div><div class="info-item-2">可重入锁 ReentrantLock、ReentrantReadWriteLock</div></div><div class="info-2"><div class="info-item-1">可重入锁支持重入性，表示能够对共享资源重复加锁，即当前线程获取该锁后再次获取不会被阻塞，主要介绍了 ReentrantLock、ReentrantReadWriteLock 两种。   ReentrantLock支持重入性，表示能够对共享资源重复加锁，即当前线程获取该锁后再次获取不会被阻塞。 ReentrantLock 是通过抽象队列同步器 AQS 在 API 程序级别实现的，其内部类 Sync 继承了 AQS 抽象类，是 Lock 接口的默认实现。 源码 在线程获取锁的时候，如果已经获取锁的线程是当前线程的话则直接再次获取成功； 12345678910111213141516171819202122// 以内部类 Sync 的 nonfairTryAcquire 方法为例final boolean nonfairTryAcquire(int acquires) &#123;    final Thread current = Thread.currentThread();    int c = getState();    // 1....</div></div></div></a><a class="pagination-related" href="/2025/01/27/ThreadLocal%E6%9C%BA%E5%88%B6/" title="ThreadLocal机制"><img class="cover" src="/2025/01/27/ThreadLocal%E6%9C%BA%E5%88%B6/cover.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-27</div><div class="info-item-2">ThreadLocal机制</div></div><div class="info-2"><div class="info-item-1">ThreadLocal为什么要有 ThreadLocal为了解决多线程存在「线程安全」的问题——线程并发对同一临界区的共享资源进行访问而导致的内存数据安全问题，才引入的 ThreadLocal——每个线程拥有自己线程隔离的「本地变量」。 ThreadLocal 中弱引用问题要说清楚 ThreadLocal 中的弱引用机制，还要从 ThreadLocal 的设计初衷讲起。为了解决多线程线程安全问题，每一个 Thread 中都有一个 ThreadLocalMap，其中 key 为 ThreadLocal 本地变量，value 为想要存放的具体值。为了实现线程安全，不允许用户直接接触 ThreadLocalMap 向里面 put Entry，而是通过 ThreadLocal 的 API：get、set、remove 来间接操作。具体的实现是，ThreadLocalMap 作为 ThreadLocal 中的静态内部类，ThreadLocal 为 Map 提供了外层的用户封装，而将可能出现的线程冲突交由内部实现来解决。 这就造成了当使用者没有正确的通过 remove 方法将...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">KiCheng</div><div class="author-info-description">杂乱无章的记事本</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><img src="/img/wechat.jpg" alt="公告图片" style="max-width:50%;"><br>This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">网络线程模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E9%98%BB%E5%A1%9EI-O%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">传统阻塞I&#x2F;O模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reactor%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">Reactor模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95Reactor%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">单Reactor单线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text">单Reactor多线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.2.3.</span> <span class="toc-text">主从Reactor多线程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Netty%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">Netty模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Netty%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8"><span class="toc-number">2.1.</span> <span class="toc-text">Netty编程入门</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/" title="Netty高性能架构"><img src="/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Netty高性能架构"/></a><div class="content"><a class="title" href="/2025/04/18/Netty%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84/" title="Netty高性能架构">Netty高性能架构</a><time datetime="2025-04-18T03:08:05.000Z" title="发表于 2025-04-18 11:08:05">2025-04-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/16/NIO%E7%BC%96%E7%A8%8B/" title="NIO编程"><img src="/2025/04/16/NIO%E7%BC%96%E7%A8%8B/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NIO编程"/></a><div class="content"><a class="title" href="/2025/04/16/NIO%E7%BC%96%E7%A8%8B/" title="NIO编程">NIO编程</a><time datetime="2025-04-16T02:28:43.000Z" title="发表于 2025-04-16 10:28:43">2025-04-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/RPC-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" title="RPC-动态代理">RPC-动态代理</a><time datetime="2025-04-07T13:50:29.000Z" title="发表于 2025-04-07 21:50:29">2025-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/30/ZooKeeper/" title="ZooKeeper"><img src="/2025/03/30/ZooKeeper/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ZooKeeper"/></a><div class="content"><a class="title" href="/2025/03/30/ZooKeeper/" title="ZooKeeper">ZooKeeper</a><time datetime="2025-03-30T01:54:15.000Z" title="发表于 2025-03-30 09:54:15">2025-03-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/24/Java-NIO/" title="Java NIO"><img src="/2025/03/24/Java-NIO/cover2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java NIO"/></a><div class="content"><a class="title" href="/2025/03/24/Java-NIO/" title="Java NIO">Java NIO</a><time datetime="2025-03-24T01:40:02.000Z" title="发表于 2025-03-24 09:40:02">2025-03-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By KiCheng</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
